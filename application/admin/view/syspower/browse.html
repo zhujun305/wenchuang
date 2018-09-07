@@ -1,0 +1,124 @@
+{include file="/common/main_top"}
+<script>
+$(function(){
+	//全选
+	$('#chkall').click(function(){
+		var chk = $(this).is(":checked");
+		$('.chklie').each(function(){
+			$(this).attr('checked' , chk);
+		});
+	});
+	//查询
+	$('#findbtn').click(function(){
+		var arr=[];
+		arr.push($('#action').val());
+		arr.push($('#method').val());
+		var find = "?find="+arr.join("{$search_separ}");
+		var url = "{:url('/Admin/syspower/browse')}";
+		location.href = url+find;
+	});
+	//排序
+	$('.editsort').click(function(){
+	  if ($('#' + $(this).attr('id') + '_edit').attr('type')==undefined) {
+		$(this).html('<input type="text" size="5" class="_sort_edit" id="' + $(this).attr('id') + '_edit" value="' + $(this).html() + '" onblur="chkval(this);" />');
+		$('#' + $(this).attr('id') + '_edit').focus();
+	  }
+	});
+});
+function chkval(obj){
+	var url = "{:url('/Admin/syspower/upd_sort')}";
+	var id = obj.getAttribute("id").split('_')[1];
+	var sort = obj.value;
+	$.post(url,{id:id,sort:sort},function(data){
+		if(data){
+			obj.parentNode.innerHTML = sort;
+		}
+	});
+}
+</script>
+<div class="allpagetop">后台管理中心<strong>/</strong>权限管理</div>
+<div class="mains">
+	<div class="h1tit">
+		<div class="h1">权限管理</div>
+		<div class="topnav">
+			<a href="{:url('/Admin/syspower/browse')}" class="select">权限列表</a>
+			<a href="{:url('/Admin/syspower/create')}">添加</a>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="sea_div mt_10">
+		<div class="sea_btn f_r mr_20" id="findbtn">查询</div>
+		<div class="sea_text f_r">
+			<div class="sobox">
+			<div class="sotype">方法</div>
+			<input type="text" id="method" class="sinput" value="{$findObj['method']}" />
+			</div>
+		</div>
+		<div class="sea_text f_r">
+			<div class="sobox">
+			<div class="sotype">控制器</div>
+			<input type="text" id="action" class="sinput" value="{$findObj['action']}" />
+			</div>
+		</div>
+	</div>
+	<div class="clear"></div>
+	
+	<div class="list_th">
+		<div class="td" style="width:7%;">
+			<label class="left_padding">
+				<input type="checkbox" id="chkall" title="全选/反选"/>ID
+			</label>
+		</div>
+		<div class="td" style="width:8%;">模块</div>
+		<div class="td" style="width:15%;">控制器</div>
+		<div class="td" style="width:15%;">方法</div>
+		<div class="td" style="width:10%;">权限类型</div>
+		<div class="td" style="width:10%;">是否显示</div>
+		<div class="td" style="width:10%;">锁定状态</div>
+		<div class="td" style="width:10%;">排序</div>
+		<div class="td" style="width:20%;">操作</div>
+		<div class="clear"></div>
+	</div>
+	<?php if(empty($list)){?>
+	<div class="list_empty">没有任何信息！</div>
+	<?php }else{?>
+	{volist name="list" id="val"}
+	<div class="list_tr link_black">
+		<div class="td" style="width:7%;">
+			<div class="left_padding striking link_blue">
+			<input type="checkbox" name="id[]" class="chklie" value="{$val.id}"/>{$val.id}
+			</div>
+		</div>
+		<div class="td" style="width:8%;">&nbsp;{$val.moduel} {$val.toppid}</div>
+		<div class="td" style="width:15%;">&nbsp;{$val.action}<?php if($val['type']>1){?>（{$val.actionName}）<?php }?></div>
+		<div class="td" style="width:15%;">&nbsp;{$val.method}<?php if($val['type']>2){?>（{$val.methodName}）<?php }?></div>
+		<div class="td" style="width:10%;">&nbsp;{$power_type[$val.type]}</div>
+		<div class="td" style="width:10%;">&nbsp;<?php echo $val['isShow']==1?'<font color="green">菜单显示</font>':'不显示';?></div>
+		<div class="td" style="width:10%;">&nbsp;<?php echo $val['status']==2?'<font color="red">锁定</font>':'正常';?></div>
+		<div class="td" style="width:10%;">
+			<div class="editsort" id="sort_{$val.id}" title="点击修改">{$val.sort}</div>
+		</div>
+		<div class="td edit" style="width:15%;">
+		  <?php if($val['pid']!=0){?>
+			<?php if($val['type']==2){?>
+			<a href="{:url('/Admin/syspower/edit','id='.$val.id)}">修改</a>
+			<a href="{:url('/Admin/syspower/setmethod','id='.$val.id)}">设置方法</a>
+			<?php }?>
+		  <?php }?>
+			<?php if($val['status']==1){?>
+			<a href="{:url('/Admin/syspower/lock','id='.$val.id)}" class="gray">锁定</a>
+			<?php }else{?>
+			<a href="{:url('/Admin/syspower/unlock','id='.$val.id)}">解锁</a>
+			<?php }?>
+		</div>
+		<div class="clear"></div>
+	</div>
+	{/volist}
+	<?php }?>
+	<div class="pages">
+		{$list->render()}
+	</div>
+</div>
+
+{include file="/common/main_footer"}

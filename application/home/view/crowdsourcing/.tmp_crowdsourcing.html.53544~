@@ -1,0 +1,19 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>众包设计</title>
+{include file="/common/c_header"}
+</head>
+
+<body>
+
+<div class="wrap">
+{include file="/common/c_top"}
+
+
+
+{include file="/common/c_footer"}
+</div>
+
+</body>
+</html>

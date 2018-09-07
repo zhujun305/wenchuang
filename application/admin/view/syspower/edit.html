@@ -1,0 +1,70 @@
+{include file="/common/main_top"}
+<script>
+$(document).ready(function () {
+	//下拉框
+	$(".J_dropdown").click(function(){
+		var _iss = $(this).attr("_iss");
+		if(_iss==1){
+			$(this).addClass("open");
+			$(this).css({"position":"relative"});
+			$(this).attr("_iss","2");
+		}else{
+			$(this).removeClass("open");
+			$(this).attr("_iss","1");
+		}
+	});
+	$(".J_listitme").click(function(){
+		var _val = $(this).attr("_val");
+		$(".J_listitme_text").html($(this).html());
+		$("#pid").val(_val);
+	});
+});
+</script>
+<div class="allpagetop">后台管理中心<strong>/</strong>权限管理<strong>/</strong>编辑</div>
+<div class="mains">
+	<div class="h1tit">
+		<div class="h1">权限管理</div>
+		<div class="topnav">
+			<a href="{:url('/Admin/syspower/browse')}">权限列表</a>
+			<a href="{:url('/Admin/syspower/create')}" class="select">添加</a>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="toptit">编辑权限</div>
+	<form id="addform" method="post" action="">
+	<div class="form_main width150">
+		<div class="fl">选择模块:</div>
+		<div class="fr">
+			<div class="select_input_new w400 J_hoverinput J_dropdown J_listitme_parent" _iss="1" style="">
+				<span class="J_listitme_text">{$powertop[$detail['pid']]}</span>
+				<div class="dropdowbox_sn J_dropdown_menu">
+					<div class="dropdow_inner_sn">
+					<ul class="nav_box">
+					{volist name="powertop" id="val"}
+					<li><a class="J_listitme" href="javascript:void(0);" _val="{$key}">{$key}{$val}</a></li>
+					{/volist}
+					</ul>
+					</div>
+				</div>
+				<input type="hidden" name="pid" id="pid" value="{$detail['pid']}" class="J_listitme_code" />
+			</div>
+		</div>
+		<div class="fl">控制器:</div>
+		<div class="fr">
+			<div><input type="text" name="action" value="{$detail['action']}" maxlength="45" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl">控制器名称:</div>
+		<div class="fr">
+			<div><input type="text" name="actionName" value="{$detail['actionName']}" maxlength="45" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl"></div>
+		<div class="fr">
+			<input type="submit" class="admin_submit" value="保 存" />
+		</div>
+		<div class="clear"></div>
+	</div>
+	</form>
+</div>
+
+{include file="/common/main_footer"}

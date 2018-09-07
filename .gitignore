@@ -1,0 +1,19 @@
+.idea
+composer.lock
+*.log
+thinkphp
+
+
+# Ö»ºöÂÔuploadsÄ¿Â¼
+runtime/
+uploads/
+
+
+
+
+
+
+
+
+
+

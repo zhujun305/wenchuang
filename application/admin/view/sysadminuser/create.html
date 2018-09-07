@@ -1,0 +1,146 @@
+{include file="/common/main_top"}
+<script>
+$(document).ready(function () {
+	//下拉框
+	$(".J_dropdown").click(function(){
+		var _iss = $(this).attr("_iss");
+		if(_iss==1){
+			$(this).addClass("open");
+			$(this).css({"position":"relative"});
+			$(this).attr("_iss","2");
+		}else{
+			$(this).removeClass("open");
+			$(this).attr("_iss","1");
+		}
+	});
+	$(".J_listitme").click(function(){
+		var _val = $(this).attr("_val");
+		$(".J_listitme_text").html($(this).html());
+		$("#roseid").val(_val);
+	});
+	$(".admin_submit").click(function(){
+		var _unameobj=$('#name');
+		_uname=_unameobj.val();
+		_kg=/\s+/;
+		if(_kg.test(_uname)) {
+			alert('您的登录用户名不能包含空格！');
+			_unameobj.focus();
+			return false;
+		}else if(_uname.length<1) {
+			alert('您的登录用户名长度不能为空！');
+			_unameobj.focus();
+			return false;
+		}else if(_uname.length<6 || _uname.length>16) {
+			alert('您的登录用户名长度必须在6位到16位之间！');
+			_unameobj.focus();
+			return false;
+		}else if(!(/^[\w|\d|\@|\.|\-|\_]+$/.test(_uname))) {
+			alert('登录用户名不能包含(字母 数字 @.-_)以外的其他字符！');
+			_unameobj.focus();
+			return false;
+		}
+		if(!($("#roseid").val()>0)){
+			alert('请选择用户角色！');
+			return false;
+		}
+		var _pwd1obj=$('#pwd1');
+		var _pwd2obj=$('#pwd2');
+		if(_kg.test(_pwd1obj.val())) {
+			alert('您的密码不能包含空格！');
+			_pwd1obj.focus();
+			return false;
+		}else if(_pwd1obj.val().length<1) {
+			alert('您的密码不能为空！');
+			_pwd1obj.focus();
+			return false;
+		}
+		if(_kg.test(_pwd2obj.val())) {
+			alert('您的确认密码不能包含空格！');
+			_pwd2obj.focus();
+			return false;
+		}else if(_pwd2obj.val().length<1) {
+			alert('您的确认密码不能为空！');
+			_pwd2obj.focus();
+			return false;
+		}
+		if(_pwd1obj.val()!=_pwd2obj.val()) {
+			alert('您输入的确认密码和密码不一致！');
+			_pwd2obj.focus();
+			return false;
+		}
+		return true;
+	});
+});
+</script>
+<div class="allpagetop">后台管理中心<strong>/</strong>用户管理<strong>/</strong>新增</div>
+<div class="mains">
+	<div class="h1tit">
+		<div class="h1">用户管理</div>
+		<div class="topnav">
+			<a href="{:url('/Admin/sysadminuser/browse')}">用户列表</a>
+			<a href="{:url('/Admin/sysadminuser/create')}" class="select">添加</a>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="toptit">新增用户</div>
+	<form id="addform" method="post" action="">
+	<div class="form_main width150">
+		<div class="fl"><span class="f_f60">*</span> 登录用户名:</div>
+		<div class="fr">
+			<div><input type="text" name="name" id="name" value="" maxlength="45" class="input_text_default middle" placeholder="字母、数字、下划线、6-16位" /></div>
+		</div>
+		<div class="fl"><span class="f_f60">*</span> 选择角色:</div>
+		<div class="fr">
+			<div class="select_input_new w400 J_hoverinput J_dropdown J_listitme_parent" _iss="1" style="">
+				<span class="J_listitme_text">选择角色</span>
+				<div class="dropdowbox_sn J_dropdown_menu">
+					<div class="dropdow_inner_sn">
+					<ul class="nav_box">
+					{volist name="roselist" id="val"}
+					<li><a class="J_listitme" href="javascript:void(0);" _val="{$val.id}">{$val.name}</a></li>
+					{/volist}
+					</ul>
+					</div>
+				</div>
+				<input type="hidden" name="roseid" id="roseid" value="" class="J_listitme_code" />
+			</div>
+		</div>
+		<div class="fl"><span class="f_f60">*</span> 登录密码:</div>
+		<div class="fr">
+			<div><input type="password" name="pwd1" id="pwd1" value="" maxlength="45" class="input_text_default middle" placeholder="字母、数字、下划线、6-16位" /></div>
+		</div>
+		<div class="fl"><span class="f_f60">*</span> 确认密码:</div>
+		<div class="fr">
+			<div><input type="password" name="pwd2" id="pwd2" value="" maxlength="45" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl">姓名:</div>
+		<div class="fr">
+			<div><input type="text" name="truename" id="truename" value="" maxlength="45" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl">手机:</div>
+		<div class="fr">
+			<div><input type="text" name="mobile" id="mobile" value="" maxlength="45" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl">qq号:</div>
+		<div class="fr">
+			<div><input type="text" name="qq" id="qq" value="" maxlength="45" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl">微信号:</div>
+		<div class="fr">
+			<div><input type="text" name="weixin" id="weixin" value="" maxlength="45" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl">邮箱:</div>
+		<div class="fr">
+			<div><input type="text" name="email" id="email" value="" maxlength="45" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl"></div>
+		<div class="fr">
+			<input type="submit" class="admin_submit" value="保 存" />
+		</div>
+		<div class="clear"></div>
+	</div>
+	</form>
+</div>
+
+{include file="/common/main_footer"}

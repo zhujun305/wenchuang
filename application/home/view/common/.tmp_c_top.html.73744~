@@ -1,0 +1,43 @@
+
+<div class="header clear">
+    <div class="htop">
+      <div class="w">
+      	<em>
+      	{if condition="($member['uid']>0)"}
+      	<a class="a_login" onClick="location='{:url('home/Member/index')}'" href="javascript:void(0);">{$member['nick_name']} </a>
+	    <a onClick="location='{:url('home/Index/logout')}'" href="javascript:void(0);">退出</a>
+		{else/}
+      	<a class="a_login" onClick="location='{:url('home/Index/login')}'" href="javascript:void(0);">亲，请登录 </a>
+	    <a onClick="location='{:url('home/Index/register')}'" href="javascript:void(0);">免费注册</a>
+		{/if}
+	    </em>
+	    <font>全国图书馆文化创意产品开发一体化平台</font><i>010-88545360</i>
+	    <a class="app_down" href="#">APP下载</a>
+	  </div>
+    </div>
+    <div class="head">
+      <div class="logo left">
+      	<a onClick="location='{:url('/home/Index/index')}'" href="javascript:void(0);"><img src="{$Think.config.web_home}/images/logo.png" /></a>
+	  </div>
+      <ul class="nav left">
+        <li {if condition="($controller=='Index')"}class="cur"{/if}>
+        	<a onClick="location='{:url('home/Index/index')}'" href="javascript:void(0);">首页</a></li>
+        <li {if condition="($controller=='Material')"}class="cur"{/if}>
+        	<a onClick="location='{:url('home/Material/index')}'" href="javascript:void(0);">文创素材</a></li>
+        <li {if condition="($controller=='Crowdsourcing')"}class="cur"{/if}>
+        	<a onClick="location='{:url('home/Crowdsourcing/index')}'" href="javascript:void(0);">众包设计</a></li>
+        <li {if condition="($controller=='Crowdfunding')"}class="cur"{/if}>
+        	<a onClick="location='{:url('home/Crowdfunding/index')}'" href="javascript:void(0);">产品众筹</a></li>
+        <li {if condition="($controller=='Product')"}class="cur"{/if}>
+        	<a onClick="location='{:url('home/Product/index')}'" href="javascript:void(0);">产品展示<img class="hot" src="{$Think.config.web_home}/images/hot.png" /></a></li>
+        <li {if condition="($controller=='About')"}class="cur"{/if}>
+        	<a onClick="location='{:url('home/About/index')}'" href="javascript:void(0);">联系我们</a></li>
+      </ul>
+      <div class="n_search">
+        <input class="n_s_intxt" type="text" />
+        <input class="s_inbut right" type="button" />
+      </div>   
+      <div class="clear0"></div>
+    </div>
+</div>
+  

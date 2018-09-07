@@ -1,0 +1,36 @@
+<script>
+(function ($) {
+	$.extend({
+	  //压缩图片，参数1：file对象，参数2：图片宽高最大的一边的压缩长度
+	  compress(file,scale=1000) {
+	    return new Promise(function (resolve,reject) {
+	      let _scale = scale;
+	      let cvs = document.createElement('canvas');
+	      let ctx = cvs.getContext('2d');
+	      let img = new window.Image();
+	      let imgType=file.type;
+	      img.src = URL.createObjectURL(file);
+	      img.onload=function () {
+		  	if(img.width>_scale || img.height>_scale){
+				if(img.width>img.height){
+					cvs.width = _scale;
+					cvs.height = Math.round(_scale/(img.width/img.height));
+				}else if(img.width<img.height){
+					cvs.width = Math.round(_scale/(img.height/img.width));
+					cvs.height = _scale;
+				}else{
+					cvs.width = _scale;
+					cvs.height = _scale;
+				}
+			}else{
+		        cvs.width = img.width;
+		        cvs.height = img.height;
+			}
+	        ctx.drawImage(img, 0, 0, cvs.width, cvs.height);
+	        resolve(cvs.toDataURL(imgType));
+	      }
+	    });
+	  }
+	});
+})(jQuery);
+</script>

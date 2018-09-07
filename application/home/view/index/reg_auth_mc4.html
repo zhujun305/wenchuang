@@ -1,0 +1,197 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>成员馆-会员认证</title>
+{include file="/member/m_header"}
+</head>
+
+<body>
+<!--头部开始-->
+<div class="top">
+	<div class="main">
+		<div class="logos" onClick="location='{:url('home/index/index')}'"><img src="{$Think.config.web_member}/img/logo.png" /></div>
+	</div>
+</div>
+
+<div class="main">
+	<div class="step">
+		<ul>
+			<li class="on"> <i>1</i> 设置账号信息</li>
+			<li class="on"> <i>2</i> 选择用户类型</li>
+			<li class="on"> <i>3</i> 完善用户资料</li>
+		</ul>
+	</div>
+	
+	<div class="regbg">
+		<div class="forms">
+			<form action="{:url('home/Index/reg_auth_member')}" method="post">
+			<div class="row"><span></span> 成员馆认证---完善会员资料</div>
+			<div class="row">
+				<span><i>* </i>成员馆编号</span> <input type="text" name="leaguer_no" id="leaguer_no" placeholder="请输入成员馆编号，如：NCL" style="text-transform:uppercase;" />
+			</div>
+			<div class="row">
+				<span><i>* </i>公司全称</span> <input type="text" name="company" id="company" placeholder="请输入公司全称" />
+			</div>
+			<div class="row">
+				<span><i>* </i>法人代表</span> <input type="text" name="legal" id="legal" placeholder="请输入法人代表名称" />
+			</div>
+			<div class="row">
+				<span><i>* </i>成员LOGO</span> 
+				<a class="ups clogo_div"><img src="{$Think.config.web_member}/img/add1.png" /></a>
+				<input type="hidden" name="imgurl" id="clogo" value="" />
+				<input type="file" id="clogo_file" style="display:none;" />
+			</div>
+			<div class="row">
+				<span><i>* </i>组织机构代码</span> 
+				<a class="ups org_code_div"><img src="{$Think.config.web_member}/img/add2.png" /></a>
+				<input type="hidden" name="org_code" id="org_code" value="" />
+				<input type="file" id="org_code_file" style="display:none;" />
+			</div>
+			<div class="row">
+				<span><i>* </i>联系电话</span> <input type="text" name="a_mobile" id="a_mobile" placeholder="请输入联系电话" />
+			</div>
+			<div class="row">
+				<span><i>* </i>电子邮箱</span> <input type="text" name="a_email" id="a_email" placeholder="请输入电子邮箱" />
+			</div>
+			<div class="row">
+				<span><i>* </i>联系地址</span> <input type="text" name="a_address" id="a_address" placeholder="请输入联系地址" />
+			</div>
+			<input type="hidden" name="cate" value="{$cate}" />
+			<input type="submit" value="确认" class="submit" />
+			</form>
+		</div>
+	</div>
+</div>
+<script>
+$(function(){
+	$(".submit").click(function(){
+		var leaguer_no = $("#leaguer_no").val();
+		if(leaguer_no.length<1) {
+			alert('您的成员馆编号不能为空！');
+			$("#leaguer_no").focus();
+			return false;
+		}
+		var _tmp = false;
+		if(leaguer_no.length>0){
+			$.ajax({
+				url:"{:url('home/Aajax/chk_leaguer_no')}",
+                type: 'post',datatype:'json',async:false,
+                data: {leaguer_no:leaguer_no},
+				success:function(data){
+					if(data==false || data=="false"){
+						alert('成员馆编号已经被注册！');
+						$("#leaguer_no").focus();
+						_tmp = true;
+					}else{
+						_tmp = false;
+					}
+				}
+			});
+		}
+		if(_tmp) return false;
+		if($("#company").val().length<1) {
+			alert('您的公司全称不能为空！');
+			$("#company").focus();
+			return false;
+		}
+		if($("#legal").val().length<1) {
+			alert('您的法人代表姓名不能为空！');
+			$("#legal").focus();
+			return false;
+		}
+		if($("#clogo").val().length<1){
+			alert('请上传成员LOGO！');
+			return false;
+		}
+		if($("#org_code").val().length<1){
+			alert('请上传组织机构代码！');
+			return false;
+		}
+		var _a_mobileobj=$('#a_mobile');
+		_a_mobile=_a_mobileobj.val();
+		var pat_mobile = /^[0-9]{8,20}$/; 
+		if(_a_mobile.length<1) {
+			alert('您的联系电话不能为空！');
+			_a_mobileobj.focus();
+			return false;
+		}else if(!pat_mobile.test(_a_mobile)) {
+			alert('您的联系电话格式不正确！');
+			_a_mobileobj.focus();
+			return false;
+		}
+		var _a_emailobj=$('#a_email');
+		_a_email=_a_emailobj.val();
+		var pat_email = /^[\w\-\.]+@[\w\-\.]+(\.\w+)+$/; 
+		if(_a_email.length<1) {
+			alert('您的电子邮箱不能为空！');
+			_a_emailobj.focus();
+			return false;
+		}else if(!pat_email.test(_a_email)) {
+			alert('您的电子邮箱格式不正确！');
+			_a_emailobj.focus();
+			return false;
+		}
+		var _a_addressobj=$('#a_address');
+		_a_address=_a_addressobj.val();
+		if(_a_address.length<1) {
+			alert('您的联系地址不能为空！');
+			_a_addressobj.focus();
+			return false;
+		}
+		return true;
+	});
+});
+</script>
+{include file="/common/upimage"}
+<style>
+.clogo_div img,.org_code_div img{max-width:120px;}
+</style>
+<script>
+$(function () {
+	//上传成员LOGO
+	var div_clogo = $(".clogo_div");
+	var file_clogo = $("#clogo_file");
+	var name_clogo = $("#clogo");
+	div_clogo.click(function(){
+		file_clogo.attr("val","1");
+		document.getElementById("clogo_file").click(); //js触发其他标签click事件
+	});
+	file_clogo.change(function () {
+		let files = $(this)[0].files[0]; //获取files对象
+		//参数2为按比例缩小压缩后宽高
+		$.compress(files,1000).then((url)=>{
+			div_clogo.find("img").attr("src",url);
+			//上传到服务器
+			$.post("{:url('home/Aajax/ajaxupimages')}",{imgsource:url,type:'auth'},function(data){
+				name_clogo.val(data.imgurl);
+				div_clogo.find("img").attr("src",data.imgurl);
+			},"json");
+		});
+	});
+	//上传组织机构代码
+	var div_org_code = $(".org_code_div");
+	var file_org_code = $("#org_code_file");
+	var name_org_code = $("#org_code");
+	div_org_code.click(function(){
+		file_org_code.attr("val","1");
+		document.getElementById("org_code_file").click(); //js触发其他标签click事件
+	});
+	file_org_code.change(function () {
+		let files = $(this)[0].files[0]; //获取files对象
+		//参数2为按比例缩小压缩后宽高
+		$.compress(files,1000).then((url)=>{
+			div_org_code.find("img").attr("src",url);
+			//上传到服务器
+			$.post("{:url('home/Aajax/ajaxupimages')}",{imgsource:url,type:'auth'},function(data){
+				name_org_code.val(data.imgurl);
+				div_org_code.find("img").attr("src",data.imgurl);
+			},"json");
+		});
+	});
+});
+</script>
+
+{include file="/member/m_footer"}
+
+</body>
+</html>

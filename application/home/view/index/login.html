@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>登录</title>
+{include file="/member/m_header"}
+</head>
+
+<body>
+<!--头部开始-->
+<div class="top">
+	<div class="main">
+		<div class="logos"><img src="{$Think.config.web_member}/img/logo.png" /></div>
+	</div>
+</div>
+
+<div class="logins">
+	<div class="loginbg">
+		<div class="forms" style="margin-top:100px;">
+            <form action="" method="post">
+			<div class="row">
+				<i class="user"></i>
+				<input type="text" name="username" placeholder="请输入用户名" value="{$data['user_name']}" />
+			</div>
+			<div class="row">
+				<i class="pass"></i>
+				<input type="password" name="password" placeholder="请输入密码" value="{$data['password']}" />
+			</div>
+			<div style="margin-bottom:3px;">
+				<input type="text" name="imgcode" placeholder="请输入验证码" class="yzm" style="height:33px;" size="10" />
+				<img src="{:url('home/index/verify')}" height="33" alt="点击更新验证码" onclick="this.src=this.src" />
+			</div>
+			<div style="margin-top:13px;">
+				<input type="submit" value="登录" class="submit" />
+			</div>
+			<div class="forget">
+				<span><a href="javascript:void(0);" id="forgetpwd">忘记密码</a></span>
+				<input type="checkbox" name="is_pwd_ever" id="is_pwd_ever" value="" /> 记住密码？
+			</div>
+			</form>
+			<div class="ljzc" style="margin-top:20px;"><a onClick="location='{:url('home/index/register')}'" href="javascript:void(0);">立即注册，参与平台文化创意开发</a></div>
+		</div>
+	</div>
+
+</div>
+<!--banner-->
+<!-- 代码begin -->
+<div class="banner">
+	<div class="flexslider">
+		<ul class="slides">
+			<li><a href="javascript:void(0);" style="background:url({$Think.config.web_member}/img/banner1.png) 50% 0 no-repeat; display:block;height:653px;"></a></li>
+			<li><a href="javascript:void(0);" style="background:url({$Think.config.web_member}/img/banner1.png) 50% 0 no-repeat; display:block;height:653px;"></a></li>
+			<li><a href="javascript:void(0);" style="background:url({$Think.config.web_member}/img/banner1.png) 50% 0 no-repeat; display:block;height:653px;"></a></li>
+		</ul>
+	</div>
+</div>
+<!-- 代码end -->
+<!-- js调用部分begin -->
+<script>
+$(function(){
+	$('.banner .flexslider').flexslider({
+		directionNav: true,
+		pauseOnAction: false
+	});
+	//是否记住密码
+	$("#is_pwd_ever").click(function(){
+		if($(this).is(':checked')){
+			$(this).val("1");
+		}else{
+			$(this).val("");
+		}
+	});
+	$("#forgetpwd").click(function(){
+		location.href = "{:url('home/index/forgetpwd')}";
+	});
+});
+</script>
+
+{include file="/member/m_footer"}
+
+</body>
+</html>

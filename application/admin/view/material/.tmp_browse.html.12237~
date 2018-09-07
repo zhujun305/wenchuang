@@ -1,0 +1,138 @@
+{include file="/common/main_top"}
+<script>
+$(function(){
+	//全选
+	$('#chkall').click(function(){
+		var chk = $(this).is(":checked");
+		$('.chklie').each(function(){
+			$(this).attr('checked' , chk);
+		});
+	});
+	//查询
+	$('#findbtn').click(function(){
+		var arr=[];
+		arr.push($('#title').val());
+		arr.push($('#is_chk').val());
+		arr.push($('#is_lock').val());
+		var find = "?find="+arr.join("{$search_separ}");
+		var url = "{:url('/Admin/material/browse')}";
+		location.href = url+find;
+	});
+});
+</script>
+<div class="allpagetop">后台管理中心<strong>/</strong>素材管理</div>
+<div class="mains">
+	<div class="h1tit">
+		<div class="h1">素材管理</div>
+		<div class="topnav">
+			<a href="{:url('/Admin/material/browse')}" class="select">素材列表</a>
+			<a href="{:url('/Admin/materialcate/browse')}">分类列表</a>
+			<a href="{:url('/Admin/materialtopic/browse')}">专题列表</a>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="sea_div mt_10">
+		<div class="sea_clearbtn f_r mr_20" id="clearbtn">清除</div>
+		<div class="sea_btn f_r" id="findbtn">查询</div>
+		<select id="is_lock" class="gg_select w100 f_r ml_20">
+			<option value="" selected="selected">是否锁定</option>
+			<option value="1" <?php echo $findObj['is_lock']==1?'selected':''?>>未锁定</option>
+			<option value="2" <?php echo $findObj['is_lock']==2?'selected':''?>>已锁定</option>
+		</select>
+		<select id="is_chk" class="gg_select w100 f_r ml_20">
+			<option value="" selected="selected">审核状态</option>
+			<option value="1" <?php echo $findObj['is_chk']==1?'selected':''?>>未审核</option>
+			<option value="2" <?php echo $findObj['is_chk']==2?'selected':''?>>已审核</option>
+			<option value="3" <?php echo $findObj['is_chk']==3?'selected':''?>>不通过</option>
+		</select>
+		<div class="sea_text f_r">
+			<div class="sobox">
+			<div class="sotype">标题</div>
+			<input type="text" id="title" class="sinput" value="{$findObj['title']}" />
+			</div>
+		</div>
+	</div>
+	<div class="clear"></div>
+	
+	<div class="list_th">
+		<div class="td" style="width:7%;">
+			<label class="left_padding">
+				<input type="checkbox" id="chkall" title="全选/反选"/>ID
+			</label>
+		</div>
+		<div class="td" style="width:10%;">分类/名称</div>
+		<div class="td" style="width:10%;">缩略图</div>
+		<div class="td" style="width:10%;">元数据/分类/批次/流水</div>
+		<div class="td" style="width:10%;">所属专题</div>
+		<div class="td" style="width:10%;">&nbsp;</div>
+		<div class="td" style="width:10%;">下载积分/下载量/收藏量/访问量</div>
+		<div class="td" style="width:5%;">是否批量上传</div>
+		<div class="td" style="width:5%;">审核状态</div>
+		<div class="td" style="width:10%;">录入时间/录入人</div>
+		<div class="td" style="width:10%;">操作</div>
+		<div class="clear"></div>
+	</div>
+	<?php if(empty($list)){?>
+	<div class="list_empty">没有任何信息！</div>
+	<?php }else{?>
+	{volist name="list" id="val"}
+	<div class="list_tr link_black">
+		<div class="td" style="width:7%;">
+			<div class="left_padding striking link_blue">
+			<input type="checkbox" name="id[]" class="chklie" value="{$val.id}"/>{$val.id}
+			</div>
+		</div>
+		<div class="td" style="width:10%;">【{$catelist[$val.cate]['cname']}】<br/>{$val.title}</div>
+		<div class="td" style="width:10%;">
+			<img src="<?php echo getImgURL($val['cover']);?>" class="suotu_div" _shuiyin="<?php echo getImgURL($val['pic_water']);?>" width="133" height="99" />
+		</div>
+		<div class="td" style="width:10%;">&nbsp;{$val.metadata}<br/>
+			{$val.cno}--{$val.batch}--{$val.filename}
+		</div>
+		<div class="td" style="width:10%;">&nbsp;
+			<?php $topic_arr=[]; 
+				if($val['topic_str']!=''){ $topic_arr=explode(",",$val['topic_str']); }
+				$topic_str = '';
+				if(!empty($topic_arr)){
+					foreach($topic_arr as $kkk=>$vvv){
+						$topic_str.= (isset($topicarr[$vvv])?$topicarr[$vvv]:'').'，';
+					}
+				}?>
+			{$topic_str}
+		</div>
+		<div class="td" style="width:10%;">&nbsp;</div>
+		<div class="td" style="width:10%;">积分：{$val.integral} 下载：{$val.download}<br/>
+			收藏：{$val.coll} 访问：{$val.pv}
+		</div>
+		<div class="td" style="width:5%;">&nbsp;<?php echo ($val['mu_id']>0 || $val['matuprid']>0)?'批量上传':'前台发布';?></div>
+		<div class="td" style="width:5%;">{$chk_arr[$val['is_chk']]}<br/>
+			<?php echo $val['is_lock']==2?'<font color="red">锁定</font>':'';?>
+		</div>
+		<div class="td" style="width:10%;">
+			<?php echo $val['input_time']>0?date("Y-m-d H:i:s",$val['input_time']):''?><br/>
+			<?php echo $val['uid']>0?$memberlist[$val['uid']]['nick_name']:'';?>
+		</div>
+		<div class="td edit" style="width:10%;">
+			<?php if($val['is_chk']!=2){?>
+			<a href="{:url('/Admin/material/detail','id='.$val.id.'&type=2')}">审核</a>
+			<?php }?>
+			<a href="{:url('/Admin/material/detail','id='.$val.id)}">查看详细</a>
+			<br/>
+			<?php if($val['is_lock']==1){?>
+			<a href="{:url('/Admin/material/lock','id='.$val.id)}" class="gray">锁定</a>
+			<?php }else{?>
+			<a href="{:url('/Admin/material/unlock','id='.$val.id)}">解锁</a>
+			<?php }?>
+			<a href="{:url('/Admin/material/del','id='.$val.id)}" class="gray" onclick="return confirm('你确定要删除吗？')">删除</a>
+		</div>
+		<div class="clear"></div>
+	</div>
+	{/volist}
+	<?php }?>
+	<div class="pages">
+		{$list->render()}
+	</div>
+</div>
+
+{include file="/common/main_footer"}

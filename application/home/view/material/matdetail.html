@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>文创素材</title>
+{include file="/common/c_header"}
+</head>
+
+<body>
+
+<div class="wrap">
+{include file="/common/c_top"}
+
+
+  <div class="unionbg clear">
+    <div class="w location">当前位值：
+		<a href="{:url('home/Material/matlist','cate='.$detail['cate'])}">{$detail['yijimenu']}</a>
+		<i>&gt;</i>{$detail['erjimenu']}
+	</div>
+    <div class="w">
+      <div class="pic_tit">
+        <h2>{$detail['title']}</h2>
+        <p><font>浏览：{$detail['pv']}</font><font>收藏：{$detail['coll']}</font><font>下载：{$detail['download']}</font></p>
+        <em>
+        	<?php if($detail['is_coll']==1){?>
+        	<a class="collection" href="javascript:void(0);" style="background-color:#cacaca;">已收藏</a>
+			<?php }else{?>
+        	<a class="collection" id="coll_mat" href="javascript:void(0);">收藏素材</a>
+			<?php }?>
+			<a id="down_mat" href="javascript:void(0);">下载素材</a>
+		</em>
+      </div>
+      <div class="n_pic_con clear">
+        <div class="n_pic_dt left"><img src="<?php echo getImgURL($detail['pic_water']);?>" width="810" height="775" /></div>
+        <div class="n_pic_rt right">
+          <ul class="n_pic_rtc">
+            <li><em>素材编号：</em>{$detail['metadata']}</li>
+            <li><em>上传时间：</em><?php echo $detail['input_time']>0?date("Y/m/d",$detail['input_time']):'';?></li>
+            <li><em>格式：</em>{$detail['ext']}</li>
+            <li><em>分辨率：</em>{$detail['pixel']}dpi</li>
+			<?php $size_str = '';
+				$size = intval($detail['size']/1024);
+				if($size>1024){
+					$size = round(($size/1024),1);
+					$size_str = $size.'MB';
+				}else{
+					$size_str = $size.'KB';
+				}?>
+            <li><em>大小：</em>{$size_str}</li>
+            <li><em>尺寸：</em>{$detail['width']}*{$detail['height']}像素</li>
+            <li><em>其他题名：</em>{$detail['supply_tit']}</li>
+			<?php $topic_arr=[]; 
+				if($detail['topic_str']!=''){ $topic_arr=explode(",",$detail['topic_str']); }
+				$topic_str = '';
+				if(!empty($topic_arr)){
+					foreach($topic_arr as $kkk=>$vvv){
+						$topic_str.= (isset($topicarr[$vvv])?$topicarr[$vvv].'，':'');
+					}
+				}?>
+            <li><em>系列题名：</em>{$topic_str}</li>
+            <li><em>责任者名称：</em>{$detail['author']}</li>
+            <li><em>责任方式：</em>{$detail['author_info']}</li>
+            <li><em>主题词：</em>{$detail['themewords']}</li>
+            <li><em>关键词：</em>{$detail['keywords']}</li>
+            <li><em>素材来源书：</em>{$detail['source']}</li>
+            <li><em>素材版本：</em>{$detail['version']}</li>
+            <li><em>创作时间：</em>{$detail['originaltime']}</li>
+            <li><em>制作时间：</em>{$detail['makingtime']}</li>
+            <li><em>空间范围：</em>{$detail['roomarea']}</li>
+            <li><em>资源类型：</em>{$detail['resourcecate']}</li>
+            <li><em>包含于：</em>{$detail['contain']}</li>
+          </ul>
+          <div class="n_pic_txt">
+            <h3>应用场景：</h3>
+            <p>{$detail['scene']}</p>
+          </div>
+        </div>
+        <div class="clear0"></div>
+      </div>
+    </div>
+    <div class="material clear">
+      <div class="tit2"><em>相关素材</em></div>
+      <ul>
+      	{volist name="xglist" id="val"}
+        <li>
+          <div class="pic"><a onClick="location='{:url('home/Material/matdetail','id='.$val.id)}'" href="javascript:void(0);">
+          	<img src="<?php echo getImgURL($val['cover']);?>" width="270" height="200" /></a></div>
+          <div class="txts">
+            <h3>{$val.title}</h3>
+            <p>{$catearr[$val.cate]['cname']}</p>
+          </div>
+        </li>
+		{/volist}
+      </ul>
+    </div>
+  </div>
+
+{include file="/common/c_footer"}
+</div>
+<script type="text/javascript">
+$(function(){
+	var uid = "{$member['uid']}";
+	var matid = "{$detail['id']}";
+	$("#coll_mat").click(function(){
+		if(!(uid>0)){
+			alert("收藏素材，请先登录！");
+			return false;
+		}else{
+			var url = "{:url('home/Material/coll_mat')}";
+			$.post(url,{uid:uid,matid:matid},function(data){
+				if(data>0){
+					alert("收藏成功！");
+					location.href = "{:url('home/Material/matdetail','id='.$detail['id'])}";
+				}
+			},'json');
+		}
+	});
+	$("#down_mat").click(function(){
+		
+	});
+});
+</script>
+
+</body>
+</html>

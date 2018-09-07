@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>修改密码-会员中心</title>
+{include file="/member/m_header"}
+</head>
+
+<body>
+
+<!--头部开始-->
+{include file="/member/m_top"}
+<!-- 非头尾的内容 START -->
+<!--面包屑导航开始-->
+<div class="breadcrumb clearfix " >
+</div>
+<!--面包屑导航结束-->
+
+<div class="main clearfix" >
+{include file="/member/m_left"}
+    <div class="contents fr m20">
+		<div class="clearfix"></div>
+		{include file="/member/ad"}
+		
+		<div class="lm">
+			<a class="on">登录密码</a>
+		</div>
+		<div class="border">
+		<div class="forms">
+			<form action="" method="post">
+			<div class="row">
+				<span><i>* </i>旧的密码</span> <input type="password" name="old_pwd" placeholder="请输入旧密码" />
+			</div>
+			<div class="row">
+				<span><i>* </i>新的密码</span> <input type="password" name="new_pwd" placeholder="请输入新密码" />
+			</div>
+			<div class="row">
+				<span><i>* </i>确认密码</span> <input type="password" name="new_pwd2" placeholder="请再次输入新密码" />
+			</div>
+			<input type="submit" value="确认" class="submit" />
+			</form>
+		</div>
+		</div>
+    </div>
+</div>
+<!-- 非头尾的内容 END -->
+<script type="text/javascript">
+var is_submit=false;
+$(function(){
+	$('.submit').click(function(){
+		if(is_submit) {
+			alert('数据传输中，请勿重复点击。');
+			return false;
+		}
+		var old_pwd=$('input[name="old_pwd"]').val();
+		if(old_pwd=='' || /\s+/.test(old_pwd)) {
+			$('input[name="old_pwd"]').focus();
+			alert('旧密码不能为空，且不能包含空格！');
+			return false;
+		}
+		var new_pwd=$('input[name="new_pwd"]').val();
+		var new_pwd2=$('input[name="new_pwd2"]').val();
+		if (new_pwd=='' || /\s+/.test(new_pwd)) {
+			$('input[name="new_pwd"]').focus();
+			alert('新密码不能为空，且不能包含空格！');
+			return false;
+		} else if (new_pwd2=='' || /\s+/.test(new_pwd2)) {
+			$('input[name="new_pwd2"]').focus();
+			alert('确认密码不能为空，且不能包含空格！');
+			return false;
+		} else if (new_pwd2!=new_pwd) {
+			$('input[name="new_pwd2"]').focus();
+			alert('两次输入密码不一致！');
+			return false;
+		}
+		is_submit=true;
+		$(this).parents('form').submit();
+	});
+});
+</script>
+
+{include file="/member/m_footer"}
+
+</body>
+</html>

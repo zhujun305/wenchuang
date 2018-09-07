@@ -1,0 +1,16 @@
+
+<div class="top">
+	<div class="main">
+		<div class="logos" onClick="location='{:url('home/index/index')}'">
+			<img src="{$Think.config.web_home}/images/logo2.png" /></div>
+		<div class="userinf">
+			<img src="{$member['imgurl']}" class="img" width="40px" height="40px" />
+			<dl class="username">
+				<dt>{$member['nick_name']}</dt>
+				<dd>{$membercate[$member['cate']]}</dd>
+			</dl>
+			<div class="email">12</div>
+			<a class="quit" onClick="location='{:url('home/index/logout')}'" href="javascript:void(0);">退出</a>
+		</div>
+	</div>
+</div>

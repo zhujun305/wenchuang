@@ -1,0 +1,23 @@
+<script>
+(function ($) {
+	$.extend({
+	  //压缩图片，参数1：file对象，参数2：压缩比例
+	  compress(file,scale) {
+	    return new Promise(function (resolve,reject) {
+	      let _scale=scale || 1;
+	      let cvs = document.createElement('canvas');
+	      let ctx = cvs.getContext('2d');
+	      let img = new window.Image();
+	      let imgType=file.type;
+	      img.src = URL.createObjectURL(file);
+	      img.onload=function () {
+	        cvs.width = img.width*_scale;
+	        cvs.height = img.height*_scale;
+	        ctx.drawImage(img, 0, 0, cvs.width, cvs.height);
+	        resolve(cvs.toDataURL(imgType));
+	      }
+	    });
+	  }
+	});
+})(jQuery);
+</script>

@@ -1,0 +1,135 @@
+{include file="/common/main_top"}
+<script>
+$(function(){
+	//全选
+	$('#chkall').click(function(){
+		var chk = $(this).is(":checked");
+		$('.chklie').each(function(){
+			$(this).attr('checked' , chk);
+		});
+	});
+	//查询
+	$('#findbtn').click(function(){
+		var arr=[];
+		arr.push($('#cate').val());
+		arr.push($('#titname').val());
+		arr.push($('#leaguer_no').val());
+		arr.push($('#a_mobile').val());
+		arr.push($('#is_chk').val());
+		arr.push($('#is_leaguer').val());
+		var find = "?find="+arr.join("{$search_separ}");
+		var url = "{:url('/Admin/memberauth/browse')}";
+		location.href = url+find;
+	});
+});
+</script>
+<div class="allpagetop">后台管理中心<strong>/</strong>会员认证管理</div>
+<div class="mains">
+	<div class="h1tit">
+		<div class="h1">会员认证管理</div>
+		<div class="topnav">
+			<a href="{:url('/Admin/memberauth/browse')}" class="select">会员认证列表</a>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="sea_div mt_10">
+		<div class="sea_clearbtn f_r mr_20" id="clearbtn">清除</div>
+		<div class="sea_btn f_r" id="findbtn">查询</div>
+		<select id="is_leaguer" class="gg_select w100 f_r ml_20">
+			<option value="" selected="selected">是否成员馆</option>
+			<option value="1" <?php echo $findObj['is_leaguer']==1?'selected':''?>>非成员馆</option>
+			<option value="2" <?php echo $findObj['is_leaguer']==2?'selected':''?>>成员馆</option>
+		</select>
+		<select id="is_chk" class="gg_select w100 f_r ml_20">
+			<option value="" selected="selected">审核状态</option>
+			<option value="1" <?php echo $findObj['is_chk']==1?'selected':''?>>未审核</option>
+			<option value="2" <?php echo $findObj['is_chk']==2?'selected':''?>>已审核</option>
+			<option value="3" <?php echo $findObj['is_chk']==3?'selected':''?>>不通过</option>
+		</select>
+		<div class="sea_text f_r">
+			<div class="sobox">
+			<div class="sotype">电话</div>
+			<input type="text" id="a_mobile" class="sinput" value="{$findObj['a_mobile']}" />
+			</div>
+		</div>
+		<div class="sea_text f_r">
+			<div class="sobox">
+			<div class="sotype">成员馆编号</div>
+			<input type="text" id="leaguer_no" class="sinput" value="{$findObj['leaguer_no']}" />
+			</div>
+		</div>
+		<div class="sea_text f_r">
+			<div class="sobox">
+			<div class="sotype">认证名称</div>
+			<input type="text" id="titname" class="sinput" value="{$findObj['titname']}" />
+			</div>
+		</div>
+		<select id="cate" class="gg_select w100 f_r">
+			<option value="" selected="selected">会员类型</option>
+			{volist name="membercate" id="val"}
+			<option value="{$key}" <?php echo $findObj['cate']==$key?'selected':''?>>{$val}</option>
+			{/volist}
+		</select>
+	</div>
+	<div class="clear"></div>
+	
+	<div class="list_th">
+		<div class="td" style="width:5%;">
+			<label class="left_padding">
+				<input type="checkbox" id="chkall" title="全选/反选"/>ID
+			</label>
+		</div>
+		<div class="td" style="width:10%;">认证类型</div>
+		<div class="td" style="width:10%;">logo</div>
+		<div class="td" style="width:10%;">认证名称/成员馆文件夹</div>
+		<div class="td" style="width:15%;">其他材料</div>
+		<div class="td" style="width:15%;">电话/邮箱/地址</div>
+		<div class="td" style="width:10%;">提交时间</div>
+		<div class="td" style="width:10%;">审核状态/是否成员馆</div>
+		<div class="td" style="width:15%;">操作</div>
+		<div class="clear"></div>
+	</div>
+	<?php if(empty($list)){?>
+	<div class="list_empty">没有任何信息！</div>
+	<?php }else{?>
+	{volist name="list" id="val"}
+	<div class="list_tr link_black">
+		<div class="td" style="width:5%;">
+			<div class="left_padding striking link_blue">
+			<input type="checkbox" name="uid[]" class="chklie" value="{$val.uid}"/>{$val.uid}
+			</div>
+		</div>
+		<div class="td" style="width:10%;">&nbsp;{$membercate[$val.cate]}</div>
+		<div class="td" style="width:10%;"><img src="<?php echo getImgURL($val['logo'],'memberauth','');?>" width="133" height="99" /></div>
+		<div class="td" style="width:10%;">
+			<?php if($val['cate']==1 || $val['cate']==2){ echo $val['true_name']; }
+			elseif($val['cate']==3 || $val['cate']==4){ echo $val['company']; }?><br/>
+			<?php echo !empty($val['leaguer_no'])?$val['leaguer_no']:'<font color="red">没有文件夹</font>';?>
+		</div>
+		<div class="td" style="width:15%;">&nbsp;</div>
+		<div class="td" style="width:15%;">&nbsp;{$val.a_mobile}<br/>{$val.a_email}<br/>{$val.a_address}</div>
+		<div class="td" style="width:10%;">&nbsp;<?php echo $val['input_time']>0?date("Y-m-d H:i:s",$val['input_time']):''?></div>
+		<div class="td" style="width:10%;">&nbsp;<?php echo $chk_arr[$val['is_chk']];?><br/>
+			<?php echo $val['is_leaguer']==2?'<font color="green;">成员馆</font>':'非成员馆';?>
+		</div>
+		<div class="td edit" style="width:15%;">
+			<?php if($val['is_chk']!=2){?>
+			<a href="{:url('/Admin/memberauth/detail','id='.$val.id.'&type=2')}">认证审核</a>
+			<?php }else{?>
+			<a href="{:url('/Admin/memberauth/detail','id='.$val.id)}">查看详细</a>
+			<?php }?>
+			<?php if($val['is_leaguer']!=2){?>
+			<a href="{:url('/Admin/memberauth/detail','id='.$val.id.'&type=3')}">认证成员馆</a>
+			<?php }?>
+		</div>
+		<div class="clear"></div>
+	</div>
+	{/volist}
+	<?php }?>
+	<div class="pages">
+		{$list->render()}
+	</div>
+</div>
+
+{include file="/common/main_footer"}

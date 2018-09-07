@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>众包设计</title>
+{include file="/common/c_header"}
+</head>
+
+<body>
+
+<div class="wrap">
+{include file="/common/c_top"}
+
+
+  <div class="unionbg padtop clear">
+    <div class="crowdsource_class clear">
+      <div class="crowdsource_class_t"><a class="cur" href="cdlist.html">需求</a><a href="cdteam.html">团队</a><a href="cdcase.html">案例</a></div>
+      <dl>
+        <dt>分类</dt>
+        <dd class="cur"><a href="#">不限</a></dd>
+        <dd><a href="#">生活配饰</a></dd>
+        <dd><a href="#">文房用品</a></dd>
+        <dd><a href="#">雅玩摆件</a></dd>
+        <dd><a href="#">礼品珍宝</a></dd>
+        <dd><a href="#">书籍邮册</a></dd>
+        <dd><a href="#">创意家具</a></dd>
+        <dd><a href="#">服装箱包</a></dd>
+        <dd><a href="#">其它分类</a></dd>
+        <div class="clear0"></div>
+      </dl>
+      <dl class="sort1">
+        <dt>排序</dt>
+        <dd><em><a href="#">发布时间<i></i></a></em><p><a href="#">一周内发布</a><a href="#">一月内发布</a><a href="#">一年内发布</a></p></dd>
+        <dd><em><a href="#">截稿时间<i></i></a></em><p><a href="#">一周</a><a href="#">一月</a><a href="#">所有</a></p></dd>
+        <dd><em><a href="#">参与人数<i></i></a></em><p><a href="#">人数顺序</a><a href="#">人数倒序</a></p></dd>
+        <dd><em><a href="#">预算价格<i></i></a></em><p><a href="#">从高到低</a><a href="#">从低到高</a></p></dd>
+        <div class="clear0"></div>
+      </dl>
+    </div>
+    <div class="crowdsource clear">
+      <ul>
+        <li>
+          <div class="pic"><a href="cdinfo.html"><img src="images/cd05.png" width="270" height="200" /></a></div>
+          <div class="txts">
+            <h3><a href="#">文创商品产品众包项目名称</a></h3>
+            <p>￥28000.00</p>
+            <em>12个团队参与创作</em>
+            <h4><a href="#">我要投稿</a></h4>
+          </div>
+        </li>
+        <li>
+          <div class="pic"><a href="#"><img src="images/cd06.png" width="270" height="200" /></a></div>
+          <div class="txts">
+            <h3><a href="#">文创商品产品众包项目名称</a></h3>
+            <p>￥28000.00</p>
+            <em>12个团队参与创作</em>
+            <h4><a href="#">我要投稿</a></h4>
+          </div>
+        </li>
+        <li>
+          <div class="pic"><a href="#"><img src="images/cd07.png" width="270" height="200" /></a></div>
+          <div class="txts">
+            <h3><a href="#">文创商品产品众包项目名称</a></h3>
+            <p>￥28000.00</p>
+            <em>12个团队参与创作</em>
+            <h4><a href="#">我要投稿</a></h4>
+          </div>
+        </li>
+        <li>
+          <div class="pic"><a href="#"><img src="images/cd08.png" width="270" height="200" /></a></div>
+          <div class="txts">
+            <h3><a href="#">文创商品产品众包项目名称</a></h3>
+            <p>￥28000.00</p>
+            <em>12个团队参与创作</em>
+            <h4><a href="#">我要投稿</a></h4>
+          </div>
+        </li>
+        <li>
+          <div class="pic"><a href="#"><img src="images/cd01.png" width="270" height="200" /></a></div>
+          <div class="txts">
+            <h3><a href="#">文创商品产品众包项目名称</a></h3>
+            <p>￥28000.00</p>
+            <em>12个团队参与创作</em>
+            <h4><a href="#">我要投稿</a></h4>
+          </div>
+        </li>
+        <li>
+          <div class="pic"><a href="#"><img src="images/cd02.png" width="270" height="200" /></a></div>
+          <div class="txts">
+            <h3><a href="#">文创商品产品众包项目名称</a></h3>
+            <p>￥28000.00</p>
+            <em>12个团队参与创作</em>
+            <h4><a href="#">我要投稿</a></h4>
+          </div>
+        </li>
+        <li>
+          <div class="pic"><a href="#"><img src="images/cd03.png" width="270" height="200" /></a></div>
+          <div class="txts">
+            <h3><a href="#">文创商品产品众包项目名称</a></h3>
+            <p>￥28000.00</p>
+            <em>12个团队参与创作</em>
+            <h4><a href="#">我要投稿</a></h4>
+          </div>
+        </li>
+        <li>
+          <div class="pic"><a href="#"><img src="images/cd04.png" width="270" height="200" /></a></div>
+          <div class="txts">
+            <h3><a href="#">中国风古风嫦娥七夕仙境手机壳设计</a></h3>
+            <p>￥28000.00</p>
+            <em>12个团队参与创作</em>
+            <h4><a href="#">我要投稿</a></h4>
+          </div>
+        </li>
+        <li>
+          <div class="pic"><a href="#"><img src="images/cd09.png" width="270" height="200" /></a></div>
+          <div class="txts">
+            <h3><a href="#">中国风古风嫦娥七夕仙境手机壳设计</a></h3>
+            <p>￥28000.00</p>
+            <em>12个团队参与创作</em>
+            <h4><a href="#">我要投稿</a></h4>
+          </div>
+        </li>
+        <li>
+          <div class="pic"><a href="#"><img src="images/cd10.png" width="270" height="200" /></a></div>
+          <div class="txts">
+            <h3><a href="#">家庭装饰画设计</a></h3>
+            <p>￥28000.00</p>
+            <em>12个团队参与创作</em>
+            <h4><a href="#">我要投稿</a></h4>
+          </div>
+        </li>
+        <li>
+          <div class="pic"><a href="#"><img src="images/cd11.png" width="270" height="200" /></a></div>
+          <div class="txts">
+            <h3><a href="#">文创商品产品众包项目名称</a></h3>
+            <p>￥28000.00</p>
+            <em>12个团队参与创作</em>
+            <h4><a href="#">我要投稿</a></h4>
+          </div>
+        </li>
+        <li>
+          <div class="pic"><a href="#"><img src="images/cd12.png" width="270" height="200" /></a></div>
+          <div class="txts">
+            <h3><a href="#">文创商品产品众包项目名称</a></h3>
+            <p>￥28000.00</p>
+            <em>12个团队参与创作</em>
+            <h4><a href="#">我要投稿</a></h4>
+          </div>
+        </li>
+      </ul>
+      <div class="page clear"><a href="#">&laquo;</a><a href="#">1</a><a href="#">2</a><a href="#">3</a><a href="#">4</a><a href="#">5</a><a href="#">&raquo;</a></div>
+    </div>
+  </div>
+
+{include file="/common/c_footer"}
+</div>
+
+</body>
+</html>

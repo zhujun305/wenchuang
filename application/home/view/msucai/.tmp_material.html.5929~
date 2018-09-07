@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>素材管理-会员中心</title>
+{include file="/member/m_header"}
+</head>
+
+<body>
+
+<!--头部开始-->
+{include file="/member/m_top"}
+<!-- 非头尾的内容 START -->
+<!--面包屑导航开始-->
+<div class="breadcrumb clearfix " >
+</div>
+<!--面包屑导航结束-->
+
+<div class="main clearfix" >
+{include file="/member/m_left"}
+    <div class="contents fr m20">
+		{include file="/member/ad"}
+		
+		<div class="lm">
+			<div class="search">
+				<input type="text" class="txt" id="seatxt" value="{$find}" placeholder="搜索" /> 
+				<input type="image" src="{$Think.config.web_member}/img/fff.png" class="ss" id="seaform" />
+			</div>
+			<a onClick="location='{:url('home/Msucai/material')}'" {if condition="$is_chk==''"}class="on"{/if} href="javascript:void(0);">所有素材(<i>{$tongji['allnum']}</i>)</a>
+			<a onClick="location='{:url('home/Msucai/material','is_chk=1')}'" {if condition="$is_chk==1"}class="on"{/if} href="javascript:void(0);">审核中素材(<i>{$tongji['chkanum']}</i>)</a>
+			<a onClick="location='{:url('home/Msucai/material','is_chk=2')}'" {if condition="$is_chk==2"}class="on"{/if} href="javascript:void(0);">审核通过(<i>{$tongji['chkbnum']}</i>)</a>
+			<a onClick="location='{:url('home/Msucai/material','is_chk=3')}'" {if condition="$is_chk==3"}class="on"{/if} href="javascript:void(0);">驳回素材(<i>{$tongji['chkcnum']}</i>)</a>
+		</div>
+    	<div class="border">
+			<div class="list_tit">
+				<ul>
+				<li class="l1">缩略图</li>
+				<li class="l2">名称 [类别] / 说明</li>
+				<li class="l3">审核状态</li>
+				<li class="l4">点击</li>
+				<li class="l5">发布日期</li>
+				<li class="l6">操作</li>
+				</ul>
+			</div>
+			<div class="clearfix"></div>
+			<div class="sc_list">
+				<ul>
+        		{volist name="list" id="val"}
+				<li>
+					<dl class="d1"><input type="checkbox" /></dl>
+					<dl class="d2"><a onClick="location='{:url('home/Msucai/materialinfo','id='.$val.id)}'" href="javascript:void(0);">
+						<img src="<?php echo getImgURL($val['cover']);?>" width="133" height="99" /></a></dl>
+					<dl class="d3">
+					<h3><a onClick="location='{:url('home/Msucai/materialinfo','id='.$val.id)}'" href="javascript:void(0);">{$val.title}【{$catelist[$val.cate]['cname']}】</a></h3>
+					<dt>{$val.supply_tit}</dt>
+					<?php if(!empty($val['filepath'])){?>
+					<?php $skb=intval($val['size']/1024); $size_str = $skb.'KB'; ?>
+					<?php if($skb>1024){
+						$smb=round(($skb/1024),1);
+						$size_str = $smb.'MB';
+					} ?>
+					<dd>参数：{$val.ext} | {$size_str} | {$val.width}×{$val.height} | {$val.pixel}dpi</dd>
+					<?php }?>
+					</dl>
+					<dl class="d4">{$chk_arr[$val.is_chk]}</dl>	
+					<dl class="d5">{$val.pv}</dl>
+					<dl class="d6"><?php echo date("Y-m-d",$val['input_time']);?></dl>
+					<dl class="d7">
+						<div style="height:30px;">
+						<a onClick="location='{:url('home/Msucai/materialinfo','id='.$val.id)}'" href="javascript:void(0);">生成缩略图</a></div>
+						<a onClick="location='{:url('home/Msucai/materialupd','id='.$val.id)}'" href="javascript:void(0);">编辑</a>
+						<a id="delbtn" _var="{:url('home/Msucai/materialdel','id='.$val.id)}" href="javascript:void(0);">删除</a>
+					</dl>
+				</li>
+				{/volist}
+				</ul>
+			</div>
+			<div class="page">
+				{$list->render()}
+			</div>
+		</div>
+    </div>
+</div>
+<!-- 非头尾的内容 END -->
+<script type="text/javascript">
+$(function(){
+	$('#chkall').click(function(){
+		if($(this).is(':checked')){
+			$('input:[type="checkbox"]').attr('checked','checked');
+		}else{
+			$('input:[type="checkbox"]').removeAttr('checked');
+		}
+	});
+	$("#delbtn").click(function(){
+		if(confirm('确定要删除选中的数据吗?')){
+			var url = $(this).attr("_var");
+			location.href = url;
+		}
+	});
+	$("#seaform").click(function(){
+		var seatxt = $("#seatxt").val();
+		var url = "{:url('home/Msucai/material')}?is_chk=&find="+seatxt+"";
+		location.href = url;
+	});
+});
+</script>
+
+{include file="/member/m_footer"}
+
+</body>
+</html>

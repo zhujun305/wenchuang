@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>设计师-会员认证</title>
+{include file="/member/header"}
+</head>
+
+<body>
+<!--头部开始-->
+<div class="top">
+	<div class="main">
+		<div class="logos"><img src="{$Think.config.web_member}/img/logo.png" /></div>
+	</div>
+</div>
+
+<div class="main">
+	<div class="step">
+		<ul>
+			<li class="on"> <i>1</i> 设置账号信息</li>
+			<li class="on"> <i>2</i> 选择用户类型</li>
+			<li class="on"> <i>3</i> 完善用户资料</li>
+		</ul>
+	</div>
+	
+	<div class="regbg">
+		<div class="forms">
+			<form action="{:url('home/Index/reg_auth_member')}" method="post">
+			<div class="row"><span></span> 设计师---完善会员资料</div>
+			<div class="row">
+				<span><i>* </i>昵称</span> <input type="text" name="nick_name" value="{$nick_name}" placeholder="请输入昵称" />
+			</div>
+			<div class="row">
+				<span><i>* </i>真实姓名</span> <input type="text" name="true_name" placeholder="请输入真实姓名" />
+			</div>
+			<div class="row">
+				<span><i>* </i>工作单位</span> <input type="text" name="work_unit" placeholder="请输入工作单位" />
+			</div>
+			<div class="row" >
+				<span><i>* </i>设计师照片</span> <a class="ups" ><img src="{$Think.config.web_member}/img/ad3.png" /></a>
+			</div>
+			<input type="file" id="upimages" style="display:none" />
+			<div class="row" >
+				<span><i>* </i>身份证反正面</span> 
+				<a class="ups" ><img src="{$Think.config.web_member}/img/ad4.png" /></a>
+				<a class="ups" ><img src="{$Think.config.web_member}/img/ad5.png" /></a>
+			</div>
+			<div class="row" >
+				<span><i>* </i>毕业证书</span> <a class="ups" ><img src="{$Think.config.web_member}/img/ad6.png" /></a>
+			</div>
+			<div class="row">
+				<span><i>* </i>最高学历</span> <input type="text" name="diploma" placeholder="您的最高学历，如本科、硕士等" />
+			</div>
+			<div class="row">
+				<span><i>* </i>所学专业</span> <input type="text" name="major" placeholder="请输入您所学的专业" />
+			</div>
+			<div class="row">
+				<span><i>* </i>联系电话</span> <input type="text" name="a_mobile" placeholder="请输入联系电话" />
+			</div>
+			<div class="row">
+				<span><i>* </i>电子邮箱</span> <input type="text" name="a_email" placeholder="请输入电子邮箱" />
+			</div>
+			<div class="row">
+				<span><i>* </i>联系地址</span> <input type="text" name="a_address" placeholder="请输入联系地址" />
+			</div>
+			<input type="hidden" name="cate" value="{$cate}" />
+			<input type="submit" value="确认" class="submit" />
+			</form>
+		</div>
+	</div>
+</div>
+<script>
+$(function(){
+});
+</script>
+
+{include file="/member/footer"}
+
+</body>
+</html>

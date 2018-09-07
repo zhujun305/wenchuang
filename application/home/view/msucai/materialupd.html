@@ -1,0 +1,147 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>发布项目-会员中心</title>
+{include file="/member/m_header"}
+<script src="{$Think.config.web_root}/js/calendar.js"></script>
+</head>
+
+<body>
+
+<!--头部开始-->
+{include file="/member/m_top"}
+<!-- 非头尾的内容 START -->
+<!--面包屑导航开始-->
+<div class="breadcrumb clearfix " >
+</div>
+<!--面包屑导航结束-->
+
+<div class="main clearfix" >
+{include file="/member/m_left"}
+    <div class="contents fr m20">
+		<div class="lm lm_no">
+			<a class="on">素材编辑</a>
+		</div>
+
+		<div class="border">
+			<div class="clearfix"></div>
+			<div class="com_bor">
+              <ul class="c_up_infor">
+              	<form action="{:url('home/Msucai/materialupd','id='.$detail['id'])}" method="post">
+                <li><em>素材名称</em><div class="in_con">
+                	<input type="text" name="title" id="title" value="{$detail['title']}" class="c_u_intxt" placeholder="请输入素材名称" /></div></li>
+                <li class="s_li"><em>素材分类</em><div class="in_con">{$catelist[$detail['cate']]['cname']}</div></li>
+                <li><em>专题</em><div class="in_con">
+                	<input type="text" id="xz_topic" value="{$topic_str}" class="c_u_intxt" placeholder="点击选择专题" />
+                	<input type="hidden" name="topic_str" id="topic_str" value="{$detail['topic_str']}" />
+					</div></li>
+                <li><em>其它题名</em><div class="in_con">
+                	<input type="text" name="supply_tit" id="supply_tit" value="{$detail['supply_tit']}" class="c_u_intxt" placeholder="资源的补充名称" /></div></li>
+                <li><em>责任者名称</em><div class="in_con">
+                	<input type="text" name="author" id="author" value="{$detail['author']}" class="c_u_intxt" placeholder="创作资源或者对资源的有贡献的个人、机构等" /></div></li>
+                <li><em>关键词</em><div class="in_con">
+                	<input type="text" name="keywords" id="keywords" value="{$detail['keywords']}" class="c_u_intxt" placeholder="资源内容的核心词" /></div></li>
+                <li><em>主题词</em><div class="in_con">
+                	<input type="text" name="themewords" id="themewords" value="{$detail['themewords']}" class="c_u_intxt" placeholder="资源内容的主题描述" /></div></li>
+                <li><em>素材来源</em><div class="in_con">
+                	<input type="text" name="source" id="source" value="{$detail['source']}" class="c_u_intxt" placeholder="素材的原始出处" /></div></li>
+                <li><em>素材版本</em><div class="in_con">
+                	<input type="text" name="version" id="version" value="{$detail['version']}" class="c_u_intxt" placeholder="素材的原始出处" /></div></li>
+                <li class="s_li"><em>创作时间</em><div class="in_con">
+                	<input type="text" name="originaltime" id="originaltime" value="{$detail['originaltime']}" class="c_u_intxt c_u_intxt1" placeholder="素材内容原创时间" /></div></li>
+                <li class="s_li"><em>制作时间</em><div class="in_con">
+                	<input type="text" name="makingtime" id="makingtime" value="{$detail['makingtime']}" class="c_u_intxt c_u_intxt1" placeholder="数字化加工时间" onClick="new Calendar().show(this);" readonly="readonly" />
+					</div></li>
+                <li><em>空间范围</em><div class="in_con">
+                	<input type="text" name="roomarea" id="roomarea" value="{$detail['roomarea']}" class="c_u_intxt" placeholder="资源内容反映的地域" /></div></li>
+                <li><em>素材封面</em><div class="in_con">
+					<a class="upload_file cover_div"><img src="<?php echo getImgURL($detail['cover']);?>" width="258px" /></a>
+					<input type="hidden" name="cover" id="cover" value="{$detail['cover']}" />
+					<input type="file" id="cover_file" style="display:none;" />
+					</div></li>
+                <li><input type="submit" value="保存" class="release" id="submit" /></li>
+              	</form>
+              </ul>
+            </div>
+			<div class="clearfix" style="height:20px"></div>
+		</div>
+    </div>
+</div>
+<!-- 非头尾的内容 END -->
+<div class="pop_sc" style="display:none;overflow-y:scroll;">
+  <h3><a href="javascript:void(0);">X</a>请选择所属专题（可多选）</h3>
+  <ul class="pop_scs">
+	{volist name="topiclist" id="val"}
+    <li><input type="checkbox" value="{$val.id}" _tit="{$val.title}" id="opt{$val.id}" {if condition="in_array($val.id,$topic_arr)"}checked="checked"{/if} />
+	<label for="opt{$val.id}">{$val.title}</label></li>
+	{/volist}
+  </ul>
+  <input class="pop_but" type="button" value="确认选择" id="cho_topic" />
+</div>
+{include file="/common/upimage"}
+<script type="text/javascript">
+$(function(){
+	//类型二级联动
+	$('#catetop').change(function(){
+		var cate = $(this).val();
+		$.post("{:url('home/Aajax/getmaterialcate')}",{cate:cate},function(data){
+			$("#cate").empty();
+			$.each(data,function(key, val){
+				$("#cate").append("<option value='"+val.id+"'>"+val.cname+"</option>");
+			});
+		},"json");
+	});
+	//专题选择
+	$(".pop_sc h3 a").click(function(){ $(".pop_sc").hide(); });
+	$("#xz_topic").click(function(){ $(".pop_sc").show(); });
+	$("#cho_topic").click(function(){
+		var arr = new Array();
+		var arrtit = [];
+        $(".pop_scs li input:checkbox[checked]").each(function(i){
+            arr[i] = $(this).val();
+			arrtit[i] = $(this).attr("_tit");
+        });
+        var ids = arr.join(",");
+        var tit_str = arrtit.join(",");
+		$("#xz_topic").val(tit_str);
+		$("#topic_str").val(ids);
+		$(".pop_sc").hide();
+	});
+	//上传素材封面
+	var div_cover = $(".cover_div");
+	var file_cover = $("#cover_file");
+	var name_cover = $("#cover");
+	div_cover.click(function(){
+		file_cover.attr("val","1");
+		document.getElementById("cover_file").click(); //js触发其他标签click事件
+	});
+	file_cover.change(function () {
+		let files = $(this)[0].files[0]; //获取files对象
+		//参数2为按比例缩小压缩后宽高
+		$.compress(files,1000).then((url)=>{
+			div_cover.find("img").attr("src",url);
+			//上传到服务器
+			$.post("{:url('home/Aajax/ajaxupimages')}",{imgsource:url},function(data){
+				name_cover.val(data.imgurl);
+				div_cover.css({"background":""});
+				div_cover.find("img").attr("src",data.imgurl);
+			},"json");
+		});
+	});
+});
+$(function(){
+	$("#submit").click(function(){
+		if($('#title').val().length<1) {
+			alert('素材标题不能为空！');
+			$('#title').focus();
+			return false;
+		}
+		return true;
+	});
+});
+</script>
+
+{include file="/member/m_footer"}
+
+</body>
+</html>

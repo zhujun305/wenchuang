@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=7">
+<link rel="shortcut icon" href="/favicon.ico"/>
+<meta name="author" content="qingtian"/>
+<meta name="copyright" content="qingtian.com"/>
+<title>网站后台管理中心</title>
+<link href="{$Think.config.web_root}/webadmin/css/common.css" rel="stylesheet" type="text/css"/>
+<link href="{$Think.config.web_root}/webadmin/css/admin.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="{$Think.config.web_root}/webadmin/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="{$Think.config.web_root}/webadmin/js/jquery.highlight-3.js"></script>
+<script type="text/javascript" src="{$Think.config.web_root}/webadmin/js/jquery.vtip-min.js"></script>
+<script type="text/javascript" src="{$Think.config.web_root}/webadmin/js/jquery.modal.dialog.js"></script>
+<script type="text/javascript" src="{$Think.config.web_root}/webadmin/js/jquery.disappear.tooltip.js"></script>
+<script type="text/javascript" src="{$Think.config.web_root}/webadmin/js/admin.js"></script>
+<!--[if lt IE 9]>
+<script type="text/javascript" src="{$Think.config.web_root}/webadmin/js/PIE.js"></script>
+<script type="text/javascript">
+	(function ($) {
+		$.pie = function (name, v) {
+			// 如果没有加载 PIE 则直接终止
+			if (!PIE) return false;
+			// 是否 jQuery 对象或者选择器名称
+			var obj = typeof name == 'object' ? name : $(name);
+			// 指定运行插件的 IE 浏览器版本
+			var version = 9;
+			// 未指定则默认使用 ie10 以下全兼容模式
+			if (typeof v != 'number' && v < 9) {
+				version = v;
+			}
+			// 可对指定的多个 jQuery 对象进行样式兼容
+			if ($.browser.msie && obj.size() > 0) {
+				if ($.browser.version * 1 <= version * 1) {
+					obj.each(function () {
+						PIE.attach(this);
+					});
+				}
+			}
+		}
+	})(jQuery);
+	if ($.browser.msie) {
+		$.pie('.pie_about');
+	};
+</script>
+<![endif]-->
+<script>
+$(function(){
+	//搜索栏清除按钮，清空搜索栏
+	$('#clearbtn').click(function(){
+		$('.sea_div input[type="text"],.sea_div select').val('');
+	});
+	//点击缩略图显示大图
+	$(".suotu_div").click(function(){
+		var imgsrc = $(this).attr("_shuiyin");
+		$(".popup_img_cont img").attr("src",imgsrc);
+		$(".popup_img").show();
+		$(".popup_img_cont").show();
+	});
+	//点击取消
+	$(".popup_img").click(function(){
+		$(".popup_img").hide();
+		$(".popup_img_cont img").attr("src","");
+		$(".popup_img_cont").hide();
+	});
+});
+</script>
+</head>
+<body>
+<!-- public:header 以上内容 -->

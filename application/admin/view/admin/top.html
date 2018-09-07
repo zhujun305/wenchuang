@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=7">
+<link rel="shortcut icon" href="/favicon.ico"/>
+<meta name="author" content="qingtian"/>
+<meta name="copyright" content="qingtian.com"/>
+<title>网站后台管理中心</title>
+<link href="{$Think.config.web_root}/webadmin/css/common.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="{$Think.config.web_root}/webadmin/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+    $(".frame_top .navmenu a").click(function () {
+        $(".frame_top .navmenu a").removeClass("select");
+        $(this).addClass("select");
+        $(this).blur();
+        if (!$(this).hasClass('for_more')) {
+            window.parent.frames["leftFrame"].location.href = $(this).attr('frame-url');
+        }
+    });
+	$("#refcache").click(function(){
+		$.get("{:url('/Admin/Aajax/refreshCache')}");
+	});
+});
+</script>
+</head>
+<body>
+
+<div class="frame_top">
+    <div class="logo">
+        <img src="{$Think.config.web_root}/webadmin/images/admin_logo_in.png" border="0"/>
+    </div>
+    <div class="navmenu">
+        <a href="{:url('/Admin/admin/left')}" target="leftFrame" class="select">首页</a>
+		{volist name="menulist" id="val"}
+        <a href="{:url('/Admin/admin/left','mid='.$val.id)}" target="leftFrame" title="{$val.moduel}">{$val.moduel}</a>
+		{/volist}
+        <div class="clear"></div>
+    </div>
+    <div class="links">
+        <a href="{:url('')}" target="_blank" class="home" title="网站首页"></a>
+        <a href="javascript:void(0);" id="refcache" class="qscms" title="刷新缓存"></a>
+        <a href="{:url('/Admin/admin/logout')}" target="_top" class="logout" title="退出登录"></a>
+        <div class="clear"></div>
+    </div>
+    <div class="adminname">
+        <div class="unamestr">{$user['truename']}<span style="padding-left:10px;color:#009900;">({$user['rosename']})</span></div>
+        <div class="useravatar"><img src="{$Think.config.web_root}/webadmin/images/avatar.jpg" border="0"/></div>
+        <div class="clear"></div>
+    </div>
+</div>
+</body>
+</html>

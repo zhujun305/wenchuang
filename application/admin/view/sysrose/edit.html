@@ -1,0 +1,33 @@
+{include file="/common/main_top"}
+<div class="allpagetop">后台管理中心<strong>/</strong>角色管理<strong>/</strong>编辑</div>
+<div class="mains">
+	<div class="h1tit">
+		<div class="h1">角色管理</div>
+		<div class="topnav">
+			<a href="{:url('/Admin/sysrose/browse')}">角色列表</a>
+			<a href="{:url('/Admin/sysrose/create')}" class="select">添加</a>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="toptit">编辑角色</div>
+	<form id="addform" method="post" action="">
+	<div class="form_main width150">
+		<div class="fl">角色名称:</div>
+		<div class="fr">
+			<div><input type="text" name="name" value="{$detail['name']}" maxlength="45" class="input_text_default" /></div>
+		</div>
+		<div class="fl">角色描述：</div>
+		<div class="fr">
+			<textarea name="remark" cols="70" rows="3" class="input_text_default" style="font-size:12px;line-height:200%;height:150px;"></textarea>
+		</div>
+		<div class="fl"></div>
+		<div class="fr">
+			<input type="submit" class="admin_submit" value="保 存" />
+		</div>
+		<div class="clear"></div>
+	</div>
+	</form>
+</div>
+
+{include file="/common/main_footer"}

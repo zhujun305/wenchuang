@@ -1,0 +1,86 @@
+{include file="/common/main_top"}
+<script>
+$(document).ready(function () {
+	//下拉框
+	$(".J_dropdown").click(function(){
+		var _iss = $(this).attr("_iss");
+		if(_iss==1){
+			$(this).addClass("open");
+			$(this).css({"position":"relative"});
+			$(this).attr("_iss","2");
+		}else{
+			$(this).removeClass("open");
+			$(this).attr("_iss","1");
+		}
+	});
+	$(".J_listitme").click(function(){
+		var _val = $(this).attr("_val");
+		$(".J_listitme_text").html($(this).html());
+		$("#roseid").val(_val);
+	});
+});
+</script>
+<div class="allpagetop">后台管理中心<strong>/</strong>用户管理<strong>/</strong>编辑</div>
+<div class="mains">
+	<div class="h1tit">
+		<div class="h1">用户管理</div>
+		<div class="topnav">
+			<a href="{:url('/Admin/sysadminuser/browse')}">用户列表</a>
+			<a href="{:url('/Admin/sysadminuser/create')}" class="select">添加</a>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="toptit">编辑用户</div>
+	<form id="addform" method="post" action="">
+	<div class="form_main width150">
+		<div class="fl">登录用户名:</div>
+		<div class="fr">
+			<div style="height:40px;line-height:40px;">{$detail['name']}</div>
+		</div>
+		<div class="fl">选择角色:</div>
+		<div class="fr">
+			<div class="select_input_new w400 J_hoverinput J_dropdown J_listitme_parent" _iss="1" style="">
+				<span class="J_listitme_text">{$roselist[$detail['roseid']]}</span>
+				<div class="dropdowbox_sn J_dropdown_menu">
+					<div class="dropdow_inner_sn">
+					<ul class="nav_box">
+					{volist name="roselist" id="val"}
+					<li><a class="J_listitme" href="javascript:void(0);" _val="{$key}">{$val}</a></li>
+					{/volist}
+					</ul>
+					</div>
+				</div>
+				<input type="hidden" name="roseid" id="roseid" value="{$detail['roseid']}" class="J_listitme_code" />
+			</div>
+		</div>
+		<div class="fl">姓名:</div>
+		<div class="fr">
+			<div><input type="text" name="truename" id="truename" value="{$detail['truename']}" maxlength="45" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl">手机:</div>
+		<div class="fr">
+			<div><input type="text" name="mobile" id="mobile" value="{$detail['mobile']}" maxlength="45" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl">qq号:</div>
+		<div class="fr">
+			<div><input type="text" name="qq" id="qq" value="{$detail['qq']}" maxlength="45" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl">微信号:</div>
+		<div class="fr">
+			<div><input type="text" name="weixin" id="weixin" value="{$detail['weixin']}" maxlength="45" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl">邮箱:</div>
+		<div class="fr">
+			<div><input type="text" name="email" id="email" value="{$detail['email']}" maxlength="45" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl"></div>
+		<div class="fr">
+			<input type="submit" class="admin_submit" value="保 存" />
+		</div>
+		<div class="clear"></div>
+	</div>
+	</form>
+</div>
+
+{include file="/common/main_footer"}
