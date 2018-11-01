@@ -30,11 +30,11 @@ span.jf02-007{width:318px;}
 				<ul class="fl">
 					<li>
 						<span>累计</span>
-						<p>{$member['total_balance']}积分</p>
+						<p>{php}echo intval($member['total_balance']);{/php} 积分</p>
 					</li>
 					<li class="q-jf01-li">
 						<span>当前</span>
-						<p>{$member['balance']}积分</p>
+						<p>{php}echo intval($member['balance']);{/php} 积分</p>
 					</li>
 				</ul>
 				<a href="{:url('home/member/integraladd')}" class="jf-czBtn fr">积分充值</a>

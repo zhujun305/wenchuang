@@ -1,4 +1,0 @@
-
-<div class="adver">
-	{php}echo $ads;{/php}
-</div>
