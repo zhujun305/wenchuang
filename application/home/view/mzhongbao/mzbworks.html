@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>作品管理-会员中心</title>
+{include file="/member/m_header"}
+<style>
+.pic_list_g ul li{position:relative;}
+.pic_list_g li p a{margin:0px 10px;}
+.pic_list_g ul li .ico_tj{position:absolute;top:0;left:0;z-index:99;width:50px;height:30px;background:#f60;
+text-align:center;font:bold 16px/1.8 SimSun;color:#fff;
+}
+</style>
+</head>
+
+<body>
+
+<!--头部开始-->
+{include file="/member/m_top"}
+<!-- 非头尾的内容 START -->
+<!--面包屑导航开始-->
+<div class="breadcrumb clearfix " >
+</div>
+<!--面包屑导航结束-->
+
+<div class="main clearfix" >
+{include file="/member/m_left"}
+    <div class="contents fr m20">
+		{include file="/member/ad"}
+		
+		<div class="lm">
+			<div class="search">
+				<input type="text" class="txt" id="seatxt" value="{$find}" placeholder="搜索" /> 
+				<input type="image" src="{$Think.config.web_member}/img/fff.png" class="ss" id="seaform" />
+			</div>
+			<a class="on" href="javascript:void(0);">作品管理</a>
+		</div>
+    	<div class="border">
+    	  <div class="w850">
+			<div class="sczp">
+				<p>已经上传的作品 共{$list['total']}条记录</p>
+				<select id="cate">
+					<option value="">请选择项目分类</option>
+					{volist name="catelist" id="val"}
+					<option value="{$val.id}" <?php echo $val['id']==$cate?'selected':'';?>>{$val.title}</option>
+					{/volist}
+				</select>
+				<a href="{:url('home/mzhongbao/mzbworksadd')}" class="upload">上传作品</a>
+			</div>
+			<div class="pic_list_g">
+				<ul>
+				{volist name="list" id="val"}
+				<li>
+					<div class="img"><img src="{php}echo getImgURL($val['cover']);{/php}" width="170" height="170" /></div>
+					<dl><a href="{:url('home/mzhongbao/mzbworksupd','id='.$val.id)}">{$val.title}</a></dl>
+					<p>
+						{php}if($val['is_settop']==2){{/php}
+						<a href="{:url('home/mzhongbao/mzbworkssettop','id='.$val.id.'&val=1')}">取消推荐</a>
+						{php}}else{{/php}
+						<a href="{:url('home/mzhongbao/mzbworkssettop','id='.$val.id.'&val=2')}">首页推荐</a>
+						{php}}{/php}
+						<a href="{:url('home/mzhongbao/mzbworksupd','id='.$val.id)}">编辑</a>
+						<a class="delbtn" _id="{$val.id}" href="javascript:void(0);">删除</a>
+					</p>
+					{php}if($val['is_settop']==2){{/php}
+					<div class="ico_tj">推荐</div>
+					{php}}{/php}
+				</li>
+				{/volist}
+				</ul>
+			</div>
+		  </div>
+			<div class="clearfix"></div>
+			<div class="page">
+				{$list->render()}
+			</div>
+		</div>
+    </div>
+</div>
+<!-- 非头尾的内容 END -->
+<script type="text/javascript">
+$(function(){
+	$(".delbtn").click(function(){
+		if(confirm('确定要删除选中的数据吗?')){
+			var url = "{:url('home/mzhongbao/mzbworksdel')}?id="+$(this).attr("_id");
+			location.href = url;
+		}
+	});
+	$("#cate").change(function(){
+		var cate = $(this).val();
+		var url = "{:url('home/mzhongbao/mzbworks')}?cate="+cate;
+		location.href = url;
+	});
+});
+</script>
+
+{include file="/member/m_footer"}
+
+</body>
+</html>

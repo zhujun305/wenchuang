@@ -36,12 +36,9 @@ class Syspower extends Adminbase
 		$findObj = [];
 		$fields = 'action,method';
 		$this->getFindObj($findObj, $find, $fields);
+		$this->assign("findObj", $findObj);
 		$list = syspowerModel::getList($findObj,[],20,'pid asc,sort desc,id asc');
 		$this->assign("list", $list);
-		//空判断
-		$findObj['action'] = isset($findObj['action'])?$findObj['action']:'';
-		$findObj['method'] = isset($findObj['method'])?$findObj['method']:'';
-		$this->assign("findObj", $findObj);
 		return $this->fetch();
 	}
 	
@@ -166,6 +163,22 @@ class Syspower extends Adminbase
      */
     public function unlock($id){
     	$rs = syspowerModel::upd_list($id, ['status'=>1]);
+		$this->redirect($this->syspowerList);
+    }
+	
+    /**
+     * 批量锁定
+     */
+    public function lockall($ids){
+    	$rs = syspowerModel::upd_list($ids, ['is_lock'=>2]);
+		$this->redirect($this->syspowerList);
+    }
+    
+    /**
+     * 批量解锁
+     */
+    public function unlockall($ids){
+    	$rs = syspowerModel::upd_list($ids, ['is_lock'=>1]);
 		$this->redirect($this->syspowerList);
     }
 	

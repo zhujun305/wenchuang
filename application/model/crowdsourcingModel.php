@@ -66,29 +66,57 @@ class crowdsourcingModel extends commonModel
     /**
      * 查询分页列表
      */
-    static public function getList($findObj=array(), $field=array(), $page="15", $order="id desc")
+    static public function getList($findObj=[], $field=[], $page="15", $order="id desc")
     {
     	$where = [];
 		if(!empty($findObj)){
 			if(!empty($findObj['title'])) $where['title'] = ['like', '%'.$findObj['title'].'%'];
+			if(isset($findObj['uid']) && $findObj['uid']>0) $where['uid'] = $findObj['uid'];
 			if(isset($findObj['cate']) && $findObj['cate']>0) $where['cate'] = $findObj['cate'];
+			if(isset($findObj['is_chk']) && $findObj['is_chk']>0) $where['is_chk'] = $findObj['is_chk'];
+			if(isset($findObj['status']) && $findObj['status']>0) $where['status'] = $findObj['status'];
 			if(isset($findObj['is_lock']) && $findObj['is_lock']>0) $where['is_lock'] = ($findObj['is_lock']);
 		}
 		$where = array_filter($where);
     	$where['is_del'] = 1;
         $return = Db::table(self::$table_name)->where($where)->field($field)->order($order)
-        ->paginate($page, false, ['query' => request()->param()]);
+        	->paginate($page, false, ['query' => request()->param()]);
         return $return;
     }
     
     /**
      * 根据where条件查询列表
      */
-    static public function getListByWhere($where=array(), $field=array(), $order="id desc", $limit='10')
+    static public function getListByWhere($where=[], $field=[], $order="id desc", $limit='')
     {
     	$where['is_del'] = 1;
         $return = Db::table(self::$table_name)->where($where)->field($field)->order($order)->limit($limit)->select();
         return $return;
+    }
+    
+    /**
+     * 查询分页列表
+     */
+    static public function getLeftjoinList($findObj=[], $field=['a.*,b.uid wuid'], $page="15", $order="a.id desc")
+    {
+    	$where = [];
+    	if(!empty($findObj)){
+    		if(!empty($findObj['title'])) $where['a.title'] = ['like', '%'.$findObj['title'].'%'];
+    		if(isset($findObj['wuid']) && $findObj['wuid']>0) $where['b.uid'] = $findObj['wuid'];
+    		if(isset($findObj['cate']) && $findObj['cate']>0) $where['a.cate'] = $findObj['cate'];
+    		if(isset($findObj['is_chk']) && $findObj['is_chk']>0) $where['a.is_chk'] = $findObj['is_chk'];
+    		if(isset($findObj['status']) && $findObj['status']>0) $where['a.status'] = $findObj['status'];
+    		if(isset($findObj['is_lock']) && $findObj['is_lock']>0) $where['a.is_lock'] = ($findObj['is_lock']);
+    	}
+    	$where = array_filter($where);
+    	$where['a.is_del'] = 1;
+    	$return = Db::table('crowdsourcing a')->alias('a')
+			->join('crowdsourc_wtb b','a.id = b.cs_id')
+    		->where($where)
+    		->field($field)
+    		->order($order)
+    		->paginate($page, false, ['query' => request()->param()]);
+    	return $return;
     }
     
 } 

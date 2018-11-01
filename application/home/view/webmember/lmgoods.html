@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>会员商品</title>
+{include file="/webmember/a_header"}
+<style>
+.shop_list{margin-bottom:20px;}
+.shop_list li{height:350px}
+</style>
+</head>
+
+<body>
+{include file="/webmember/a_top"}
+
+<div class="w">
+	<div class="shop_list">
+		<ul>
+		{volist name="list" id="val"}
+		<li>
+			<div class="img"><a href="{:url('home/shop/detail','id='.$val['id'])}" title="{$val['title']}">
+			<img src="{php}echo getImgURL($val['cover']);{/php}" width="260" height="260" alt="{$val['title']}" /></a></div>
+			<dl><a href="{:url('home/shop/detail','id='.$val['id'])}" title="{$val['title']}">{$val['title']}</a></dl>
+			<div class="view">
+				<a href="{:url('home/shop/detail','id='.$val['id'])}">查看详情</a>
+				<span>￥{$val['price']}</span>
+			</div>
+		</li>
+		{/volist}
+		</ul>
+		<div class="clear"></div>
+	</div>
+	<div class="pagetwo">
+		{$list->render()}
+	</div>
+</div>
+
+{include file="/webmember/a_footer"}
+
+</body>
+</html>

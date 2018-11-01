@@ -90,7 +90,7 @@ class materialtopicModel extends commonModel
     /**
      * 根据where条件查询列表
      */
-    static public function getListByWhere($where = array(), $field = array(), $order="id desc", $limit='10')
+    static public function getListByWhere($where = array(), $field = array(), $order="id desc", $limit='')
     {
     	$where['is_del'] = 1;
         $return = Db::table(self::$table_name)->where($where)->field($field)->order($order)->limit($limit)->select();

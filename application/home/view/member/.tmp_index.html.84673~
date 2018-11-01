@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>会员中心</title>
+{include file="/member/m_header"}
+<style>
+.user_inf .img{width:135px;height:135px;overflow:hidden;}
+.xm_dh{margin-top:10px;width:850px;height:138px;overflow:hidden;}
+.xm_dh .xm_dh1{width:880px;}
+.xm_dh1 ul{width:880px;}
+.xm_dh1 ul li{width:147px;}
+</style>
+</head>
+
+<body>
+
+<!--头部开始-->
+{include file="/member/m_top"}
+<!-- 非头尾的内容 START -->
+<!--面包屑导航开始-->
+<div class="breadcrumb clearfix " >
+</div>
+<!--面包屑导航结束-->
+
+<div class="main clearfix" >
+{include file="/member/m_left"}
+    <div class="contents fr m20">
+		{include file="/member/ad"}
+		
+		<div class="lm">
+			<div class="search">
+				<input type="text" class="txt" id="seatxt" value="{$find}" placeholder="搜索" /> 
+				<input type="image" src="{$Think.config.web_member}/img/fff.png" class="ss" id="seaform" />
+			</div>
+			<a class="on" href="javascript:void(0);">会员中心</a>
+		</div>
+		<div class="border" style="min-height:660px;">
+			<div class="w850">
+				<div class="user_inf">
+					<div class="img"><img src="{$member['imgurl']}" width="135" /></div>
+					<div class="bz" style="max-width:465px;">
+					登录账号：{$member['nick_name']} 
+					<a onClick="location='{:url('home/member/modcard')}'" href="javascript:void(0);">修改资料</a><br/>
+					账号状态：<?php if($member['auth_cate']>0){?><font color="green">账号已认证</font><?php }else{?>
+					<a onClick="location='{:url('home/member/memberauth')}'" href="javascript:void(0);" style="color:red;">账号未认证</a>
+					<?php }?><br/>
+					我的积分：<span>{$member['balance']}</span><br/>
+					上次登录时间：<?php echo $member['lastlogintime']>0?date("Y年m月d日 H:i:s",$member['lastlogintime']):'';?><br/>
+					技能标签：
+					{volist name="xzarr" id="val"}<span>{$catelist[$val]['name']}</span>、{/volist}
+					</div>
+					<div class="btn">
+						<a class="b1" href=""><i></i>积分充值</a>
+						<a class="b2" href=""><i></i>积分明细</a>
+					</div>
+				</div>
+				<?php if($member['auth_cate']==2 || $member['auth_cate']==3){?>
+				<div class="xm_title">
+					<span><a onClick="location='{:url('home/crowdsourcing/index')}'" href="javascript:void(0);">更多</a></span>推荐项目
+				</div>
+				<div class="tj_xm_list">
+					<ul>
+					{volist name="tjlist" id="val"}
+					<li>
+						<div onClick="location='{:url('home/crowdsourcing/detail','id='.$val.id)}'">
+							<img src="<?php echo getImgURL($val['cover']);?>" width="195" height="143" /></div>
+						<h5><a onClick="location='{:url('home/crowdsourcing/detail','id='.$val.id)}'" href="javascript:void(0);">{$val.title}</a></h5>
+						<p><?php echo intval($val['price']);?>{$val.price_max>0?' - '.intval($val.price_max):''}元</p>
+					</li>
+					{/volist}
+					</ul>
+				</div>
+				<div class="xm_title">最新动态</div>
+				<div class="zxdt">
+					<ul>
+					{volist name="newlist" id="val"}
+					<li onClick="location='{:url('home/crowdsourcing/detail','id='.$val.id)}'" href="javascript:void(0);">
+						<span>￥<?php echo intval($val['price']);?>{$val.price_max>0?' - '.intval($val.price_max):''}元</span>
+						<a>{$val.title}【{$catelist[$val['cate']]['title']}】</a>
+						<i><?php echo $val['input_time']>0?date("Y-m-d",$val['input_time']):'';?></i>
+					</li>
+					{/volist}
+					</ul>
+				</div>
+				<?php }?>
+				<?php if($member['auth_cate']==4){?>
+				<div class="xm_dh">
+				  <div class="xm_dh1">
+					<ul>
+					<li>
+						<h5>文创素材</h5>
+						<h6>2098</h6>
+					</li>
+					<li>
+						<h5>文创商品</h5>
+						<h6>2098</h6>
+					</li>
+					<li>
+						<h5>众包项目</h5>
+						<h6>2098</h6>
+					</li>
+					<li>
+						<h5>众筹项目</h5>
+						<h6>2098</h6>
+					</li>
+					</ul>
+				  </div>
+				</div>
+				<?php }?>
+				<div class="clearfix"></div>
+				
+				<?php /*?>
+				<div class="lm">
+					<a class="on">平台公告</a>
+					<a>新闻动态</a>
+				</div>
+				<div class="newslist">
+					<ul>
+						<li><span>[2018-06-28]</span><a>·国图公开课读书推荐：李炜推荐《孤独之间》</a></li>
+						<li><span>[2018-06-28]</span><a>·国图公开课读书推荐：李炜推荐《孤独之间》</a></li>
+						<li><span>[2018-06-28]</span><a>·国图公开课读书推荐：李炜推荐《孤独之间》</a></li>
+						<li><span>[2018-06-28]</span><a>·国图公开课读书推荐：李炜推荐《孤独之间》</a></li>
+						<li><span>[2018-06-28]</span><a>·国图公开课读书推荐：李炜推荐《孤独之间》</a></li>
+						<li><span>[2018-06-28]</span><a>·国图公开课读书推荐：李炜推荐《孤独之间》</a></li>
+						<li><span>[2018-06-28]</span><a>·国图公开课读书推荐：李炜推荐《孤独之间》</a></li>
+						<li><span>[2018-06-28]</span><a>·国图公开课读书推荐：李炜推荐《孤独之间》</a></li>
+						<li><span>[2018-06-28]</span><a>·国图公开课读书推荐：李炜推荐《孤独之间》</a></li>
+						<li><span>[2018-06-28]</span><a>·国图公开课读书推荐：李炜推荐《孤独之间》</a></li>
+						<li><span>[2018-06-28]</span><a>·国图公开课读书推荐：李炜推荐《孤独之间》</a></li>
+						<li><span>[2018-06-28]</span><a>·国图公开课读书推荐：李炜推荐《孤独之间》</a></li>
+						<li><span>[2018-06-28]</span><a>·国图公开课读书推荐：李炜推荐《孤独之间》</a></li>
+						<li><span>[2018-06-28]</span><a>·国图公开课读书推荐：李炜推荐《孤独之间》</a></li>
+						<li><span>[2018-06-28]</span><a>·国图公开课读书推荐：李炜推荐《孤独之间》</a></li>
+					</ul>
+				</div>
+				<div class="page">
+				</div>
+				<?php */?>
+			</div>
+		</div>
+    </div>
+</div>
+<!-- 非头尾的内容 END -->
+
+{include file="/member/m_footer"}
+
+</body>
+</html>

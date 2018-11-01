@@ -100,7 +100,7 @@ function chkval(obj){
 		</div>
 		<div class="td" style="width:10%;">&nbsp;{$val.title}</div>
 		<div class="td" style="width:10%;">
-			<img src="<?php echo getImgURL($val['cover']);?>" width="133" height="99" />
+			<img src="<?php echo getImgURL($val['cover']);?>" class="suotu_div" _shuiyin="2" width="133" height="99" />
 		</div>
 		<div class="td" style="width:20%;">&nbsp;{$val.summary}</div>
 		<div class="td" style="width:10%;">&nbsp;{$val.is_recommend==2?'<font color="green">推荐</font>':'不推荐'}</div>
@@ -119,6 +119,7 @@ function chkval(obj){
 			<?php }else{?>
 			<a href="{:url('/Admin/materialtopic/is_recommend','id='.$val.id.'&val=1')}" class="gray">取消推荐</a>
 			<?php }?>
+			<br/>
 			<?php if($val['is_lock']==1){?>
 			<a href="{:url('/Admin/materialtopic/lock','id='.$val.id)}" class="gray">锁定</a>
 			<?php }else{?>

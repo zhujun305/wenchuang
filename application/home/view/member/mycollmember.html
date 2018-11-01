@@ -3,6 +3,30 @@
 <head>
 <title>我的关注-会员中心</title>
 {include file="/member/m_header"}
+<link type="text/css" rel="stylesheet" href="__STATIC__/webmember/css/style.css"/>
+<style>
+.cd_team{margin:10px;}
+.cd_team ul{width:900px;overflow:hidden;}
+.cd_team ul li{float:left;width:180px;height:266px;border:1px solid #c9c9c9;padding:0 9px;margin:10px;background:#fff;overflow:hidden;}
+.cd_team ul li .pic{width:166px;height:166px;overflow:hidden;margin:15px auto 0 auto;}
+.cd_team ul li .pic a img{-webkit-transition:transform .35s ease-out;transition:transform .35s ease-out;}
+.cd_team ul li .pic a:hover img{-webkit-transform:scale(1.1);-ms-transform:scale(1.1); transform:scale(1.1);}
+.cd_team ul li h3{font-size:14px;line-height:39px;height:39px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;text-align:center;border-bottom:1px dotted #c3c3c3;}
+.cd_team ul li h3 a{font-size:14px;color:#404040;}
+.cd_team ul li h3 a:hover{color:#326fc2;}
+.cd_team ul li .btn{border:1px solid #ccc;line-height:30px;margin-top:5px;padding:0px 10px;border-radius:3px;}
+</style>
+<style>
+.crowd_pop{position:fixed;top:50%;left:50%;width:450px;height:350px;padding:30px 30px 0 30px;display:none;
+margin-top:-205px;margin-left:-250px;background:#fff;border:1px solid #b5b5b5;z-index:99;box-shadow:5px 5px 15px rgba(0,0,0,.17);
+-moz-box-shadow:5px 5px 15px rgba(0,0,0,.17);-webkit-box-shadow:5px 5px 15px rgba(0,0,0,.17);}
+.crowd_pop h3{display:block;height:30px;font-size:16px;}
+.crowd_pop h3 font{float:left;}
+.crowd_pop h3 a{float:right;}
+.crowd_pop textarea{width:440px;height:220px;padding:5px;}
+.crowd_pop .agree{color:#fff;cursor:pointer;background:#326fc2;font-size:16px;border-radius:3px;
+border:1px solid #b5b5b5;width:110px;text-align:center;height:35px;line-height:35px;display:block;margin:10px auto 0 auto;}
+</style>
 </head>
 
 <body>
@@ -17,11 +41,91 @@
 
 <div class="main clearfix" >
 {include file="/member/m_left"}
-    <div class="contents fr m20">
-    	
-    </div>
+	<div class="contents fr m20">
+		<div class="clearfix">
+			<div class="location">会员中心  > 我的关注</div>
+			<div class="lm">
+				<a class="on" href="javascript:void(0);">我的关注</a>
+			</div>
+	    	<div class="border">
+				<div class="cd_team">
+					<ul>
+					{volist name="list" id="val"}
+					<li>
+					<div class="pic"><a href="{:url('home/webmember/index','uid='.$val['otherid'])}">
+					<img src="{php}echo getImgURL($mlist[$val['otherid']]['imgurl'],'memberlogo');{/php}" width="166" height="166" /></a></div>
+					<h3>
+						<a href="{:url('home/webmember/index','uid='.$val['otherid'])}">{$mlist[$val['otherid']]['nick_name']}</a>
+						【{$membercate[$mlist[$val['otherid']]['cate']]}】
+					</h3>
+					<a href="javascript:void(0);" class="btn fl delgz" _collid="{$val['id']}">取消关注</a>
+					<a href="javascript:void(0);" class="btn fr send_msg" _suid="{$val['otherid']}" _uname="{$mlist[$val['otherid']]['nick_name']}">发私信</a>
+					</li>
+					{/volist}
+					</ul>
+				</div>
+				<div class="clear"></div>
+				<div class="page">
+					{$list->render()}
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 <!-- 非头尾的内容 END -->
+<div class="crowd_pop" id="crowd_pop">
+	<h3><font>发私信</font><a href="javascript:void(0);">关闭</a></h3>
+	<div class="clearfix" style="height:10px;"></div>
+	<div>
+		<input type="hidden" id="csid" />
+		<textarea id="content" placeholder="私信不得超过100个字"></textarea>
+	</div>
+	<a class="agree" href="javascript:void(0);">确认提交</a>
+</div>
+<script type="text/javascript">
+$(function(){
+	//取消关注
+	$(".delgz").click(function(){
+		var collid = $(this).attr("_collid");
+		if(collid>0){
+			if (confirm("确定不在关注此用户吗？")) {
+				var url = "{:url('home/member/delmembercoll')}";
+				$.post(url,{id:collid},function(data){
+					location.reload();
+				},'json');
+			}
+		}
+	});
+});
+$(function(){
+	//发私信
+	$(".send_msg").click(function(){
+		$("#content").val("");
+		var _suid = $(this).attr("_suid");
+		$("#crowd_pop .agree").attr("_suid",_suid);
+		$("#crowd_pop h3 font").html("给【"+$(this).attr("_uname")+"】发私信");
+		$("#csid").val($(this).attr("_csid"));
+		$("#crowd_pop").show();
+	});
+	$("#crowd_pop h3 a").click(function(){
+		$("#crowd_pop").hide();
+	});
+	$("#crowd_pop .agree").click(function(){
+		var fuid = "{$member['uid']}";
+		var suid = $(this).attr("_suid");
+		var content = $("#content").val();
+		var url = "{:url('home/webmember/uidsendmsg')}?uid=".suid;
+		$.post(url,{fuid:fuid,suid:suid,content:content},function(data){
+			if(data){
+				alert("私信发送成功。");
+			}else{
+				alert("私信发送失败。");
+			}
+			$("#crowd_pop").hide();
+		},'json');
+	});
+});
+</script>
 
 {include file="/member/m_footer"}
 

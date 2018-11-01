@@ -1,0 +1,169 @@
+{include file="/common/main_top"}
+<script>
+$(function(){
+	//全选
+	$('#chkall').click(function(){
+		var chk = $(this).is(":checked");
+		$('.chklie').each(function(){
+			$(this).attr('checked' , chk);
+		});
+	});
+	$('#lockallbtn').click(function(){
+		var url = "{:url('/Admin/crowdfunding/lockall')}";
+		ExecuteUpdCheck(url, '', "批量锁定");
+	});
+	$('#unlockallbtn').click(function(){
+		var url = "{:url('/Admin/crowdfunding/unlockall')}";
+		ExecuteUpdCheck(url, '', "批量解锁");
+	});
+	$('#chkallbtn').click(function(){
+		var url = "{:url('/Admin/crowdfunding/ischkall')}";
+		ExecuteUpdCheck(url, '', "批量审核");
+	});
+	//查询
+	$('#findbtn').click(function(){
+		var arr=[];
+		arr.push($('#cate').val());
+		arr.push($('#title').val());
+		arr.push($('#is_chk').val());
+		arr.push($('#status').val());
+		arr.push($('#is_lock').val());
+		var find = "?find="+arr.join("{$search_separ}");
+		var url = "{:url('/Admin/crowdfunding/browse')}";
+		location.href = url+find;
+	});
+});
+</script>
+<style>
+.list_tr div.td{line-height:30px;}
+</style>
+<div class="allpagetop">后台管理中心<strong>/</strong>众筹管理</div>
+<div class="mains">
+	<div class="h1tit">
+		<div class="h1">众筹管理</div>
+		<div class="topnav">
+			<a href="{:url('/Admin/crowdfunding/browse')}" class="select">众筹列表</a>
+			<a href="{:url('/Admin/crowdfundingcate/browse')}">分类列表</a>
+			<a href="{:url('/Admin/crowdfundingcate/create')}">添加分类</a>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="sea_div mt_10">
+		<div class="czbox f_l ml_20">
+			<a href="javascript:;" id="lockallbtn">批量锁定</a>
+			<a href="javascript:;" id="unlockallbtn">批量解锁</a>
+			<a href="javascript:;" id="chkallbtn">批量审核</a>
+		</div>
+		<div class="sea_clearbtn f_r mr_20" id="clearbtn">清除</div>
+		<div class="sea_btn f_r" id="findbtn">查询</div>
+		<select id="is_lock" class="gg_select w100 f_r ml_20">
+			<option value="" selected="selected">是否锁定</option>
+			<option value="1" <?php echo $findObj['is_lock']==1?'selected':''?>>未锁定</option>
+			<option value="2" <?php echo $findObj['is_lock']==2?'selected':''?>>已锁定</option>
+		</select>
+		<select id="status" class="gg_select w100 f_r ml_20">
+			<option value="" selected="selected">项目状态</option>
+			{volist name="status_arr" id="val"}
+			<option value="{$key}" <?php echo $findObj['status']==$key?'selected':''?>>{$val}</option>
+			{/volist}
+		</select>
+		<select id="is_chk" class="gg_select w100 f_r ml_20">
+			<option value="" selected="selected">审核状态</option>
+			<option value="1" <?php echo $findObj['is_chk']==1?'selected':''?>>未审核</option>
+			<option value="2" <?php echo $findObj['is_chk']==2?'selected':''?>>已审核</option>
+			<option value="3" <?php echo $findObj['is_chk']==3?'selected':''?>>不通过</option>
+		</select>
+		<div class="sea_text f_r">
+			<div class="sobox">
+			<div class="sotype">标题</div>
+			<input type="text" id="title" class="sinput" value="{$findObj['title']}" />
+			</div>
+		</div>
+		<select id="cate" class="gg_select w100 f_r ml_20">
+			<option value="" selected="selected">请选择分类</option>
+			{volist name="catelist" id="val"}
+			<option value="{$val['id']}" <?php echo $findObj['cate']==$val['id']?'selected':''?>>{$val['title']}</option>
+			{/volist}
+		</select>
+	</div>
+	<div class="clear"></div>
+	
+	<div class="list_th">
+		<div class="td" style="width:6%;">
+			<label class="left_padding">
+				<input type="checkbox" id="chkall" title="全选/反选"/>ID
+			</label>
+		</div>
+		<div class="td" style="width:12%;">标题/分类</div>
+		<div class="td" style="width:8%;">缩略图</div>
+		<div class="td" style="width:6%;">单价</div>
+		<div class="td" style="width:8%;">结算时间</div>
+		<div class="td" style="width:10%;">结算数量/金额</div>
+		<div class="td" style="width:10%;">当前数量/金额/进度</div>
+		<div class="td" style="width:6%;">浏览/收藏</div>
+		<div class="td" style="width:7%;">审核状态</div>
+		<div class="td" style="width:7%;">项目状态</div>
+		<div class="td" style="width:10%;">录入时间/录入人</div>
+		<div class="td" style="width:10%;">操作</div>
+		<div class="clear"></div>
+	</div>
+	<?php if(empty($list)){?>
+	<div class="list_empty">没有任何信息！</div>
+	<?php }else{?>
+	{volist name="list" id="val"}
+	<div class="list_tr link_black">
+		<div class="td" style="width:6%;">
+			<div class="left_padding striking link_blue">
+			<input type="checkbox" name="id[]" class="chklie" value="{$val.id}"/>{$val['id']}
+			</div>
+		</div>
+		<div class="td" style="width:12%;">
+			<div class="cont">{$val['title']}</div>
+			<div class="cont">【{$catelist[$val.cate]['title']}】</div>
+		</div>
+		<div class="td" style="width:8%;">
+			<img src="<?php echo getImgURL($val['cover']);?>" class="suotu_div" _shuiyin="2" width="133" height="99" />
+		</div>
+		<div class="td" style="width:6%;">&nbsp;{$val['price']} 元</div>
+		<div class="td" style="width:8%;">
+			<?php echo $val['end_time']>0?date("Y-m-d",$val['end_time']):''?>
+		</div>
+		<div class="td" style="width:10%;">{$val['tot_num']} 件<br/>{$val['tot_price']} 元</div>
+		<div class="td" style="width:10%;">{$val['zhe_num']} 件<br/>{$val['zhe_price']} 元<br/>
+			{$val['percent']}%
+		</div>
+		<div class="td" style="width:6%;">{$val['pv']}<br/>{$val['coll']}</div>
+		<div class="td" style="width:7%;">{$chk_arr[$val['is_chk']]}<br/>
+			<?php echo $val['is_lock']==2?'<font color="red">锁定</font>':'';?>
+		</div>
+		<div class="td" style="width:7%;">{$status_arr[$val['status']]}</div>
+		<div class="td" style="width:10%;">
+			<?php echo $val['input_time']>0?date("Y-m-d H:i:s",$val['input_time']):''?><br/>
+			<a href="{:url('/Admin/member/browse','find='.$val['uid'])}">
+			<?php echo $val['uid']>0?$memberlist[$val['uid']]['nick_name']:'';?></a>
+		</div>
+		<div class="td edit" style="width:10%;">
+			<?php if($val['is_chk']!=2){?>
+			<a href="{:url('/Admin/crowdfunding/detail','id='.$val.id.'&type=2')}">审核</a>
+			<?php }?>
+			<a href="{:url('/Admin/crowdfunding/detail','id='.$val.id)}">查看详细</a>
+			<a href="{:url('/Admin/crowdfundingorder/browse')}?find=__{$val['id']}">查看订单</a>
+			<br/>
+			<?php if($val['is_lock']==1){?>
+			<a href="{:url('/Admin/crowdfunding/lock','id='.$val.id)}" class="gray">锁定</a>
+			<?php }else{?>
+			<a href="{:url('/Admin/crowdfunding/unlock','id='.$val.id)}">解锁</a>
+			<?php }?>
+			<a href="{:url('/Admin/crowdfunding/del','id='.$val.id)}" class="gray" onclick="return confirm('你确定要删除吗？')">删除</a>
+		</div>
+		<div class="clear"></div>
+	</div>
+	{/volist}
+	<?php }?>
+	<div class="pages">
+		{$list->render()}
+	</div>
+</div>
+
+{include file="/common/main_footer"}

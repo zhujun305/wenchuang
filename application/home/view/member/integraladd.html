@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>积分充值-会员中心</title>
+{include file="/member/m_header"}
+<link type="text/css" rel="stylesheet" href="__STATIC__/webmember/css/style.css"/>
+<style>
+</style>
+</head>
+
+<body>
+
+<!--头部开始-->
+{include file="/member/m_top"}
+<!-- 非头尾的内容 START -->
+<!--面包屑导航开始-->
+<div class="breadcrumb clearfix " >
+</div>
+<!--面包屑导航结束-->
+
+<div class="main clearfix" >
+{include file="/member/m_left"}
+	<div class="contents fr m20">
+		<div class="clearfix">
+			<div class="location">会员中心  > 积分充值</div>
+			<?php if(1==2){?>
+			<div class="hy-jfcz">
+				<div class="hy-jfczW hy-jfcz01">
+					<h3>您可以通过网上在线支付对积分充值，以便即时下载您要的素材原文件。<br />积分兑换规则是：<span>1元=10积分</span></h3>
+					<p>
+						<span class="fl">金额</span>
+						<input type="text" class="fl" />
+						<span class="fl">元</span>
+					</p>
+				</div>
+				<div class="hy-jfczW hy-jfcz02">
+					<div class="hy-jfcz02T">
+						<h3 class="fl">充值方式</h3>	
+						<div class="hy-jfcz02TC fl">
+							<div class="hy-jfcz02TCT">
+								<ul class="fl">
+									<li><span>支付宝</span></li>
+									<li class="hy-wxCurrent"><span>微信扫码支付</span></li>
+									<li><span>网银支付</span></li>
+								</ul>
+							</div>
+							<div class="hy-jfcz02TCB">
+								<div class="hy-jfcz02TCB-01">
+									<p>扫微信二维码支付</p>
+									<span><img src="img/wx001.png"></span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="hy-jfcz03">
+					<a href="#">确定充值</a>
+				</div>
+			</div>
+			<?php }else{?>
+			升级中...
+			<?php }?>
+			<div class="clearfix" style="height:10px;"></div>
+		</div>
+	</div>
+</div>
+<!-- 非头尾的内容 END -->
+
+{include file="/member/m_footer"}
+
+</body>
+</html>

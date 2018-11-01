@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>编辑商品批发价格-会员中心</title>
+{include file="/member/m_header"}
+<link rel="stylesheet" type="text/css" href="{$Think.config.web_member}/css/style.css"/>
+<style>
+.adda{background-color:#fff;border-radius:5px;box-shadow:0px 0px 7px #cccccc;margin-left:89px;
+padding:6px 20px;width:100px;border:1px solid #dddddd;text-align:center;color:#333333;}
+.hyAddB-01B{text-align:center;}
+.hyAddB-01B a.qdSave{margin:0 auto;}
+</style>
+</head>
+
+<body>
+
+<!--头部开始-->
+{include file="/member/m_top"}
+<!-- 非头尾的内容 START -->
+<!--面包屑导航开始-->
+<div class="breadcrumb clearfix " >
+</div>
+<!--面包屑导航结束-->
+
+<div class="main clearfix" >
+{include file="/member/m_left"}
+	<div class="contents fr m20">
+      <div class="clearfix">
+		<div class="location">会员中心  > 商品管理   > 编辑商品</div>
+		<div class="hyAdd">
+			<div class="hyAddT">
+				<ul>
+				<li onClick="location='{:url('home/mshangpin/mspupd','id='.$obj['id'])}'"><span>商品基础信息</span></li>
+				<li onClick="location='{:url('home/mshangpin/mspupddetail','id='.$obj['id'])}'"><span>商品详细</span></li>
+				<li onClick="location='{:url('home/mshangpin/mspupdimages','id='.$obj['id'])}'"><span>商品相册</span></li>
+				<li onClick="location='{:url('home/mshangpin/mspupdnorms','id='.$obj['id'])}'"><span>规格/参数</span></li>
+				<li onClick="location='{:url('home/mshangpin/mspupdrule','id='.$obj['id'])}'" class="hyAddT-current"><span>批发价格</span></li>
+				</ul>
+			</div>
+			<form id="addform" method="post" action="">
+			<div class="hyAddB">
+				<div class="hyAddB-01 forms2">
+					<div class="hyAddB-03T">
+						<h3>请设置您的产品批发价格：<span class="gz">根据购买商品总数量的多少变动价格的折扣比例</span></h3>
+						{volist name="list" id="val"}
+						{php}if($val['cate']==2){{/php}
+						<div class="hyAddB-03T-01 row">
+							<input type="hidden" name="idsarr[]" value="{$val['id']}" />
+							<input type="hidden" name="catearr[]" value="{$val['cate']}" />
+							<em class="fl">批发的数量</em>
+							<input type="text" name="numarr[]" value="{$val['num']}" class="fl hy-input01 rlie" placeholder="设置产品件数" />
+							<b class="fl">件，每件</b>
+							<input type="text" name="valarr[]" value="{$val['agio']}" class="fl hy-input02 rlie agioli" placeholder="设置批发价格" />
+							<a class="fl add delrow">移除</a>
+						</div>
+						{php}}{/php}
+						{/volist}
+						<div class="addtwo_bot"></div>
+						<div class="clearfix" style="height:30px;padding-top:20px;">
+							<a class="adda" id="addrule2">添加</a>
+						</div>
+					</div>
+				</div>
+				<div class="hyAddB-01B">
+					<a id="submit" class="qdSave">确定保存</a>
+				</div>
+			</div>
+			</form>
+		</div>
+	  </div>
+	</div>
+</div>
+<!-- 非头尾的内容 END -->
+<div id="dtaddtwo" style="display:none;">
+	<div class="hyAddB-03T-01 row">
+		<input type="hidden" name="idsarr[]" value="" />
+		<input type="hidden" name="catearr[]" value="2" />
+		<em class="fl">批发的数量</em>
+		<input type="text" name="numarr[]" value="" class="fl hy-input01 rlie" placeholder="设置产品件数" />
+		<b class="fl">件，每件</b>
+		<input type="text" name="valarr[]" value="" class="fl hy-input02 rlie agioli" placeholder="设置批发价格" />
+		<a class="fl add delrow">移除</a>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("#addrule2").click(function(){
+		$(".addtwo_bot").before($("#dtaddtwo").html());
+	});
+	$(".delrow").live('click',function(){
+		if(confirm("确定要删除此行数据吗？")){
+			$(this).parent(".row").remove();
+		}
+	});
+	//提交
+	var is_tijiao = true;
+	$("#submit").click(function(){
+		$(".forms2 .rlie").each(function(index){
+			if($(this).val()==''){
+				$(this).focus();
+				alert("请输入内容。");
+				is_tijiao = false;
+				return false;
+			}
+		});
+		$(".forms2 .agioli").each(function(index){
+			if($(this).val()<0 || $(this).val()>10){
+				$(this).focus();
+				alert("折扣数字必须大于0小于10。");
+				is_tijiao = false;
+				return false;
+			}
+		});
+		if(is_tijiao){
+			$('#addform').submit();
+		}
+	});
+});
+</script>
+
+{include file="/member/m_footer"}
+
+</body>
+</html>

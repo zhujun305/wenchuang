@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>众包设计</title>
+{include file="/common/c_header"}
+</head>
+
+<body>
+
+<div class="wrap">
+{include file="/common/c_top"}
+
+  <div class="unionbg padtop clear">
+    <div class="crowdsource_class clear">
+      <div class="crowdsource_class_t">
+      	<a href="{:url('home/crowdsourcing/index')}">需求</a>
+		<a href="{:url('home/crowdsourcing/teamer')}" class="cur">团队</a>
+		<a href="{:url('home/crowdsourcing/caselist')}">案例</a>
+	  </div>
+      <dl>
+        <dt>技能分类</dt>
+        <dd <?php if(!($cate>0)){echo 'class="cur"';}?>>
+        	<a href="{:url('home/crowdsourcing/teamer','cate=&mc='.$mc)}">不限</a></dd>
+		{volist name="catelist" id="val"}
+		<?php if($val['pid']==0){?>
+        <dd <?php if($cate==$val['id']){echo 'class="cur"';}?>>
+        	<a href="{:url('home/crowdsourcing/teamer','cate='.$val['id'].'&mc='.$mc)}">{$val.name}</a></dd>
+		<?php }?>
+		{/volist}
+        <div class="clear0"></div>
+      </dl>
+      <dl>
+        <dt>会员分类</dt>
+        <dd <?php if(!in_array($mc,[1,2,3])){echo 'class="cur"';}?>>
+        	<a href="{:url('home/crowdsourcing/teamer','cate='.$cate)}">不限</a></dd>
+        <dd <?php if($mc==1){echo 'class="cur"';}?>><a href="{:url('home/crowdsourcing/teamer','cate='.$cate.'&mc=1')}">合作伙伴</a></dd>
+        <dd <?php if($mc==2){echo 'class="cur"';}?>><a href="{:url('home/crowdsourcing/teamer','cate='.$cate.'&mc=2')}">设计公司</a></dd>
+        <dd <?php if($mc==3){echo 'class="cur"';}?>><a href="{:url('home/crowdsourcing/teamer','cate='.$cate.'&mc=3')}">设计师</a></dd>
+        <div class="clear0"></div>
+      </dl>
+    </div>
+    <div class="cd_team clear">
+      <ul>
+		{volist name="list" id="val"}
+        <li>
+          <div class="pic"><a href="{:url('home/webmember/index','uid='.$val['uid'])}">
+          	<img src="<?php echo getImgURL($val['imgurl'],'memberlogo');?>" width="188" height="188" /></a></div>
+          <h3><a href="{:url('home/webmember/index','uid='.$val['uid'])}">{$val['nick_name']}</a></h3>
+          <p>{$val['sign']}</p>
+        </li>
+		{/volist}
+      </ul>
+    </div>
+      <div class="pagetwo">
+		{$list->render()}
+	  </div>
+  </div>
+
+{include file="/common/c_footer"}
+</div>
+
+</body>
+</html>

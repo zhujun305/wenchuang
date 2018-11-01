@@ -54,17 +54,17 @@ class Msucai extends Member
 		$this->assign('chk_arr', $chk_arr);
 		//数量统计
 		$tongji = array();
-		$all = materialModel::getOneByWhere(array('is_lock'=>1),array('count(1) num')); //全部
-		$chka = materialModel::getOneByWhere(array('is_lock'=>1,'is_chk'=>1),array('count(1) num')); //is_chk=1
-		$chkb = materialModel::getOneByWhere(array('is_lock'=>1,'is_chk'=>2),array('count(1) num')); //is_chk=2
-		$chkc = materialModel::getOneByWhere(array('is_lock'=>1,'is_chk'=>3),array('count(1) num')); //is_chk=3
+		$all = materialModel::getOneByWhere(array('is_lock'=>1,'uid'=>$this->uid),array('count(1) num')); //全部
+		$chka = materialModel::getOneByWhere(array('is_lock'=>1,'uid'=>$this->uid,'is_chk'=>1),array('count(1) num')); //is_chk=1
+		$chkb = materialModel::getOneByWhere(array('is_lock'=>1,'uid'=>$this->uid,'is_chk'=>2),array('count(1) num')); //is_chk=2
+		$chkc = materialModel::getOneByWhere(array('is_lock'=>1,'uid'=>$this->uid,'is_chk'=>3),array('count(1) num')); //is_chk=3
 		$tongji['allnum'] = $all['num'];
 		$tongji['chkanum'] = $chka['num'];
 		$tongji['chkbnum'] = $chkb['num'];
 		$tongji['chkcnum'] = $chkc['num'];
 		$this->assign('tongji', $tongji);
 		//列表
-		$where = array('is_lock'=>1,);
+		$where = array('is_lock'=>1,'uid'=>$this->uid);
 // 		$is_chk = "";
 // 		if(!empty($find)){
 // 			$arr = explode("_",$find);
@@ -113,6 +113,7 @@ class Msucai extends Member
 			$data['originaltime'] = $post['originaltime'];
 			$data['makingtime'] = $post['makingtime'];
 			$data['roomarea'] = $post['roomarea'];
+			$data['desc'] = $post['desc'];
 			$data['input_uid'] = $data['uid'];
 			$id = materialModel::add_data($data);
 			if($id>0){
@@ -184,6 +185,7 @@ class Msucai extends Member
 			$data['originaltime'] = $post['originaltime'];
 			$data['makingtime'] = $post['makingtime'];
 			$data['roomarea'] = $post['roomarea'];
+			$data['desc'] = $post['desc'];
 			$data['cover'] = basename($post['cover']);
 			$rs = materialModel::upd_data(array('id'=>$id),$data);
 			if($rs>0){
@@ -193,6 +195,19 @@ class Msucai extends Member
 			}
 		}
 		return $this->fetch();
+	}
+	
+	/**
+	 * 下载积分设置
+	 */
+	public function scoreset(){
+		$id = Request::instance()->post("id");
+		$score = Request::instance()->post("score");
+		$rs = 0;
+		if($id>0 && $score>=0){
+			$rs = materialModel::upd_data(['id'=>$id],['score'=>$score]);
+		}
+		echo json_encode($rs);
 	}
 	
 	/**
@@ -289,8 +304,10 @@ class Msucai extends Member
 				}
 			}
 			if(!$is_pic_water){
+				$syssettings = readCacheFile("syssettings");
+				if($syssettings['iswater']!=2) $syssettings['watertext']='';
 				$image = Image::open($tojpgpath);
-				$image->text('文创平台 www.nlccpd.com','fzhzgb.ttf',24,'#383838')->save($shuiyin); //生成水印图
+				$image->text($syssettings['watertext'],'fzhzgb.ttf',24,'#383838')->save($shuiyin); //生成水印图
 			}
 			//获取图片文件信息
 			$imginfo = helper::getimginfo(ROOT_PATH.$detail['filepath']);
@@ -331,15 +348,15 @@ class Msucai extends Member
 		if(!empty($file)){
 			$excelpath = UPLOADS_PATH.'excel';
 			if (!file_exists($excelpath)) { //如果没有这个文件夹
-				@mkdir($excelpath."/"); //创建这个文件夹
+				@mkdir($excelpath."/", 0777); //创建这个文件夹
 			}
 			$excelpath.= "/".$this->uid;
 			if (!file_exists($excelpath)) { //如果没有这个文件夹
-				@mkdir($excelpath."/"); //创建这个文件夹
+				@mkdir($excelpath."/", 0777); //创建这个文件夹
 			}
 			$excelpath.= "/".date("Ym",time());
 			if (!file_exists($excelpath)) { //如果没有这个文件夹
-				@mkdir($excelpath."/"); //创建这个文件夹
+				@mkdir($excelpath."/", 0777); //创建这个文件夹
 			}
 			$excelpath.= "/";
 			$oldname = $file->getInfo('name');
@@ -386,6 +403,11 @@ class Msucai extends Member
 			$this->assign('fnnum_arr', $fnnum_arr);
 		}
 		$this->assign('list', $list);
+		$cygpath = ""; //成员馆目录名称，如：NLC
+		$m_auth = memberauthModel::getOneByWhere(array('uid'=>$this->uid));
+		if(!empty($m_auth['leaguer_no'])){
+			$cygpath = $m_auth['leaguer_no'];
+		}
 		if($info['is_daoru']!=2){
 		  $cnoarr = readCacheFile("cnoarr"); //cno-id
 		  $topicarr = readCacheFile("topicarr"); //id-title
@@ -408,25 +430,34 @@ class Msucai extends Member
 					$data[$k]['title'] = isset($v[2])?$v[2]:'';
 					$data[$k]['supply_tit'] = isset($v[3])?$v[3]:'';
 					$data[$k]['topic_str'] = isset($v[4])?$v[4]:'';
-					$data[$k]['author'] = isset($v[5])?$v[5]:'';
-					$data[$k]['author_info'] = isset($v[6])?$v[6]:'';
-					$data[$k]['keywords'] = isset($v[7])?$v[7]:'';
-					$data[$k]['themewords'] = isset($v[8])?$v[8]:'';
-					$data[$k]['cno'] = isset($v[9])?$v[9]:'';
-					$data[$k]['source'] = isset($v[10])?$v[10]:'';
-					$data[$k]['version'] = isset($v[11])?$v[11]:'';
-					$data[$k]['originaltime'] = isset($v[12])?$v[12]:'';
-					$data[$k]['makingtime'] = isset($v[13])?$v[13]:'';
-					$data[$k]['roomarea'] = isset($v[14])?$v[14]:'';
+					$data[$k]['author'] = isset($v[6])?$v[6]:'';
+					$data[$k]['author_info'] = isset($v[7])?$v[7]:'';
+					$data[$k]['desc'] = isset($v[8])?$v[8]:'';
+					$data[$k]['themewords'] = isset($v[9])?$v[9]:'';
+					$data[$k]['keywords'] = isset($v[10])?$v[10]:'';
+					$data[$k]['source'] = isset($v[11])?$v[11]:'';
+					$data[$k]['version'] = isset($v[12])?$v[12]:'';
+					$data[$k]['originaltime'] = isset($v[13])?$v[13]:'';
+					$data[$k]['makingtime'] = isset($v[14])?$v[14]:'';
 					$data[$k]['resourcecate'] = isset($v[15])?$v[15]:'';
-					$data[$k]['contain'] = isset($v[16])?$v[16]:'';
-					$data[$k]['filename'] = isset($v[17])?$v[17]:'';
-					$data[$k]['ext'] = isset($v[18])?$v[18]:'';
+					$data[$k]['filename'] = isset($v[16])?$v[16]:'';
+					$data[$k]['ext'] = isset($v[17])?$v[17]:'';
+					
+					$cate = substr($v[1],-16,4);
+					$data[$k]['cate'] = isset($cnoarr[$cate])?$cnoarr[$cate]:0;
+					$data[$k]['cno'] = $cate;
+// 					$data[$k]['roomarea'] = isset($v[14])?$v[14]:'';
+// 					$data[$k]['contain'] = isset($v[16])?$v[16]:'';
+					
 					$data[$k]['uid'] = $this->uid;
-					$data[$k]['cate'] = isset($cnoarr[$v[9]])?$cnoarr[$v[9]]:0;
 					$data[$k]['batch'] = substr($v[1],-8,3);
+					$data[$k]['filename'] = '00'.substr($v[1],-5,5);
 					$data[$k]['input_uid'] = $data[$k]['uid'];
 					$data[$k]['input_time'] = time();
+					
+					$imgpath = "/".UPLOADS_PATH.'sucai/'.$cygpath.'/'.$data[$k]['batch'].'/'
+							.$data[$k]['filename'].'.'.$data[$k]['ext'];
+					$data[$k]['filepath'] = $imgpath;
 					$batcharr[$i] = $data[$k]['batch'];
 					$i++;
 				}
@@ -460,7 +491,7 @@ class Msucai extends Member
 	 */
 	public function upmatallimgmaking(){
     	$id = Request::instance()->post("id");
-		$matlist = materialModel::getList(['mu_id'=>$id]);
+		$matlist = materialModel::getListByWhere(['mu_id'=>$id]);
 		$matidarr = convert_arr_key($matlist,'id');
 		$matidarr = array_column($matidarr,'id');
 		echo json_encode($matidarr);

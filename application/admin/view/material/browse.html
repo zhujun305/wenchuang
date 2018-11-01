@@ -8,9 +8,22 @@ $(function(){
 			$(this).attr('checked' , chk);
 		});
 	});
+	$('#lockallbtn').click(function(){
+		var url = "{:url('/Admin/material/lockall')}";
+		ExecuteUpdCheck(url, '', "批量锁定");
+	});
+	$('#unlockallbtn').click(function(){
+		var url = "{:url('/Admin/material/unlockall')}";
+		ExecuteUpdCheck(url, '', "批量解锁");
+	});
+	$('#chkallbtn').click(function(){
+		var url = "{:url('/Admin/material/ischkall')}";
+		ExecuteUpdCheck(url, '', "批量审核");
+	});
 	//查询
 	$('#findbtn').click(function(){
 		var arr=[];
+		arr.push($('#cate').val());
 		arr.push($('#title').val());
 		arr.push($('#is_chk').val());
 		arr.push($('#is_lock').val());
@@ -33,6 +46,11 @@ $(function(){
 		<div class="clear"></div>
 	</div>
 	<div class="sea_div mt_10">
+		<div class="czbox f_l ml_20">
+			<a href="javascript:;" id="lockallbtn">批量锁定</a>
+			<a href="javascript:;" id="unlockallbtn">批量解锁</a>
+			<a href="javascript:;" id="chkallbtn">批量审核</a>
+		</div>
 		<div class="sea_clearbtn f_r mr_20" id="clearbtn">清除</div>
 		<div class="sea_btn f_r" id="findbtn">查询</div>
 		<select id="is_lock" class="gg_select w100 f_r ml_20">
@@ -52,6 +70,14 @@ $(function(){
 			<input type="text" id="title" class="sinput" value="{$findObj['title']}" />
 			</div>
 		</div>
+		<select id="cate" class="gg_select w100 f_r ml_20">
+			<option value="" selected="selected">请选择分类</option>
+			{volist name="catelist" id="val"}
+			{php}if($val['pid']==0){{/php}
+			<option value="{$val['id']}" <?php echo $findObj['cate']==$val['id']?'selected':''?>>{$val['cname']}</option>
+			{php}}{/php}
+			{/volist}
+		</select>
 	</div>
 	<div class="clear"></div>
 	
@@ -83,12 +109,17 @@ $(function(){
 			<input type="checkbox" name="id[]" class="chklie" value="{$val.id}"/>{$val.id}
 			</div>
 		</div>
-		<div class="td" style="width:10%;">【{$catelist[$val.cate]['cname']}】<br/>{$val.title}</div>
+		<div class="td" style="width:10%;">
+			<div>【{$catelist[$val.cate]['cname']}】</div>
+			<div>{$val.title}</div>
+		</div>
 		<div class="td" style="width:10%;">
 			<img src="<?php echo getImgURL($val['cover']);?>" class="suotu_div" _shuiyin="<?php echo getImgURL($val['pic_water']);?>" width="133" height="99" />
 		</div>
-		<div class="td" style="width:10%;">&nbsp;{$val.metadata}<br/>
-			{$val.cno}--{$val.batch}--{$val.filename}
+		<div class="td" style="width:10%;line-height:30px;">
+			<div>{$val.metadata}</div>
+			<div>{$val.cno}--{$val.batch}--{$val.filename}</div>
+			<div>格式：{$val['ext']}</div>
 		</div>
 		<div class="td" style="width:10%;">&nbsp;
 			<?php $topic_arr=[]; 
@@ -102,7 +133,7 @@ $(function(){
 			{$topic_str}
 		</div>
 		<div class="td" style="width:10%;">&nbsp;</div>
-		<div class="td" style="width:10%;">积分：{$val.integral} 下载：{$val.download}<br/>
+		<div class="td" style="width:10%;">积分：{$val.score} 下载：{$val.download}<br/>
 			收藏：{$val.coll} 访问：{$val.pv}
 		</div>
 		<div class="td" style="width:5%;">&nbsp;<?php echo ($val['mu_id']>0 || $val['matuprid']>0)?'批量上传':'前台发布';?></div>
@@ -111,12 +142,14 @@ $(function(){
 		</div>
 		<div class="td" style="width:10%;">
 			<?php echo $val['input_time']>0?date("Y-m-d H:i:s",$val['input_time']):''?><br/>
-			<?php echo $val['uid']>0?$memberlist[$val['uid']]['nick_name']:'';?>
+			<a href="{:url('/Admin/member/browse','find='.$val['uid'])}">
+			<?php echo $val['uid']>0?$memberlist[$val['uid']]['nick_name']:'';?></a>
 		</div>
 		<div class="td edit" style="width:10%;">
 			<?php if($val['is_chk']!=2){?>
 			<a href="{:url('/Admin/material/detail','id='.$val.id.'&type=2')}">审核</a>
 			<?php }?>
+			<a href="{:url('/Admin/material/edit','id='.$val['id'])}">编辑</a>
 			<a href="{:url('/Admin/material/detail','id='.$val.id)}">查看详细</a>
 			<br/>
 			<?php if($val['is_lock']==1){?>

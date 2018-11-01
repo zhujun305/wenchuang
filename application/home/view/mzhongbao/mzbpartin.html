@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>投稿列表-会员中心</title>
+{include file="/member/m_header"}
+<style>
+.crowd_pop{position:fixed;top:50%;left:50%;width:450px;height:350px;padding:30px 30px 0 30px;display:none;
+margin-top:-205px;margin-left:-250px;background:#fff;border:1px solid #b5b5b5;z-index:99;box-shadow:5px 5px 15px rgba(0,0,0,.17);
+-moz-box-shadow:5px 5px 15px rgba(0,0,0,.17);-webkit-box-shadow:5px 5px 15px rgba(0,0,0,.17);}
+.crowd_pop h3{display:block;height:30px;font-size:16px;}
+.crowd_pop h3 font{float:left;}
+.crowd_pop h3 a{float:right;}
+.crowd_pop textarea{width:440px;height:220px;padding:5px;}
+.crowd_pop .agree{color:#fff;cursor:pointer;background:#326fc2;font-size:16px;border-radius:3px;
+border:1px solid #b5b5b5;width:110px;text-align:center;height:35px;line-height:35px;display:block;margin:10px auto 0 auto;}
+</style>
+</head>
+
+<body>
+
+<!--头部开始-->
+{include file="/member/m_top"}
+<!-- 非头尾的内容 START -->
+<!--面包屑导航开始-->
+<div class="breadcrumb clearfix " >
+</div>
+<!--面包屑导航结束-->
+
+<div class="main clearfix" >
+{include file="/member/m_left"}
+    <div class="contents fr m20">
+		{include file="/member/ad"}
+		
+		<div class="lm">
+			<div class="search">
+				<input type="text" class="txt" id="seatxt" value="{$find}" placeholder="搜索" /> 
+				<input type="image" src="{$Think.config.web_member}/img/fff.png" class="ss" id="seaform" />
+			</div>
+			<a class="on" href="javascript:void(0);">稿件比选</a>
+		</div>
+    	<div class="border">
+			<div class="zc_tit" style="margin-top:10px;">
+				<i class="l1">投稿信息</i> <i class="l2">当前状态</i> <i class="l3">操作</i>
+			</div>
+			<div class="zc_list">
+				<ul>
+				{volist name="list" id="val"}
+				<li>
+					<div class="img"><img src="<?php echo getImgURL($val['cover']);?>" width="130" height="98" /></div>
+					<div class="jianjie">
+						<h5>报价：￥{$val.price}元</h5>
+						<h6>周期：{$val.cycle}</h6>
+						<p><span></span></p>
+						<p><span></span></p>
+					</div>
+					<div class="d3">{$status_arr[$val.status]}</div>
+					<div class="d4">
+						<a onClick="location='{:url('home/mzhongbao/mzbwtbupd','id='.$val.id)}'" href="javascript:void(0);">编辑</a><br/>
+						<a href="{:url('home/crowdsourcing/detail','id='.$val.cs_id)}" target="_blank">查看项目</a>
+					</div>
+				</li>
+				{/volist}
+				</ul>
+			</div>
+			<div class="clearfix"></div>
+			<div class="page">
+				{$list->render()}
+			</div>
+			<div class="clearfix" style="height:10px;"></div>
+		</div>
+    </div>
+</div>
+<!-- 非头尾的内容 END -->
+<script type="text/javascript">
+$(function(){
+	$("#crowd_pop h3 a").click(function(){
+		$("#crowd_pop").hide();
+	});
+	$("#crowd_pop .agree").click(function(){
+		var fuid = "{$member['uid']}";
+		var suid = $(this).attr("_suid");
+		var content = $("#content").val();
+		$.post("{:url('home/mzhongbao/mzbsendmsg')}",{fuid:fuid,suid:suid,content:content},function(data){
+			if(data){
+				alert("私信发送成功。");
+			}else{
+				alert("私信发送失败。");
+			}
+			$("#crowd_pop").hide();
+		},'json');
+	});
+});
+</script>
+
+{include file="/member/m_footer"}
+
+</body>
+</html>

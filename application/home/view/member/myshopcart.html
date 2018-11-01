@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>我的购物车</title>
+{include file="/common/c_header"}
+<link type="text/css" rel="stylesheet" href="__STATIC__/webmember/css/base.css"/>
+<link type="text/css" rel="stylesheet" href="__STATIC__/webmember/css/style.css"/>
+<style>
+.mr_20{margin-right:20px;}
+.tot_num{color:red;font-weight:bold;}
+.hyCurt03 p{font-size:14px;line-height:48px;}
+.buynum b{cursor:pointer;}
+.hyCurt span.hyCurt-span02{width:508px;}
+.hyCurt02 .hy-orderB02-img{width:508px;}
+.delxian{text-decoration:line-through;}
+.jiali{}
+.zhjli{font-size:14px;}
+.zklie{height:30px;}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+{include file="/common/c_top"}
+
+<div class="w">
+	<div class="hyCurt">
+		<h3>我的购物车</h3>
+		<div class="hyCurt01">
+			<span class="hyCurt-span01"><label><input type="checkbox" id="chkall" value="" />全选</label></span>
+			<span class="hyCurt-span02">商品</span>
+			<span class="hyCurt-span03">单价</span>
+			<span class="hyCurt-span04">数量</span>
+			<span class="hyCurt-span05">小计（元）</span>
+			<span class="hyCurt-span05">折后价</span>
+			<span class="hyCurt-span06">操作</span>
+		</div>
+		<div class="curtLine"></div>
+		{volist name="list" id="val"}
+		{php}$price_li = ($val['num']*$val['price']);{/php}
+		<div class="hyCurt02">
+			<span class="hyCurt-span01"><input type="checkbox" class="chklie" _id="{$val['id']}" _num="{$val['num']}" _price="{$val['price']}" /></span>
+			<div class="hy-orderB02-img fl">
+				<img src="<?php echo getImgURL($val['cover']);?>" class="fl" width="60" height="60" />
+				<div class="info fl">
+					<div>{$val['title']}</div><br/>
+					<div>
+					{php}if($sgnlist[$val['sgnid']]['snvidone']>0){ echo $shopnorms[$sgnlist[$val['sgnid']]['snidone']]['name'].'：'.$snormsval[$sgnlist[$val['sgnid']]['snvidone']]['name']; }{/php}&nbsp;
+					{php}if($sgnlist[$val['sgnid']]['snvidtwo']>0){ echo $shopnorms[$sgnlist[$val['sgnid']]['snidtwo']]['name'].'：'.$snormsval[$sgnlist[$val['sgnid']]['snvidtwo']]['name']; }{/php}&nbsp;
+					{php}if($sgnlist[$val['sgnid']]['snvidthree']>0){ echo $shopnorms[$sgnlist[$val['sgnid']]['snidthree']]['name'].'：'.$snormsval[$sgnlist[$val['sgnid']]['snvidthree']]['name']; }{/php}
+					</div>
+				</div>
+			</div>
+			<span class="hyCurt-span03">￥{$val['price']}</span>
+			<div class="hyCurt-number fl buynum">
+				<b class="num_cut" _id="{$val['id']}">-</b>
+				<input type="text" class="num_li_{$val['id']}" value="{$val['num']}" _id="{$val['id']}" _price="{$val['price']}" />
+				<b class="num_add" _id="{$val['id']}">+</b>
+			</div>
+			<span class="hyCurt-span05">
+				<b class="xji_{$val['id']} {$val['amount']>0?'delxian':''}">￥<font class="jiali jia_{$val['id']}">{$price_li}</font></b>
+			</span>
+			<span class="hyCurt-span05">
+				{php}if($val['amount']>0){{/php}
+				<div class="zklie zklie_{$val['id']}">折扣：<label>{$val['agio']}</label></div>
+				<div class="zklie zklie_{$val['id']}">￥<font class="zhjli zhj_{$val['id']}">{$val['amount']}</font></div>
+				{php}}else{{/php}
+				<div class="zklie zklie_{$val['id']}">折扣：无</div>
+				<div class="zklie zklie_{$val['id']}"></div>
+				{php}}{/php}
+			</span>
+			<span class="hyCurt-span06">
+				<a href="{:url('home/member/delmsc','id='.$val['id'])}" onclick="return confirm('你确定要删除吗？')">删除</a>
+			</span>
+		</div>
+		{/volist}
+		<div class="hyCurt03">
+			<div id="id_lie"></div>
+			<a href="javascript:;" id="submit" class="fr">去结算</a>
+			<b class="fr">￥<font class="tot_price">0</font></b>
+			<p class="fr">合计（不含运费）:</p>
+			<p class="fr mr_20">已选商品 <font class="tot_num">0</font> 件</p>
+		</div>
+	</div>
+</div>
+
+{include file="/common/c_footer"}
+</div>
+<script type="text/javascript">
+$(function(){
+	$("#chkall").click(function(){
+		var chk = $(this).is(":checked");
+		$('.chklie').prop('checked', chk);
+		tongjitot(0,0);
+		$('.chklie').each(function(){
+			if($(this).is(":checked")){
+				var id = $(this).attr("_id");
+				$("#id_lie").append('<input type="hidden" name="ids[]" class="idlie_'+id+'" value="'+id+'" />');
+			}else{
+				$("#id_lie").html('');
+			}
+		});
+	});
+	$(".chklie").click(function(){
+		var id = $(this).attr("_id");
+		tongjitot(0,0);
+		if($(this).is(":checked")){
+			$("#id_lie").append('<input type="hidden" name="ids[]" class="idlie_'+id+'" value="'+id+'" />');
+		}else{
+			$("#id_lie").find('.idlie_'+id).remove();
+		}
+	});
+	//数量减少
+	$(".num_cut").click(function(){
+		var id = $(this).attr("_id");
+		var buynum = parseInt($(".num_li_"+id).val())-1;
+		var price = $(".num_li_"+id).attr("_price");
+		if(buynum>0){
+			$(".num_li_"+id).val(buynum);
+			$(".jia_"+id).html((buynum*price));
+		}
+		tongjitot(id,buynum);
+	});
+	//数量增加
+	$(".num_add").click(function(){
+		var id = $(this).attr("_id");
+		var buynum = parseInt($(".num_li_"+id).val())+1;
+		var price = $(".num_li_"+id).attr("_price");
+		$(".num_li_"+id).val(buynum);
+		$(".jia_"+id).html((buynum*price));
+		tongjitot(id,buynum);
+	});
+	//文本框输入-失去焦点事件
+	$(".buynum input").on('blur',function(){
+		var id = $(this).attr("_id");
+		var buynum = $(".num_li_"+id).val();
+		var price = $(".num_li_"+id).attr("_price");
+		if(buynum>0){
+			$(".jia_"+id).html((buynum*price));
+		}
+		tongjitot(id,buynum);
+	});
+	$("#submit").click(function(){
+		if(!($("#id_lie input").length>0)){
+			alert("请选择商品！");
+			return false;
+		}
+		var idsarr = [];
+		$("#id_lie input").each(function(key,val){
+			var id = $(this).val();
+			idsarr.push($(this).val());
+		});
+		var idstr = idsarr.join(',');
+		location.href = "{:url('home/Member/orderadd')}?ids="+idstr;
+	});
+});
+function tongjitot(id,buynum){ //购物车id、buynum改变的数量
+	var iii = 0;
+	var tot_price = 0;
+	$('.chklie').each(function(){
+		if($(this).is(":checked")){
+			iii++;
+			var id = $(this).attr("_id");
+			var num = $(".num_li_"+id).val();
+			var price = $(this).attr("_price");
+			var zhjia = $(".zhj_"+id).html();
+			if(zhjia>0){
+				tot_price += parseFloat(zhjia);
+			}else{
+				tot_price += parseFloat(num*price);
+			}
+		}
+	});
+	$(".tot_num").html(iii);
+	$(".tot_price").html(tot_price);
+	if(id>0 && buynum>0){
+		var url = "{:url('home/Member/ajaxsetcartnum')}?id="+id;
+		$.post(url,{num:buynum},function(data){
+			if(data.amount>0){
+				$(".zklie_"+id+":eq(0)").html("折扣：<label>"+data.agio+"</label>");
+				$(".zklie_"+id+":eq(1)").html('￥<font class="zhjli zhj_'+id+'">'+data.amount+'</font>');
+				$(".xji_"+id).addClass("delxian");
+			}else{
+				$(".zklie_"+id+":eq(0)").html("折扣：无");
+				$(".zklie_"+id+":eq(1)").html('');
+				$(".xji_"+id).removeClass("delxian");
+			}
+		},'json');
+	}
+}
+</script>
+
+</body>
+</html>

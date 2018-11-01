@@ -4,6 +4,8 @@
 <title>素材管理-会员中心</title>
 {include file="/member/m_header"}
 <style>
+.loading_cs{display:none;left:50%;top:50%;width:90px;height:80px;text-align:center;border-radius:5px;}
+.loading_cs img{margin:10px 15px 0;}
 </style>
 </head>
 
@@ -64,14 +66,28 @@
     </div>
 </div>
 <!-- 非头尾的内容 END -->
+<div class="pop_box loading_cs">
+  <div class="pop_boxc01">
+	<div class="pop_boxc01T">
+		<img src="__STATIC__/images/loading.gif" />
+		<div style="color:#fff;margin-top:10px;">请等待...</div>
+	</div>
+  </div>
+</div>
 <script type="text/javascript">
 $(function(){
 	$("#impexcel").click(function(){
+		$(".loading_cs").show();
 		var _id = $(this).attr("_id");
 		$.post("{:url('home/Msucai/upmatallimgmaking')}",{id:_id},function(data){
+			var len=data.length-1;
 			$.each(data,function(index,value){
 				var url = "{:url('home/Msucai/matimgmaking')}?id="+value;
-				$.get(url);
+				$.get(url,function(){
+					if(len==index){
+						$(".loading_cs").hide();
+					}
+				});
 			});
 		},'json');
 	});

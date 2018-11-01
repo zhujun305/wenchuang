@@ -108,7 +108,7 @@ function chkval(obj){
 			</div>
 		</div>
 		<div class="td" style="width:10%;">&nbsp;{$val.pid} 
-			<?php if($val['pid']>0){ echo isset($catelist[$val['pid']]['cname'])?$catelist[$val['pid']]['cname']:'顶级'; }?>
+			<?php if($val['pid']>0){echo isset($catelist[$val['pid']]['cname'])?$catelist[$val['pid']]['cname']:'';}else{echo '顶级';}?>
 		</div>
 		<div class="td" style="width:10%;">&nbsp;{$val.cname}</div>
 		<div class="td" style="width:20%;">&nbsp;{$val.cno}</div>

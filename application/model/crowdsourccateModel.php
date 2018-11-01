@@ -2,6 +2,7 @@
 namespace app\model;
 use app\model\commonModel;
 use think\Db;
+use think\Session;
 
 class crowdsourccateModel extends commonModel
 {
@@ -33,6 +34,7 @@ class crowdsourccateModel extends commonModel
      */
     static public function add_data($data = array())
     {
+		$data['input_uid'] = Session::get('user_id'); //后台用户id
 		$data['input_time'] = time();
     	$return = Db::table(self::$table_name)->insertGetId($data);
     	return $return;
@@ -66,12 +68,11 @@ class crowdsourccateModel extends commonModel
     /**
      * 查询分页列表
      */
-    static public function getList($findObj=array(), $field=array(), $page="15", $order="id desc")
+    static public function getList($findObj=array(), $field=array(), $page="15", $order="id asc")
     {
     	$where = [];
 		if(!empty($findObj)){
 			if(!empty($findObj['title'])) $where['title'] = ['like', '%'.$findObj['title'].'%'];
-			if(isset($findObj['cate']) && $findObj['cate']>0) $where['cate'] = $findObj['cate'];
 			if(isset($findObj['is_lock']) && $findObj['is_lock']>0) $where['is_lock'] = ($findObj['is_lock']);
 		}
 		$where = array_filter($where);
@@ -84,7 +85,7 @@ class crowdsourccateModel extends commonModel
     /**
      * 根据where条件查询列表
      */
-    static public function getListByWhere($where=array(), $field=array(), $order="id desc", $limit='10')
+    static public function getListByWhere($where=array(), $field=array(), $order="id asc", $limit='')
     {
     	$where['is_del'] = 1;
         $return = Db::table(self::$table_name)->where($where)->field($field)->order($order)->limit($limit)->select();

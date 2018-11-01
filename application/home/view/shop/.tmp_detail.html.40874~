@@ -1,0 +1,340 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>商品展示</title>
+{include file="/common/c_header"}
+<style>
+.snkv_ys{line-height:35px;clear:both;}
+.snkv_ys a{padding:3px 3px;margin-right:8px;border:1px solid #ccc;white-space:nowrap;}
+.snkv_ys a.cho_snkv_a{border:2px solid #F40;}
+.snkv_ys a.no_cho_a{border:1px dotted #ccc;color:#ccc;pointer-events:none;}
+.snkv_ys a.no_cho_a:hover{cursor:not-allowed;}
+.pfjtit{font-size:14px;color:#333;}
+.pfjul{}
+.pfjul li{float:left;width:160px;}
+.pro_location{width:auto;position:relative;}
+.biaoqian{position:absolute;right:0;top:10px;width:60px;height:27px;line-height:27px;
+text-align:center;color:#fff;background-color:#f10;border-radius:9px;}
+.ping_list{}
+.ping_list ul{}
+.ping_list li{position:relative;margin-top:15px;padding-bottom:10px;overflow:hidden;line-height:200%;border-bottom:1px solid #dcdcdc;}
+.ping_list li .img{float:left;width:53px;height:53px;overflow:hidden;border-radius:50% 50%;margin-left:10px;}
+.ping_list li .bz{float:left;width:1015px;margin-left:20px;font-size:14px;color:#8a8383;padding-bottom:15px;}
+.ping_list li .bz h5{margin-top:0px;}
+.ping_list li .bz h5 span{float:right;font-weight:100;}
+.ping_list li.on .bz{border-bottom:1px solid #dcdcdc;}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+{include file="/common/c_top"}
+
+  {include file="/shop/shopmenu"}
+  <div class="bg_dt clear">
+    <div class="pro_dt clear">
+      <div class="pro_location">
+      	<a href="{:url('home/index/index')}">首页</a><i>&gt;</i>
+		<a href="{:url('home/shop/shopgoods')}">文创产品</a><i>&gt;</i>
+		<span>{$obj['title']}</span>
+		{php}if($member['uid']==$obj['uid']){{/php}
+    	<div class="biaoqian">我的商品</div>
+    	{php}}{/php}
+	  </div>
+      <div class="pro_pic left">
+        <div class="bd">
+        	{volist name="imglist" id="val"}
+			<div class="big_pic"><img src="{php}echo getImgURL($val['pic']);{/php}" width="560" height="560" /></div>
+			{/volist}
+        </div>
+        <div class="hd">
+        	{volist name="imglist" id="val"}
+        	<em><img src="{php}echo getImgURL($val['pic']);{/php}" width="100" height="100" /></em>
+			{/volist}
+		</div>
+      </div>
+      <div class="pro_txt right">
+		<h3 class="pro_txt_tit">【{$catelist[$obj['cate']]['title']}】{$obj['title']}</h3>
+		{php}if($obj['subtitle']!=''){{/php}
+		<div style="margin:5px 0px;font-size:14px;color:#f06;">{$obj['subtitle']}</div>
+		{php}}{/php}
+		<div class="pro_txt_price">
+			<em><font>￥<span class="xs_price">{php}if($salejia['min_price']!=$salejia['max_price']){echo $salejia['min_price'].'~'.$salejia['max_price'];}else{echo $obj['price'];}{/php}</span></font>/个</em>
+			零售价：<span class="yj_price">{php}if($oldjia['min_price']!=$oldjia['max_price']){echo $oldjia['min_price'].'~'.$oldjia['max_price'];}else{echo $obj['old_price'];}{/php}</span>
+		</div>
+		<div class="pro_txt_1"><i>{$obj['input_time']>0?date("m月d日",$obj['input_time']).'新品':'';}</i></div>
+		<form id="addform" action="{:url('home/Member/myshopcart')}" method="post">
+		<ul class="pro_txt_2">
+          <li><em>编号</em>{$obj['sno']}</li>
+          <li><em>条码</em>{$obj['gbarcode']}</li>
+		  {volist name="snkvarr" id="item"}
+          <li><em>{$shopnorms[$key]['name']}</em>
+		  	<div class="snkv_ys {$ys_name[$key]}" _snid="{$key}">
+			<input type="hidden" name="snvid[]" value="" class="snvid_lie" />
+		  	{php}foreach($item as $kkk=>$vvv){{/php}
+			<a href="javascript:;" class="snvid_{$kkk}" _id="{$kkk}">{$snormsval[$kkk]['name']}</a>
+		  	{php}}{/php}
+			</div>
+		  </li>
+		  {/volist}
+          <li><em>库存</em><span class="stock_num">{$obj['stock_num']}</span> 件</li>
+          <li>
+          	<em>选购数量</em>
+		  	<span class="many left">
+		  		<a class="num_cut">-</a>
+				<input type="text" name="num" id="buynum" value="1" title="请输入购买量" />
+				<a class="num_add">﹢</a>
+			</span>
+		  </li>
+		</ul>
+		<div class="pro_txt_3">
+			<input type="hidden" name="sgnid" id="sgnid" value="" />
+			<input type="hidden" name="gid" id="gid" value="{$obj['id']}" />
+			<input type="submit" id="submit" value="加入购物车" class="p_but" />
+			<p>请填写选购数量，点击加入购物车</p>
+		</div>
+		</form>
+		<?php /*?>
+		<div class="pro_txt_4">暂无优惠信息！</div>
+		<?php */?>
+		{php}if($member['auth_cate']==4 && !empty($pifalist)){{/php}
+		<div class="pro_txt_4">
+			<div class="pfjtit">批发价格</div>
+			<ul class="pfjul">
+			{volist name="pifalist" id="val"}
+			<li>批发{$val['num']}件，每件{$val['agio']}折</li>
+			{/volist}
+			</ul>
+		</div>
+		{php}}{/php}
+      </div>
+      <div class="clear0"></div>
+    </div>
+    <div class="pro_dt_con clear">
+      <div class="hd">
+      	<em>商品详情</em>
+		<em>累计评论</em>
+	  </div>
+      <div class="bd">
+        <div class="clear">
+        	{$obj['content']}
+        </div>
+        <div class="clear">
+        	<div class="ping_list">
+				<ul>
+				{volist name="pjlist" id="vvv"}
+				<li>
+					<div style="position:relative;">
+					<div class="img">
+						<img src="{php}echo getImgURL($mlist[$vvv['uid']]['imgurl'],'memberlogo');{/php}" width="53" height="53"/>
+					</div>
+					<div class="bz">
+						<h5><span>{$vvv['input_time']>0?date("Y-m-d H:i:s",$vvv['input_time']):''}</span>{$mlist[$vvv['uid']]['nick_name']} </h5>
+						<p>{$vvv['content']}</p>
+					</div>
+					</div>
+				</li>
+				{/volist}
+				</ul>
+			</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{include file="/common/c_footer"}
+</div>
+<div id="guizelie" style="display:none;">
+	{volist name="snvlist" id="item"}
+	<div class="{$key}">
+		{php}foreach($item as $kkk=>$vvv){{/php}
+		{php}$idstr = implode(",",$vvv);{/php}
+		<a class="snv_{$kkk}">{$idstr}</a>
+		{php}}{/php}
+	</div>
+	{/volist}
+</div>
+<script type="text/javascript">
+$(function(){
+	$(".snkv_ys a").click(function(){
+		$(".snkv_ys").attr("_isxz",0);
+		$(this).parents(".snkv_ys").attr("_isxz",1); //确定当前选择的div第几行
+		$(this).parents(".snkv_ys").find("a").removeClass("cho_snkv_a");
+		$(this).addClass("cho_snkv_a");
+		var snvid = $(this).attr("_id");
+		$(this).parents(".snkv_ys").find("input").val(snvid);
+		var lavel = 0;
+		var snvid_a = 0;
+		if($(".snidone").length>0){
+			lavel = 1;
+			snvid_a = $(".snidone input").val();
+		}
+		var snvid_b = 0;
+		if($(".snidtwo").length>0){
+			lavel = 2;
+			snvid_b = $(".snidtwo input").val();
+		}
+		var snvid_c = 0;
+		if($(".snidthree").length>0){
+			lavel = 3;
+			snvid_c = $(".snidthree input").val();
+		}
+		//确定当前选择的div第几行
+		var xz_lvl = 0;
+		if($(this).parents(".snidone").attr("_isxz")>0){ xz_lvl = 1; }
+		if($(this).parents(".snidtwo").attr("_isxz")>0){ xz_lvl = 2; }
+		if($(this).parents(".snidthree").attr("_isxz")>0){ xz_lvl = 3; }
+		if(lavel==2){
+			var strhang = '';
+			if(xz_lvl==1){
+				strhang = $("#guizelie .a_b").find(".snv_"+snvid).html();
+				var strarr = strhang.split(",");
+				$(".snidtwo a").attr("_isshow",1);
+				$.each(strarr,function(key,item){
+					$(".snvid_"+item).attr("_isshow",2);
+				});
+				$(".snidtwo a[_isshow!=2]").addClass('no_cho_a');
+				$(".snidtwo a[_isshow=2]").removeClass('no_cho_a');
+			}else if(xz_lvl==2){
+				strhang = $("#guizelie .b_a").find(".snv_"+snvid).html();
+				var strarr = strhang.split(",");
+				$(".snidone a").attr("_isshow",1);
+				$.each(strarr,function(key,item){
+					$(".snvid_"+item).attr("_isshow",2);
+				});
+				$(".snidone a[_isshow!=2]").addClass('no_cho_a');
+				$(".snidone a[_isshow=2]").removeClass('no_cho_a');
+			}
+		}else if(lavel==3){
+			var strhang = '';
+			if(xz_lvl==1){
+				strhang = $("#guizelie .a_b").find(".snv_"+snvid).html();
+				var strarr = strhang.split(",");
+				$(".snidtwo a").attr("_isshow",1);
+				$.each(strarr,function(key,item){
+					$(".snvid_"+item).attr("_isshow",2);
+				});
+				$(".snidtwo a[_isshow!=2]").addClass('no_cho_a');
+				$(".snidtwo a[_isshow=2]").removeClass('no_cho_a');
+				strhang = $("#guizelie .a_c").find(".snv_"+snvid).html();
+				var strarr = strhang.split(",");
+				$(".snidthree a").attr("_isshow",1);
+				$.each(strarr,function(key,item){
+					$(".snvid_"+item).attr("_isshow",2);
+				});
+				$(".snidthree a[_isshow!=2]").addClass('no_cho_a');
+				$(".snidthree a[_isshow=2]").removeClass('no_cho_a');
+			}else if(xz_lvl==2){
+				strhang = $("#guizelie .b_a").find(".snv_"+snvid).html();
+				var strarr = strhang.split(",");
+				$(".snidone a").attr("_isshow",1);
+				$.each(strarr,function(key,item){
+					$(".snvid_"+item).attr("_isshow",2);
+				});
+				$(".snidone a[_isshow!=2]").addClass('no_cho_a');
+				$(".snidone a[_isshow=2]").removeClass('no_cho_a');
+				strhang = $("#guizelie .b_c").find(".snv_"+snvid).html();
+				var strarr = strhang.split(",");
+				$(".snidthree a").attr("_isshow",1);
+				$.each(strarr,function(key,item){
+					$(".snvid_"+item).attr("_isshow",2);
+				});
+				$(".snidthree a[_isshow!=2]").addClass('no_cho_a');
+				$(".snidthree a[_isshow=2]").removeClass('no_cho_a');
+			}else if(xz_lvl==3){
+				strhang = $("#guizelie .c_a").find(".snv_"+snvid).html();
+				var strarr = strhang.split(",");
+				$(".snidone a").attr("_isshow",1);
+				$.each(strarr,function(key,item){
+					$(".snvid_"+item).attr("_isshow",2);
+				});
+				$(".snidone a[_isshow!=2]").addClass('no_cho_a');
+				$(".snidone a[_isshow=2]").removeClass('no_cho_a');
+				strhang = $("#guizelie .c_b").find(".snv_"+snvid).html();
+				var strarr = strhang.split(",");
+				$(".snidtwo a").attr("_isshow",1);
+				$.each(strarr,function(key,item){
+					$(".snvid_"+item).attr("_isshow",2);
+				});
+				$(".snidtwo a[_isshow!=2]").addClass('no_cho_a');
+				$(".snidtwo a[_isshow=2]").removeClass('no_cho_a');
+			}
+		}
+		if(snvid_a>0 || snvid_b>0 || snvid_c>0){
+			var url = "{:url('home/shop/getnormsbysnvid','id='.$obj['id'])}";
+			$.post(url,{lavel:lavel,snvid_a:snvid_a,snvid_b:snvid_b,snvid_c:snvid_c},function(data){
+				if(data.obj.id>0){
+					$(".xs_price").html(data.obj.price);
+					$(".yj_price").html(data.obj.old_price);
+					$(".stock_num").html(data.obj.stock_num);
+					$("#sgnid").val(data.obj.id);
+				}
+			},'json');
+		}
+	});
+	//数量减少
+	$(".num_cut").click(function(){
+		var buynum = $("#buynum").val();
+		if(buynum>0){
+			$("#buynum").val((parseInt(buynum)-1));
+		}else{
+			$("#buynum").val(1);
+		}
+	});
+	//数量增加
+	$(".num_add").click(function(){
+		var buynum = $("#buynum").val();
+		if(buynum>0){
+			$("#buynum").val((parseInt(buynum)+1));
+		}else{
+			$("#buynum").val(1);
+		}
+	});
+	//加入购物车
+	$("#submit").click(function(){
+		if($(".snidone").length>0 && !($(".snidone input").val()>0)){
+			alert('请勾选您要的商品信息！');
+			return false;
+		}
+		if($(".snidtwo").length>0 && !($(".snidtwo input").val()>0)){
+			alert('请勾选您要的商品信息！');
+			return false;
+		}
+		if($(".snidthree").length>0 && !($(".snidthree input").val()>0)){
+			alert('请勾选您要的商品信息！');
+			return false;
+		}
+		if(!($("#sgnid").val()>0)){
+			alert('请勾选您要的商品信息！');
+			return false;
+		}
+		if(!($('#buynum').val()>0)) {
+			alert('购买数量不正确！');
+			$('#buynum').focus();
+			return false;
+		}
+		var memberuid = "{$member['uid']}";
+		var objuid = "{$obj['uid']}";
+		if(memberuid==objuid){
+			alert('不能购买自己的商品！');
+			return false;
+		}
+		var membercate = "{$member['cate']}";
+		if(membercate!=4){
+			alert('非联盟会员不能购买商品！');
+			return false;
+		}
+		$("#addform").submit();
+	});
+});
+</script>
+<script type="text/javascript">
+jQuery(".sider").slide({ type:"menu",titCell:".mainCate",targetCell:".subCate",delayTime:0,triggerTime:0,defaultPlay:false,returnDefault:true });
+jQuery(".nav_hover").slide({ type:"menu",titCell:".n_lf",targetCell:".sider",delayTime:0,triggerTime:0,defaultPlay:false,returnDefault:true });
+jQuery(".pro_pic").slide({titCell:".hd em"});
+jQuery(".pro_dt_con").slide({titCell:".hd em",trigger:"click"});
+</script>
+
+</body>
+</html>

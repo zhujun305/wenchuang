@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>技能标签-会员中心</title>
+{include file="/member/m_header"}
+<style>
+.jn_left_list li{overflow:hidden;}
+.jn_righ_list li{overflow:hidden;}
+</style>
+</head>
+
+<body>
+
+<!--头部开始-->
+{include file="/member/m_top"}
+<!-- 非头尾的内容 START -->
+<!--面包屑导航开始-->
+<div class="breadcrumb clearfix " >
+</div>
+<!--面包屑导航结束-->
+
+<div class="main clearfix" >
+{include file="/member/m_left"}
+    <div class="contents fr m20">
+		{include file="/member/ad"}
+		
+		<div class="lm">
+			<a class="on">技能标签</a>
+		</div>
+    	<div class="border">
+			<div class="w850">
+				<div class="jn_left">
+					<h5>请选择行业获取相应的技能标签</h5>
+					<select id="tagspid">
+						<option value="">请选择</option>
+						{volist name="catelist" id="val"}
+						<?php if($val['pid']==0){?>
+						<option value="{$val.id}">{$val.name}</option>
+						<?php }?>
+						{/volist}
+					</select>
+					<div class="jn_left_list">
+						<ul>
+						</ul>
+					</div>
+				</div>
+				<div class="jn_right">
+					<h5>您选择的标签，最多5项</h5>
+					<div class="jn_righ_list" style="height:120px;">
+						<ul>
+						{volist name="xzarr" id="val"}
+						<li id='lie_{$val}' _id='{$val}'><a alt="{$catelist[$val]['name']}">{$catelist[$val]['name']}</a></li>
+						{/volist}
+						</ul>
+					</div>
+				</div>
+				<div class="clearfix"></div>
+              	<form id="addform" action="{:url('home/member/skilltags')}" method="post">
+				<div class="jn_btn">
+					<input type="hidden" name="idstr" id="idstr" value="" />
+					<a id="submit">保存技能标签</a>
+				</div>
+				</form>
+			</div>
+    	</div>
+    </div>
+</div>
+<!-- 非头尾的内容 END -->
+<script>
+$(function(){
+	$("#tagspid").change(function(){
+		var cate = $(this).val();
+		$.post("{:url('home/Aajax/getmemberskilltags')}",{cate:cate},function(data){
+			$(".jn_left_list ul").empty();
+			$.each(data,function(key, val){
+				$(".jn_left_list ul").append("<li _id='"+val.id+"' _name='"+val.name+"'><a title='"+val.name+"'>"+val.name+"</a></li>");
+			});
+			var num = $(".jn_left_list ul li").length;
+			if(!(num>0)){
+				var ptxt = $("#tagspid").find("option:selected").text();
+				$(".jn_left_list ul").append("<li _id='"+cate+"' _name='"+ptxt+"'><a title='"+ptxt+"'>"+ptxt+"</a></li>");
+			}
+		},"json");
+	});
+	$(".jn_left_list ul li").live('click',function(){
+		var id = $(this).attr("_id");
+		var name = $(this).attr("_name");
+		var xzid = $("#lie_"+id).attr("_id");
+		var sonnum = $(".jn_righ_list ul").children().length;
+		if(sonnum<5){
+			if(xzid==id){
+				if(sonnum<6){
+					$(".jn_right h5").css({"color":"#666"});
+				}
+				$("#lie_"+id).remove();
+			}else{
+				$(".jn_righ_list ul").append("<li id='lie_"+id+"' _id='"+id+"'><a title='"+name+"'>"+name+"</a></li>");
+			}
+		}else{
+			$(".jn_right h5").css({"color":"red"});
+			if(xzid==id){
+				if(sonnum<6){
+					$(".jn_right h5").css({"color":"#666"});
+				}
+				$("#lie_"+id).remove();
+			}
+		}
+	});
+	$("#submit").click(function(){
+		var sonnum = $(".jn_righ_list ul").children().length;
+		if(sonnum<1){
+			alert("请选择技能标签。");
+			return false;
+		}
+		var arrids = [];
+        $(".jn_righ_list ul li").each(function(i){
+            arrids[i] = $(this).attr("_id");
+        });
+        var ids = ","+arrids.join(",")+",";
+		$("#idstr").val(ids);
+		$("#addform").submit();
+	});
+});
+</script>
+
+{include file="/member/m_footer"}
+
+</body>
+</html>

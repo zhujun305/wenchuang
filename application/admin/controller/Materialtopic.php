@@ -35,16 +35,12 @@ class Materialtopic extends Adminbase
 		$findObj = [];
 		$fields = 'title,is_recommend,is_lock';
 		$this->getFindObj($findObj, $find, $fields);
+		$this->assign("findObj", $findObj);
 		$list = materialtopicModel::getList($findObj,[],'15','is_recommend desc,sort desc,id desc');
 		$this->assign("list", $list);
 		//管理员列表
 		$adminuserlist = readCacheFile("adminuserlist");
 		$this->assign('adminuserlist', $adminuserlist);
-		//空判断
-		$findObj['title'] = isset($findObj['title'])?$findObj['title']:'';
-		$findObj['is_recommend'] = isset($findObj['is_recommend'])?$findObj['is_recommend']:'';
-		$findObj['is_lock'] = isset($findObj['is_lock'])?$findObj['is_lock']:'';
-		$this->assign("findObj", $findObj);
 		return $this->fetch();
 	}
 	
@@ -105,6 +101,24 @@ class Materialtopic extends Adminbase
      */
     public function unlock($id){
     	$rs = materialtopicModel::upd_list($id, ['is_lock'=>1]);
+		$this->cacheMaterialtopic(); //刷新缓存
+		$this->redirect($this->materialtopicList);
+    }
+	
+    /**
+     * 批量锁定
+     */
+    public function lockall($ids){
+    	$rs = materialtopicModel::upd_list($ids, ['is_lock'=>2]);
+		$this->cacheMaterialtopic(); //刷新缓存
+		$this->redirect($this->materialtopicList);
+    }
+    
+    /**
+     * 批量解锁
+     */
+    public function unlockall($ids){
+    	$rs = materialtopicModel::upd_list($ids, ['is_lock'=>1]);
 		$this->cacheMaterialtopic(); //刷新缓存
 		$this->redirect($this->materialtopicList);
     }

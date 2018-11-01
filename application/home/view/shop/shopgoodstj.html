@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>特别推荐-商品展示</title>
+{include file="/common/c_header"}
+<style>
+.shop_pro ul li h3{display:block;height:30px;overflow:hidden;}
+.shop_pro ul li .btn a.coll_bg{background-position:0 -32px;color:#600000;}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+{include file="/common/c_top"}
+
+  {include file="/shop/shopmenu"}
+  <div class="bg_e clear">
+    <div class="w location">
+    	当前位置：<a href="{:url('home/shop/shopgoods')}">文创产品</a>{php}if($cate>0){echo '<i>&gt;</i>'.$catelist[$cate]['title'];}{/php}
+	</div>
+    <div class="sort clear">
+    	<a {php}if($paixu==1){echo 'class="cur"';}{/php} href="{:url('home/shop/shopgoods','paixu=1')}"><em>综合排序</em></a>
+		<a {php}if($paixu==2){echo 'class="cur"';}{/php} href="{:url('home/shop/shopgoods','paixu=2')}"><em>销量</em><i></i></a>
+		<a {php}if($paixu==4){echo 'class="cur"';}{/php} href="{:url('home/shop/shopgoods','paixu=4')}"><em>新品</em><i></i></a>
+	</div>
+    <div class="shop_pro shop_pro1 coms clear">
+      <ul>
+      	{volist name="list" id="val"}
+        <li>
+          <div class="pic"><a href="{:url('home/shop/detail','id='.$val['id'])}">
+          	<img src="{php}echo getImgURL($val['cover']);{/php}" width="260" height="260" /></a></div>
+          <div class="btn">
+        	<?php if(isset($colllist[$val['id']])){?>
+          	<a href="javascript:;" class="coll_a coll_bg" _collid="{$colllist[$val['id']]}">已收藏</a>
+			<?php }else{?>
+          	<a href="javascript:;" class="coll_a" _id="{$val['id']}" _collid="0">收藏</a>
+			<?php }?>
+			<a class="cart" href="{:url('home/shop/detail','id='.$val['id'])}">购物车</a>
+		  </div>
+          <div class="txts">
+            <h3>{$val['title']}【{$catelist[$val['cate']]['title']}{$val['cate_san']>0?('（'.$catelist[$val['cate_san']]['title'].'）'):''}】</h3>
+            <p><a class="buyshop" href="{:url('home/shop/detail','id='.$val['id'])}">立即购买</a>￥{$val['price']}</p>
+          </div>
+        </li>
+		{/volist}
+      </ul>
+    </div>
+	  <div class="pagetwo">
+		{$list->render()}
+	  </div>
+  </div>
+
+{include file="/common/c_footer"}
+</div>
+<script type="text/javascript">
+$(function(){
+	$(".coms ul li").hover(function(){
+		$(this).addClass("lihover")},function(){$(this).removeClass("lihover");
+	});
+});
+$(function(){
+	var uid = "{$member['uid']}";
+	$(".coll_a").click(function(){
+		if(!(uid>0)){
+			if(confirm("收藏商品，请先登录。")){
+				location.href = "{:url('home/Index/login')}";
+			}
+			return false;
+		}else{
+			var obj = $(this);
+			var _collid = $(this).attr("_collid");
+			if(_collid>0){
+			  if (confirm("确定不在收藏此商品吗？")) {
+				var url = "{:url('home/member/delmembercoll')}";
+				$.post(url,{id:_collid},function(data){
+					if(data>0){
+						obj.removeClass("coll_bg");
+						obj.html("收藏");
+						obj.attr("_collid", "0"); //修改属性
+					}
+				},'json');
+			  }
+			}else{
+				var url = "{:url('home/member/addmembercoll')}";
+				var cate = 5; //1会员2素材3众筹4众筹5商品
+				var id = $(this).attr("_id");
+				$.post(url,{cate:cate,id:id},function(data){
+					if(data>0){
+						obj.addClass("coll_bg");
+						obj.html("已收藏");
+						obj.attr("_collid", data); //修改属性
+						alert("收藏成功。");
+					}
+				},'json');
+			}
+		}
+	});
+});
+</script>
+<script type="text/javascript">
+jQuery(".sider").slide({ type:"menu",titCell:".mainCate",targetCell:".subCate",delayTime:0,triggerTime:0,defaultPlay:false,returnDefault:true });
+jQuery(".nav_hover").slide({ type:"menu",titCell:".n_lf",targetCell:".sider",delayTime:0,triggerTime:0,defaultPlay:false,returnDefault:true });
+</script>
+
+</body>
+</html>

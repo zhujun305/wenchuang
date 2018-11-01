@@ -1,0 +1,251 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>编辑作品-会员中心</title>
+{include file="/member/m_header"}
+<link rel="stylesheet" type="text/css" href="{$Think.config.web_root}/layui/css/layui.css">
+<script src="{$Think.config.web_root}/layui/layui.js"></script>
+<style>
+textarea{padding:5px;width:603px;height:120px;}
+.tijiao_li{border-top:2px solid #e5e5e5;}
+#upimg_more{width:850px;overflow:hidden;margin-top:20px;}
+.imglie{float:left;width:132px;height:185px;overflow:hidden;border:1px solid #ccc;text-align:center;
+margin-right:35px;margin-bottom:20px;}
+.imglie img{width:132px;height:132px;}
+.imglie span{display:block;}
+.imglie button{display:inline-block;color:#fff;white-space:nowrap;text-align:center;margin:6px 8px 0px;
+border:none;border-radius:2px;cursor:pointer;height:22px;line-height:22px;padding:0 5px;font-size:12px;}
+.imglie button:hover{opacity:.8;filter:alpha(opacity=80);color:#fff;}
+.imglie button.demo-reload{background-color:#009688;display:none;}
+.imglie button.demo-delete{background-color:#FF5722;}
+.cho_btn{background-color:#1E9FFF;display:inline-block;height:38px;line-height:38px;padding:0 18px;color:#fff;
+white-space:nowrap;text-align:center;font-size:14px;border:none;border-radius:2px;cursor:pointer;float:left;}
+.cho_btn:hover{opacity:.8;filter:alpha(opacity=80);color:#fff;}
+.cho_btn:active{opacity:1;filter:alpha(opacity=100);}
+.up_but{float:left;height:38px;padding:0 18px;margin-left:20px;line-height:38px;font-size:14px;color:#fff;
+background:#009688;border-radius:2px;}
+.up_but:hover{color:#fff;}
+.sendbtn{margin-left:330px;margin-top:30px;margin-bottom:30px;cursor:pointer;}
+</style>
+</head>
+
+<body>
+
+<!--头部开始-->
+{include file="/member/m_top"}
+<!-- 非头尾的内容 START -->
+<!--面包屑导航开始-->
+<div class="breadcrumb clearfix " >
+</div>
+<!--面包屑导航结束-->
+
+<div class="main clearfix" >
+{include file="/member/m_left"}
+    <div class="contents fr m20">
+		{include file="/member/ad"}
+		
+		<div class="lm">
+			<div class="search">
+				<input type="text" class="txt" id="seatxt" value="{$find}" placeholder="搜索" /> 
+				<input type="image" src="{$Think.config.web_member}/img/fff.png" class="ss" id="seaform" />
+			</div>
+			<a class="on" href="javascript:void(0);">编辑作品</a>
+		</div>
+    	<div class="border">
+          	<form id="addfrom" action="{:url('home/mzhongbao/mzbworksupd','id='.$obj['id'])}" method="post" enctype="multipart/form-data">
+			<div class="com_bor">
+			<ul class="c_up_infor">
+			<li><em>作品名称</em>
+				<div class="in_con">
+				<input type="text" name="title" id="title" value="{$obj['title']}" class="c_u_intxt" placeholder="请输入作品名称" />
+				</div>
+			</li>
+			<li class="s_li"><em>作品分类</em>
+				<div class="in_con">
+				<select class="c_i_sel2" name="cate" id="cate">
+					<option value="">请选择分类</option>
+					{volist name="catelist" id="val"}
+					<option value="{$val.id}" <?php echo $obj['cate']==$val['id']?'selected':''?>>{$val.title}</option>
+					{/volist}
+				</select>
+				</div>
+			</li>
+			<li>
+				<em>作品封面</em>
+				<div class="in_con">
+				<a class="cover_div"><img src="<?php echo getImgURL($obj['cover']);?>" width="132" height="132" /></a>
+				<input type="hidden" name="cover" id="cover" value="{$obj['cover']}" />
+				<input type="file" id="cover_file" style="display:none;" />
+				</div>
+			</li>
+			<li>
+				<em>作品说明</em>
+				<div class="in_con">
+				<textarea name="desc" id="desc" placeholder="请输入作品，不超过200个字">{$obj['desc']}</textarea>
+				</div>
+			</li>
+			<li>作品图片：选择一个或多个图片，最多10个（文件格式为：jpg、jpeg、png、gif、bmp等）</li>
+			<li>
+				<div>
+				<a class="cho_btn" id="moreimg">选择图片</a>
+			    <a class="up_but" id="moreimgAction">开始上传</a>
+				</div>
+				<div class="clearfix"></div>
+				<div id="upimg_more">
+					{volist name="imglist" id="val"}
+					<div class="imglie" id="upload-{$val.id}">
+						<img src="<?php echo getImgURL($val['pic']);?>" />
+						<span>{$val.id}</span>
+						<button type="button" class="demo-delete" _id="{$val.id}">删除</button>
+					</div>
+					{/volist}
+				</div>
+				<div class="clearfix"></div>
+			</li>
+			<li class="tijiao_li">
+				<input type="submit" id="submit" class="sendbtn" value="确认保存" />
+			</li>
+			</ul>
+			</div>
+          	</form>
+			<div class="clearfix" style="height:10px;"></div>
+		</div>
+    </div>
+</div>
+<!-- 非头尾的内容 END -->
+<script type="text/javascript">
+$(function(){
+	$("#submit").click(function(){
+		if($('#title').val().length<1) {
+			alert('作品名称不能为空！');
+			$('#title').focus();
+			return false;
+		}
+		if(!($('#cate').val()>0)) {
+			alert('请选择所属分类！');
+			$('#cate').focus();
+			return false;
+		}
+		if($('#cover').val().length<1) {
+			alert('请上传封面！');
+			$('#cover').focus();
+			return false;
+		}
+		if($('#desc').val().length>200) {
+			alert('作品说明不要超过200个字！');
+			$('#desc').focus();
+			return false;
+		}
+		$('#addfrom').submit();
+	});
+});
+</script>
+{include file="/common/upimage"}
+<script>
+$(function () {
+	//上传封面图
+	var div_cover = $(".cover_div");
+	var file_cover = $("#cover_file");
+	var name_cover = $("#cover");
+	div_cover.click(function(){
+		file_cover.attr("val","1");
+		document.getElementById("cover_file").click(); //js触发其他标签click事件
+	});
+	file_cover.change(function () {
+		let files = $(this)[0].files[0]; //获取files对象
+		//参数2为按比例缩小压缩后宽高
+		$.compress(files,1000).then((url)=>{
+			div_cover.find("img").attr("src",url);
+			//上传到服务器
+			$.post("{:url('home/Aajax/ajaxupimages')}",{imgsource:url},function(data){
+				name_cover.val(data.imgurl);
+				div_cover.find("img").attr("src",data.imgurl);
+			},"json");
+		});
+	});
+});
+$(function(){
+	$(".demo-delete").click(function(){
+		var id = $(this).attr("_id");
+		if(id>0){
+			$("#submit").before('<input type="hidden" name="ids[]" class="ids" value="'+id+'" />');
+			$(this).parent(".imglie").remove();
+		}
+	});
+});
+layui.use('upload', function(){
+  var $ = layui.jquery,upload = layui.upload;
+  //多文件列表示例
+  var arrnum = 0;
+  var demoListView = $('#upimg_more'),uploadListIns = upload.render({
+	elem: '#moreimg'
+	,bindAction: '#moreimgAction'
+    ,multiple: true //允许多文件
+	,auto: false //不自动上传
+    ,url: "{:url('home/Aajax/ajaxupfiles')}"
+	,data: {type:'img'} //扩展名验证
+    ,exts: 'jpg|jpeg|gif|png|bmp' //可上传文件后缀
+    ,acceptMime: 'image/*' //只允许上传图片
+	,number: 10 //限制一次最多上传数量
+	,choose: function(obj){
+		var sonnum = $("#upimg_more").children().length;
+		if(sonnum>9){
+			alert("最多上传10张图片");
+		}else{
+      var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+      //读取本地文件
+      obj.preview(function(index, file, result){
+	  	var html = $(['<div class="imglie" id="upload-'+ index +'">'
+						,'<img src="'+result+'" />'
+						,'<input type="hidden" name="picarr[]" class="picarr" value="" />'
+						,'<span>等待上传</span>'
+						,'<button type="button" class="demo-reload">重传</button>'
+						,'<button type="button" class="demo-delete">删除</button>'
+					,'</div>'].join(''));
+        //单个重传
+        html.find('.demo-reload').on('click', function(){
+          obj.upload(index, file);
+        });
+        //删除
+        html.find('.demo-delete').on('click', function(){
+          delete files[index]; //删除对应的文件
+          html.remove();
+          uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+		  arrnum -= 1; //统计数量减一
+        });
+		if(arrnum<10){
+        demoListView.append(html); //元素插入到div
+	  	arrnum += 1; //统计数量加一
+		}else{
+			alert("最多上传10张图片");
+		}
+      });
+	    }
+	}
+	,done: function(res, index, upload){
+      if(res.code == 0){ //上传成功
+        var tr = demoListView.find('#upload-'+ index);
+        tr.find("span").html('上传成功').css({"color":"#5FB878"});
+        tr.find(".picarr").val(res.data.src);
+        return delete this.files[index]; //删除文件队列已经上传成功的文件
+      }
+      this.error(index, upload);
+	}
+	,allDone: function(obj){ //当文件全部被提交后，才触发
+	  console.log(obj.total); //得到总文件数
+	  console.log(obj.successful); //请求成功的文件数
+	  console.log(obj.aborted); //请求失败的文件数
+	}
+	,error: function(index, upload){
+      var tr = demoListView.find('#upload-'+ index);
+      tr.find("span").html('上传失败').css({"color":"#FF5722"});
+      tr.find(".demo-reload").show(); //显示重传
+	}
+  });
+});
+</script>
+
+{include file="/member/m_footer"}
+
+</body>
+</html>

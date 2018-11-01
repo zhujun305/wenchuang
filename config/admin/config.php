@@ -115,7 +115,4 @@ return [
     // 全局请求缓存排除规则
     'request_cache_except'   => [],
 
-    //设置域名
-    'domain_host' => 'tonsh.com',
-
 ];

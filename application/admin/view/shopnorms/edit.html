@@ -1,0 +1,57 @@
+{include file="/common/main_top"}
+<script>
+$(function(){
+	//全选
+	$('.admin_submit').click(function(){
+		if($("#name").val().length < 1){
+			alert("商品规格名称不能为空");
+			$("#name").focus();
+			return false;
+		}
+		$("#addform").submit();
+	});
+});
+</script>
+<div class="allpagetop">后台管理中心<strong>/</strong>商品规格管理<strong>/</strong>编辑</div>
+<div class="mains">
+	<div class="h1tit">
+		<div class="h1">商品规格管理</div>
+		<div class="topnav">
+			<a href="{:url('/Admin/shopnorms/browse')}">规格列表</a>
+			<a href="{:url('/Admin/shopnorms/create')}" class="select">添加规格</a>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="toptit">编辑商品规格</div>
+	<form id="addform" method="post" action="">
+	<div class="form_main width150">
+		<div class="fl"><i>* </i>名称:</div>
+		<div class="fr">
+			<div><input type="text" name="name" id="name" value="{$obj['name']}" maxlength="50" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl">备注:</div>
+		<div class="fr">
+			<div><input type="text" name="alias" id="alias" value="{$obj['alias']}" maxlength="50" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl">显示类型:</div>
+		<div class="fr">
+			<div>
+			<label><input type="radio" name="cate" value="1" {php}echo $obj['cate']!=2?'checked="checked"':'';{/php} />普通文本</label>
+			<label class="ml_20"><input type="radio" name="cate" value="2" {php}echo $obj['cate']==2?'checked="checked"':'';{/php} />图片</label>
+			</div>
+		</div>
+		<div class="fl">排序:</div>
+		<div class="fr">
+			<div><input type="text" name="sort" value="{$obj['sort']}" maxlength="10" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl"></div>
+		<div class="fr">
+			<input type="submit" class="admin_submit" value="保 存" />
+		</div>
+		<div class="clear"></div>
+	</div>
+	</form>
+</div>
+
+{include file="/common/main_footer"}

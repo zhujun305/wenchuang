@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>作品-会员首页</title>
+{include file="/webmember/a_header"}
+</head>
+
+<body>
+{include file="/webmember/a_top"}
+
+<div class="w">
+	<div class="look_list">
+		<ul>
+			{volist name="list" id="val"}
+			<li>
+				<div class="img">
+					<a href="{:url('home/webmember/sjcsworksdetail','uid='.$userauth['uid'].'&id='.$val['id'])}" title="{$val['title']}">
+					<img src="{php}echo getImgURL($val['cover']);{/php}" width="270" height="200" /></a>
+				</div>
+				<dl><a href="{:url('home/webmember/sjcsworksdetail','uid='.$userauth['uid'].'&id='.$val['id'])}" title="{$val['title']}">{$val['title']}</a></dl>
+				<p>{$catelist[$val['cate']]['title']}</p>
+				<div class="view">
+					<?php $pv=$val['pv']; 
+					if(strlen($val['pv'])>4){
+						$pv=round(($val['pv']/10000),1)."万";
+					}?>
+					<span class="s1">{$pv}</span>
+					<span class="s2">{$val['pingnum']}</span>
+					<span class="s3">{$val['likes']}</span>
+				</div>
+			</li>
+			{/volist}
+		</ul>
+	</div>
+	<div class="pagetwo">
+		{$list->render()}
+	</div>
+</div>
+<div class="clearfix"></div>
+
+{include file="/webmember/a_footer"}
+
+</body>
+</html>

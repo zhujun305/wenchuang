@@ -1,0 +1,92 @@
+{include file="/common/main_top"}
+<script>
+$(function(){
+	//提交
+	$('.admin_submit').click(function(){
+		if($("#title").val().length < 1){
+			alert("商品分类名称不能为空");
+			$("#title").focus();
+			return false;
+		}
+		$("#addform").submit();
+	});
+	$("#pid").change(function(){
+		var id = $(this).val();
+		if(id>0){
+			$("#level").val('2');
+		}else{
+			$("#level").val('1');
+		}
+		$("#piderji .xzlie").removeAttr("selected");
+		$("#piderji .xzlie_"+id).attr("selected");
+		$("#piderji .xzlie").addClass("d_n");
+		$("#piderji .xzlie_"+id).removeClass("d_n");
+	});
+	$("#piderji").change(function(){
+		var id = $(this).val();
+		var pid = $("#pid").val();
+		if(id>0){
+			$("#level").val('3');
+		}else{
+			if(pid>0){
+				$("#level").val('2');
+			}else{
+				$("#level").val('1');
+			}
+		}
+	});
+});
+</script>
+<div class="allpagetop">后台管理中心<strong>/</strong>商品分类管理<strong>/</strong>新增</div>
+<div class="mains">
+	<div class="h1tit">
+		<div class="h1">商品分类管理</div>
+		<div class="topnav">
+			<a href="{:url('/Admin/shopgoods/browse')}">商品列表</a>
+			<a href="{:url('/Admin/shopgoodscate/browse')}">分类列表</a>
+			<a href="{:url('/Admin/shopgoodscate/create')}" class="select">添加分类</a>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="toptit">新增商品分类</div>
+	<form id="addform" method="post" action="">
+	<div class="form_main width150">
+		<div class="fl">选择上级:</div>
+		<div class="fr">
+			<select name="pid" id="pid" class="gg_select w200">
+				<option value="0" selected="selected">作为顶级分类</option>
+				{volist name="catelist" id="val"}
+				<?php if($val['pid']==0){?>
+				<option value="{$val.id}" <?php echo $pid==$val['id']?'selected':'';?>>{$val.title}</option>
+				<?php }?>
+				{/volist}
+			</select>
+			<select name="piderji" id="piderji" class="gg_select w200">
+				<option value="" selected="selected">请选择</option>
+				{volist name="catelist" id="val"}
+				<?php if($val['level']==2){?>
+				<option value="{$val.id}" class="xzlie xzlie_{$val['pid']} {$pid==$val['pid']?'':'d_n'}" <?php echo $topobj['id']==$val['id']?'selected':'';?>>{$val.title}</option>
+				<?php }?>
+				{/volist}
+			</select>
+		</div>
+		<div class="fl">名称:</div>
+		<div class="fr">
+			<div><input type="text" name="title" id="title" value="" maxlength="50" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl">排序:</div>
+		<div class="fr">
+			<div><input type="text" name="sort" value="0" maxlength="10" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl"></div>
+		<div class="fr">
+			<input type="hidden" name="level" id="level" value="{$topobj['level']>0?($topobj['level']+1):1}" />
+			<input type="submit" class="admin_submit" value="保 存" />
+		</div>
+		<div class="clear"></div>
+	</div>
+	</form>
+</div>
+
+{include file="/common/main_footer"}

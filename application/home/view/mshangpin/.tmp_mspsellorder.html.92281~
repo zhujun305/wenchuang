@@ -1,0 +1,193 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>订单管理-会员中心</title>
+{include file="/member/m_header"}
+<link rel="stylesheet" type="text/css" href="{$Think.config.web_member}/css/style.css"/>
+<script src="__STATIC__/js/calendar.js"></script>
+<style>
+.hy-orderB02-02{height:auto;}
+.hy-orderB02-02C{width:915px;}
+.hy-orderB02-02CT{height:auto;}
+.hy-orderB02-img{width:472px;}
+.hy-orderB02-02 span.orderSpan06{display:block;line-height:80px;padding:0;}
+.hy-orderB01 input.serBtn{margin-right:30px;border:0;border-radius:3px;}
+#seabtn{background-color:#326fc1;color:#fff;}
+#clearbtn{margin-right:0;}
+</style>
+<script type="text/javascript">
+$(function(){
+	$("#clearbtn").click(function(){
+		$('.sea_div input[type="text"],.sea_div select').val('');
+	});
+	$("#sea_sts span").click(function(){
+		var sts = $(this).attr("_sts");
+		location.href = "{:url('home/mshangpin/mspsellorder')}?sts="+sts;
+	});
+	$("#seabtn").click(function(){
+		var arr=[];
+		arr.push($('#ordsn').val());
+		arr.push($('#sh_name').val());
+		arr.push($('#pay_status').val());
+		arr.push($('#pay_cate').val());
+		arr.push($('#is_fahuo').val());
+		arr.push($('#time1').val());
+		arr.push($('#time2').val());
+		var find = "?sts={$sts}&find="+arr.join("_");
+		var url = "{:url('/Home/mshangpin/mspsellorder')}";
+		location.href = url+find;
+	});
+});
+</script>
+</head>
+
+<body>
+
+<!--头部开始-->
+{include file="/member/m_top"}
+<!-- 非头尾的内容 START -->
+<!--面包屑导航开始-->
+<div class="breadcrumb clearfix " >
+</div>
+<!--面包屑导航结束-->
+
+<div class="main clearfix" >
+{include file="/member/m_left"}
+    <div class="contents fr m20">
+        <div class="clearfix">
+			<div class="location">会员中心  > 订单管理</div>
+			<div class="hy-order">
+				<div class="hy-orderT" id="sea_sts">
+					<span {$sts==''?'class="hy-orderCur"':''} _sts="">所有订单</span>
+					<span {$sts=='1'?'class="hy-orderCur"':''} _sts="1">待确认</span>
+					<span {$sts=='2'?'class="hy-orderCur"':''} _sts="2">已确认</span>
+					<span {$sts=='4'?'class="hy-orderCur"':''} _sts="4">已发货</span>
+					<span {$sts=='5'?'class="hy-orderCur"':''} _sts="5">已收货</span>
+					<span {$sts=='6'?'class="hy-orderCur"':''} _sts="6">已完成</span>
+					<span {$sts=='8'?'class="hy-orderCur"':''} _sts="8">已关闭</span>
+					<span {$sts=='3'?'class="hy-orderCur"':''} _sts="3">已取消</span>
+				</div>
+				<div class="hy-orderB">
+					<div class="hy-orderB01">
+						<div class="forms sea_div">
+							<div class="row">
+								<span>订单编号</span><input type="text" id="ordsn" value="{$findObj['ordsn']}" placeholder="订单编号" />
+								<span>收货人</span><input type="text" id="sh_name" value="{$findObj['sh_name']}" placeholder="收货人" />
+								<span>下单时间</span>
+								<input type="text" id="time1" value="{$findObj['time1']}" onClick="new Calendar().show(this);" readonly="readonly" placeholder="开始时间" />
+								<input type="text" id="time2" value="{$findObj['time2']}" onClick="new Calendar().show(this);" readonly="readonly" placeholder="结束时间" />
+							</div>
+							<div class="row">
+								<span>支付状态</span>
+								<select id="pay_status" style="width:122px;">
+									<option value="">请选择</option>
+									<option value="1" {$findObj['pay_status']==1?'selected':''}>未支付</option>
+									<option value="2" {$findObj['pay_status']==2?'selected':''}>已支付</option>
+								</select>
+								<span>支付方式</span>
+								<select id="pay_cate" style="width:122px;">
+									<option value="">请选择</option>
+									<option value="1" {$findObj['pay_cate']==1?'selected':''}>支付宝</option>
+									<option value="2" {$findObj['pay_cate']==2?'selected':''}>微信</option>
+									<option value="3" {$findObj['pay_cate']==3?'selected':''}>银行卡</option>
+								</select>
+								<span>发货状态</span>
+								<select id="is_fahuo" style="width:122px;">
+									<option value="">请选择</option>
+									<option value="1" {$findObj['is_fahuo']==1?'selected':''}>未发货</option>
+									<option value="2" {$findObj['is_fahuo']==2?'selected':''}>已发货</option>
+								</select>
+								<input type="button" id="seabtn" value="搜索" class="serBtn" />
+								<input type="button" id="clearbtn" value="清除" class="serBtn" />
+							</div>
+							<div class="hy-orderB02">
+								<div class="hy-orderB02-01">
+									<span class="orderSpan01"></span>
+									<span class="orderSpan02">商品</span>
+									<span class="orderSpan03">单价（元）</span>
+									<span class="orderSpan04">数量</span>
+									<span class="orderSpan05">买家</span>
+									<span class="orderSpan06">订单金额</span>
+									<span class="orderSpan07">交易状态</span>
+									<span class="orderSpan08">交易操作</span>
+								</div>
+								{volist name="list" id="val"}
+								<div class="hy-orderB02-02">
+									<div class="hy-orderB02-02C fl">
+										<div class="hy-orderB02-02CT">
+											<ul class="">
+												<li>订单编号：{$val['ordsn']}</li>
+												<li>下单时间：{$val['input_time']>0?date("Y-m-d H:i:s",$val['input_time']):''}</li>
+												<li>订单状态：{$status_arr[$val['status']]}</li>
+												<li>订单金额：<font color="red">{$val['amount']}</font></li>
+											</ul>
+											<div class="clear"></div>
+											<ul class="">
+												<li>付款金额：<font color="#f60;">{$val['pay_amount']}</font></li>
+												<li>付款状态：{$val['pay_status']==2?'<font color="green">已付款</font>':'<font color="red">未付款</font>'}</li>
+												<li>付款方式：</li>
+												<li>收货人：{$val['sh_name']}</li>
+											</ul>
+											<div class="clear"></div>
+										</div>
+										{php}if(!empty($snlist[$val['ordsn']])){{/php}
+										{php}$iii=0;{/php}
+										{php}foreach($snlist[$val['ordsn']] as $kkk=>$vvv){{/php}
+										{php}$iii++;{/php}
+										<div class="hy-orderB02-02CB">
+											<div class="hy-orderB02-img fl">
+												<img src="<?php echo getImgURL($vvv['cover']);?>" class="fl" width="60" height="60" />
+												<p>
+												<div>{$vvv['title']}</div><br/>
+												<div>
+												{php}if($vvv['snvidone']>0){ echo $shopnorms[$vvv['snidone']]['name'].'：'.$snormsval[$vvv['snvidone']]['name']; }{/php}&nbsp;
+												{php}if($vvv['snvidtwo']>0){ echo $shopnorms[$vvv['snidtwo']]['name'].'：'.$snormsval[$vvv['snvidtwo']]['name']; }{/php}&nbsp;
+												{php}if($vvv['snvidthree']>0){ echo $shopnorms[$vvv['snidthree']]['name'].'：'.$snormsval[$vvv['snvidthree']]['name']; }{/php}
+												</div>
+												</p>
+											</div>
+											<span class="orderSpan05">￥{$vvv['price']}</span>
+											<span class="orderSpan06">{$vvv['num']} 件</span>
+											<span class="orderSpan07">￥{$vvv['amount']}</span>
+											{php}if($iii==1){{/php}
+											<div class="hy-orderSpan08 fl">
+												<ul>
+												<li><a href="{:url('home/mshangpin/mspsellorderdetail','sn='.$val['ordsn'])}">
+													<i><img src="__STATIC__/webmember/img/icon-ser.png"/></i>
+													<b>详情</b>
+												</a></li>
+												<?php /*?>
+												<div class="hy-orderLine"></div>
+												<li><a href="#">
+													<i><img src="__STATIC__/webmember/img/icon-del.png"/></i>
+													<b>删除</b>
+												</a></li>
+												<?php */?>
+												</ul>
+											</div>
+											{php}}{/php}
+											<div class="clear"></div>
+										</div>
+										{php}}{/php}
+										{php}}{/php}
+									</div>
+								</div>
+								{/volist}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="clear"></div>
+			<div class="page">
+				{$list->render()}
+			</div>
+		</div>
+    </div>
+</div>
+<!-- 非头尾的内容 END -->
+
+{include file="/member/m_footer"}
+
+</body>
+</html>

@@ -1,0 +1,141 @@
+{include file="/common/main_top"}
+<script>
+$(function(){
+	//全选
+	$('#chkall').click(function(){
+		var chk = $(this).is(":checked");
+		$('.chklie').each(function(){
+			$(this).attr('checked' , chk);
+		});
+	});
+	//查询
+	$('#findbtn').click(function(){
+		var arr=[];
+		arr.push($('#type').val());
+		arr.push($('#title').val());
+		arr.push($('#is_lock').val());
+		var find = "?find="+arr.join("{$search_separ}");
+		var url = "{:url('/Admin/ads/browse')}";
+		location.href = url+find;
+	});
+	//排序
+	$('.editsort').click(function(){
+	  if ($('#' + $(this).attr('id') + '_edit').attr('type')==undefined) {
+		$(this).html('<input type="text" size="5" class="_sort_edit" id="' + $(this).attr('id') + '_edit" value="' + $(this).html() + '" onblur="chkval(this);" />');
+		$('#' + $(this).attr('id') + '_edit').focus();
+	  }
+	});
+});
+function chkval(obj){
+	var url = "{:url('/Admin/ads/upd_sort')}";
+	var id = obj.getAttribute("id").split('_')[1];
+	var sort = obj.value;
+	$.post(url,{id:id,sort:sort},function(data){
+		if(data){
+			obj.parentNode.innerHTML = sort;
+		}
+	});
+}
+</script>
+<div class="allpagetop">后台管理中心<strong>/</strong>广告管理</div>
+<div class="mains">
+	<div class="h1tit">
+		<div class="h1">广告管理</div>
+		<div class="topnav">
+			<a href="{:url('/Admin/ads/browse')}" class="select">广告列表</a>
+			<a href="{:url('/Admin/ads/create')}">添加广告</a>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="sea_div mt_10">
+		<div class="sea_clearbtn f_r mr_20" id="clearbtn">清除</div>
+		<div class="sea_btn f_r" id="findbtn">查询</div>
+		<select id="is_lock" class="gg_select w100 f_r ml_20">
+			<option value="" selected="selected">是否锁定</option>
+			<option value="1" <?php echo $findObj['is_lock']==1?'selected':''?>>未锁定</option>
+			<option value="2" <?php echo $findObj['is_lock']==2?'selected':''?>>已锁定</option>
+		</select>
+		<div class="sea_text f_r">
+			<div class="sobox">
+			<div class="sotype">名称</div>
+			<input type="text" id="title" class="sinput" value="{$findObj['title']}" />
+			</div>
+		</div>
+		<select id="type" class="gg_select w100 f_r ml_20">
+			<option value="" selected="selected">请选择类型</option>
+			<option value="1" <?php echo $findObj['type']==1?'selected':''?>>单张图片广告</option>
+			<option value="2" <?php echo $findObj['type']==2?'selected':''?>>图片Flash广告</option>
+		</select>
+	</div>
+	<div class="clear"></div>
+	
+	<div class="list_th">
+		<div class="td" style="width:5%;">
+			<label class="left_padding">
+				<input type="checkbox" id="chkall" title="全选/反选"/>ID
+			</label>
+		</div>
+		<div class="td" style="width:10%;">名称/类型</div>
+		<div class="td" style="width:10%;">编码/广告位</div>
+		<div class="td" style="width:10%;">显示日期</div>
+		<div class="td" style="width:20%;">广告内容</div>
+		<div class="td" style="width:10%;">广告宽高</div>
+		<div class="td" style="width:5%;">浏览量</div>
+		<div class="td" style="width:5%;">排序</div>
+		<div class="td" style="width:5%;">锁定状态</div>
+		<div class="td" style="width:10%;">录入时间/录入人</div>
+		<div class="td" style="width:10%;">操作</div>
+		<div class="clear"></div>
+	</div>
+	<?php if(empty($list)){?>
+	<div class="list_empty">没有任何信息！</div>
+	<?php }else{?>
+	{volist name="list" id="val"}
+	<div class="list_tr link_black">
+		<div class="td" style="width:5%;">
+			<div class="left_padding striking link_blue">
+			<input type="checkbox" name="id[]" class="chklie" value="{$val.id}"/>{$val.id}
+			</div>
+		</div>
+		<div class="td" style="width:10%;">&nbsp;{$val.title}<br/>
+			【{php}if($val['type']==1){echo '单图片广告';}else{echo '图片Flash广告';}{/php}】
+		</div>
+		<div class="td" style="width:10%;">&nbsp;{$val.code}<br/>{$adspos_arr[$val['code']]}</div>
+		<div class="td" style="width:10%;">
+			{php}if($val['start_time']>0 || $val['end_time']>0){{/php}
+			{php}echo ($val['start_time']>0?date('Y-m-d',$val['start_time']):'').'-<br/>'.($val['end_time']>0?date('Y-m-d',$val['end_time']):'');{/php}
+			{php}}else{{/php}
+			{php}echo '<font color="green">长期有效</font>';{/php}
+			{php}}{/php}
+		</div>
+		<div class="td" style="width:20%;">&nbsp;</div>
+		<div class="td" style="width:10%;">&nbsp;{$val.width} * {$val.height} 像素</div>
+		<div class="td" style="width:5%;">&nbsp;{$val.pv}</div>
+		<div class="td" style="width:5%;">
+			<div class="editsort" id="sort_{$val.id}" title="点击修改">{$val.sort}</div>
+		</div>
+		<div class="td" style="width:5%;">&nbsp;<?php echo $val['is_lock']==2?'<font color="red">锁定</font>':'正常';?></div>
+		<div class="td" style="width:10%;">
+			<?php echo $val['input_time']>0?date("Y-m-d H:i:s",$val['input_time']):''?><br/>
+			<?php echo $val['input_uid']>0?$adminuserlist[$val['input_uid']]['truename']:'';?>
+		</div>
+		<div class="td edit" style="width:10%;">
+			<a href="{:url('/Admin/ads/edit','id='.$val.id)}">修改</a>
+			<?php if($val['is_lock']==1){?>
+			<a href="{:url('/Admin/ads/lock','id='.$val.id)}" class="gray">锁定</a>
+			<?php }else{?>
+			<a href="{:url('/Admin/ads/unlock','id='.$val.id)}">解锁</a>
+			<?php }?>
+			<a href="{:url('/Admin/ads/del','id='.$val.id)}" class="gray" onclick="return confirm('你确定要删除吗？')">删除</a>
+		</div>
+		<div class="clear"></div>
+	</div>
+	{/volist}
+	<?php }?>
+	<div class="pages">
+		{$list->render()}
+	</div>
+</div>
+
+{include file="/common/main_footer"}

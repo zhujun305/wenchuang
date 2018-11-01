@@ -1,6 +1,7 @@
 <?php
 namespace app\admin\controller;
 use app\common\controller\Adminbase;
+use think\Config;
 use think\Request;
 use think\Session;
 use think\Url;
@@ -47,6 +48,8 @@ class Admin extends Adminbase
 			$user['rosename'] = $rosearr['name'];
 		}
 		$this->assign('user', $user);
+		$domain = Config::get('domain_host');
+		$this->assign('domain', $domain);
 		return $this->fetch();
 	}
 	
@@ -54,7 +57,7 @@ class Admin extends Adminbase
 	 * 后台左部
 	 */
 	public function left($mid='0'){
-		$erlist = syspowerModel::getListByWhere(array('pid'=>$mid),[],'id asc');
+		$erlist = syspowerModel::getListByWhere(array('pid'=>$mid),[],'sort desc,id asc');
 		$erarr = convert_arr_key($erlist,'id','id');
 		$menulist = [];
 		if($mid>0 && !empty($erarr)){

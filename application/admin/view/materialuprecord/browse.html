@@ -88,7 +88,9 @@ $(function(){
 			<span>{$val.is_shangc==2?'<font color="green">已上传</font>':'未上传'}</span>
 		</div>
 		<div class="td" style="width:15%;">
+			<a href="{:url('/Admin/member/browse','find='.$val['uid'])}">
 			{$val.uid} <?php echo isset($memberlist[$val['uid']]['nick_name'])?$memberlist[$val['uid']]['nick_name']:'';?>
+			</a>
 		</div>
 		<div class="td edit" style="width:10%;">
 			<a href="{:url('/Admin/material/browse')}">内容素材</a>

@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>账号认证-会员中心</title>
+{include file="/member/m_header"}
+</head>
+
+<body>
+
+<!--头部开始-->
+{include file="/member/m_top"}
+<!-- 非头尾的内容 START -->
+<!--面包屑导航开始-->
+<div class="breadcrumb clearfix " >
+</div>
+<!--面包屑导航结束-->
+
+<div class="main clearfix" >
+{include file="/member/m_left"}
+    <div class="contents fr m20">
+		{include file="/member/ad"}
+		
+		<div class="lm">
+			<a class="on">会员认证</a>
+		</div>
+		<div class="border">
+			<div class="reg_tow2">
+				<?php if($is_member_auth==1){?>
+				<div class="ts" style="text-align:left;">会员已完成账号认证</div>
+				<?php }?>
+				<ul>
+				<?php if($is_member_auth!=1 || ($is_member_auth==1 && $member['cate']==4)){?>
+				<li class="s1" val="{:url('home/Member/memberauth','cate=4')}">
+					<div class="img"><img src="{$Think.config.web_member}/img/tx.png" /><p>联盟成员</p></div>
+					<div class="bz">
+					<h5>联盟成员在平台的权限：</h5>
+					1.上传分享文创素材；<br/>
+					2. 发布众包项目；<br/>
+					3. 发布和参与众筹项目；<br/>
+					4. 上传自有文创商品到平台；<br/>
+					5. 以批发价格批量采购平台商品; <br/>
+					6. 使用平台核心会员互动APP...<br/>
+					</div>
+				</li>
+				<?php }?>
+				<?php if($is_member_auth!=1 || ($is_member_auth==1 && $member['cate']==3)){?>
+				<li class="s2" val="{:url('home/Member/memberauth','cate=3')}">
+					<div class="img"><img src="{$Think.config.web_member}/img/tx.png" /><p>设计与制作<br/>（公司）</p></div>
+					<div class="bz">
+						<h5>设计与生产制作团队权限：</h5>
+						1.实名认证获得平台下载积分；<br/>
+						2.上传设计作品，展示案例和实力；<br/>
+						3. 参与平台众包项目；<br/>
+						4. 有机会获得平台素材下载权限；<br/>
+						5. 获得更多创意项目合作机会...
+					</div>
+				</li>
+				<?php }?>
+				<?php if($is_member_auth!=1 || ($is_member_auth==1 && $member['cate']==2)){?>
+				<li class="s3" val="{:url('home/Member/memberauth','cate=2')}">
+					<div class="img"><img src="{$Think.config.web_member}/img/tx.png" /><p>设计师或工匠<br/>(个人)</p></div>
+					<div class="bz">
+					<h5>设计师或工匠的权限：</h5>
+					1.实名认证获得平台下载积分；<br/>
+					2.上传设计作品，展示案例和实力；<br/>
+					3. 参与平台众包项目；<br/>
+					4. 有机会获得平台素材下载权限；<br/>
+					5. 获得更多创意项目合作机会...
+					</div>
+				</li>
+				<?php }?>
+				<?php if($is_member_auth!=1 || ($is_member_auth==1 && $member['cate']==1)){?>
+				<li class="s4" val="{:url('home/Member/memberauth','cate=1')}">
+					<div class="img"><img src="{$Think.config.web_member}/img/tx.png" /><p>普通会员</p></div>
+					<div class="bz">
+					<h5>普通会员的权限：</h5>
+					1.实名认证获得平台下载积分；<br/>
+					2....
+					</div>
+				</li>
+				<?php }?>
+				</ul>
+			</div>
+		</div>
+    </div>
+</div>
+<!-- 非头尾的内容 END -->
+<script>
+$(function(){
+	$(".s1,.s2,.s3,.s4").click(function(){
+		var is_member_auth = "{$is_member_auth}";
+		if(!(is_member_auth>0)){
+			location.href = $(this).attr("val");
+		}
+	});
+});
+</script>
+
+{include file="/member/m_footer"}
+
+</body>
+</html>

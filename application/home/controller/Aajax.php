@@ -15,6 +15,9 @@ use app\model\materialModel;
 use app\model\materialcateModel;
 use app\model\materialuprecordModel;
 use app\model\materialuprecordpicModel;
+use app\model\memberskilltagsModel;
+use app\model\helpModel;
+use app\model\resareaModel;
 
 /**
  * ajax异步
@@ -56,18 +59,19 @@ class Aajax extends Homebase
 	public function ajaxupfiles(Request $request){
 		$files = $request->file('file');
     	$type = $request->post("type");
-    	$filemenu = "";
-    	if($type == 'zipfile'){
-    		$filemenu = "zipfile";
-    	}elseif($type == 'docfile'){
-    		$filemenu = "docfile";
-    	}else{
-    		
-    	}
-		$path = ROOT_PATH.UPLOADS_PATH.$filemenu.'/';
+    	//
+		$path = ROOT_PATH.UPLOADS_PATH;
     	$max_size = 50*1024*1024; //允许上传文件最大大小限制50M
 		$ext_arr = Config::get('config.ext_arr'); //允许上传的文件扩展名
 		$ext_str = implode(",", $ext_arr['file']);
+		//
+    	if($type == 'zipfile'){
+    		$path.= "zipfile".'/';
+    	}elseif($type == 'img'){
+			$ext_str = implode(",", $ext_arr['image']);
+    	}else{
+    		
+    	}
 		$src_arr = array();
 		$src_arr['ext_str'] = $ext_str;
 		if($files){
@@ -207,7 +211,7 @@ class Aajax extends Homebase
 			$fp_arr = explode("/",$flujig);
 			foreach ( $fp_arr as $key => $value ) { //循环输出数组，
 				if (! file_exists ( "" . $path . $value . "" )) { //如果没有这个文件夹
-					@mkdir ( "" . $path . $value . "/" ); //创建这个文件夹
+					@mkdir ( "" . $path . $value . "/", 0777 ); //创建这个文件夹,并赋予777最大权限
 				}
 				$path = $path . $value . "/"; //给$root重新赋值
 			}
@@ -294,7 +298,7 @@ class Aajax extends Homebase
 			$fp_arr = explode("/",$flujig);
 			foreach ( $fp_arr as $key => $value ) { //循环输出数组，
 				if (! file_exists ( "" . $path . $value . "" )) { //如果没有这个文件夹
-					@mkdir ( "" . $path . $value . "/" ); //创建这个文件夹
+					@mkdir ( "" . $path . $value . "/", 0777 ); //创建这个文件夹,并赋予777最大权限
 				}
 				$path = $path . $value . "/"; //给$root重新赋值
 			}
@@ -386,6 +390,39 @@ class Aajax extends Homebase
 		$where = array('is_lock'=>1,'pid'=>$cate);
 		$field = array('id','pid','cname','cno');
 		$data = materialcateModel::getListByWhere($where,$field);
+		echo json_encode($data);
+	}
+	
+	/**
+	 * 返回技能标签，二级联动
+	 */
+	public function getmemberskilltags(){
+		$cate = Request::instance()->post("cate");
+		$where = array('is_lock'=>1,'pid'=>$cate);
+		$list = memberskilltagsModel::getListByWhere($where,[],'pid asc,sort desc,id asc');
+		$data = convert_arr_key($list,'id');
+		echo json_encode($data);
+	}
+	
+	/**
+	 * 返回地区，n级联动
+	 */
+	public function getareabypid(){
+		$pid = Request::instance()->post("id");
+		$data = [];
+		if($pid>0){
+			$data = resareaModel::getListByWhere(['pid'=>$pid],[],'pid asc,id asc');
+		}
+		echo json_encode($data);
+	}
+	
+	/**
+	 * 单页帮助中心
+	 */
+	public function gethelplist(){
+		$catearr = ['about','newguide','safety','kefu','question','copyright',];
+		$list = helpModel::getListByWhere(['is_lock'=>1,'cate'=>['in',$catearr]]);
+		$data = convert_arr_key($list,'cate');
 		echo json_encode($data);
 	}
 	

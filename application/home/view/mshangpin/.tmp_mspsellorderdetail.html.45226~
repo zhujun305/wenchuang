@@ -1,0 +1,494 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>订单详情-会员中心</title>
+{include file="/member/m_header"}
+<link rel="stylesheet" type="text/css" href="{$Think.config.web_member}/css/style.css"/>
+<style>
+a.ddqrBtn{display:block;padding:0 10px;height:26px;line-height:26px;
+background:#35518a;border:1px solid #273c67;border-radius:2px;text-align:center;color:#fff;}
+.mjOrder01BR01C span.mj-xd01{border-right:0;}
+.fp_tit{display:block;float:left;width:100px;}
+.fptxt{display:none;margin-top:3px;width:270px;}
+.fpbtn{display:none;}
+.fpbtn a{margin:10px 0;}
+.pop_box{display:none;}
+.pop_boxc03{margin:-220px 0 0 -250px;}
+.pop_box input{background-color:#fff;}
+</style>
+</head>
+
+<body>
+
+<!--头部开始-->
+{include file="/member/m_top"}
+<!-- 非头尾的内容 START -->
+<!--面包屑导航开始-->
+<div class="breadcrumb clearfix " >
+</div>
+<!--面包屑导航结束-->
+
+<div class="main clearfix" >
+{include file="/member/m_left"}
+    <div class="contents fr m20">
+        <div class="clearfix">
+			<div class="location">会员中心  > 订单管理   > 订单详情</div>
+			<div class="mjOrder01">
+				<div class="mjOrder01T">
+					<p class="fl">订单状态：{$status_arr[$obj['status']]}</p>
+					{php}if($obj['pay_status']==2 && $obj['status']<3){{/php}
+					<a href="javascript:;" id="updsts" class="fr ddqrBtn">订单发货</a>
+					{php}}{/php}
+				</div>
+				<div class="mjOrder01B">
+					<div class="mjOrder01BL fl">
+						<h3>订单信息</h3>
+						<div class="mjOrder01BLC">
+							<div class="mjOrder01BLCC">
+								<span class="mjorder01BL-01">订单号</span>
+								<span class="mjorder01BL-02">{$obj['ordsn']}</span>
+							</div>
+							<div class="mjOrder01BLCC">
+								<span class="mjorder01BL-01">总重量</span>
+								<span class="mjorder01BL-02">{$obj['weight']}</span>
+							</div>
+							<div class="mjOrder01BLCC">
+								<span class="mjorder01BL-01">订单总金额</span>
+								<span class="mjorder01BL-02">￥{$obj['amount']}</span>
+							</div>
+							<div class="mjOrder01BLCC">
+								<span class="mjorder01BL-01">我的商品总金额</span>
+								<span class="mjorder01BL-02">￥<font color="red">{$tot_price}</font></span>
+							</div>
+							<div class="mjOrder01BLCC">
+								<span class="mjorder01BL-01">已支付</span>
+								<span class="mjorder01BL-02">￥{$obj['pay_amount']}</span>
+							</div>
+							<div class="mjOrder01BLCC">
+								<span class="mjorder01BL-01">还需支付</span>
+								<span class="mjorder01BL-02"><b>￥</b> </span>
+							</div>
+							<div class="mjOrder01BLCC">
+								<span class="mjorder01BL-01">支付方式</span>
+								<span class="mjorder01BL-02"></span>
+							</div>
+							<div class="mjOrder01BLCC">
+								<span class="mjorder01BL-01">支付状态</span>
+								<span class="mjorder01BL-02"></span>
+							</div>
+							<div class="mjOrder01BLCC">
+								<span class="mjorder01BL-01">支付手续费</span>
+								<span class="mjorder01BL-02"></span>
+							</div>
+							<div class="mjOrder01BLCC">
+								<span class="mjorder01BL-01">优惠券</span>
+								<span class="mjorder01BL-02"></span>
+							</div>
+							<div class="mjOrder01BLCC">
+								<span class="mjorder01BL-01">物流费用</span>
+								<span class="mjorder01BL-02"></span>
+							</div>
+							<div class="mjOrder01BLCC">
+								<span class="mjorder01BL-01">发票税费</span>
+								<span class="mjorder01BL-02"></span>
+							</div>
+							<div class="mjOrder01BLCC">
+								<span class="mjorder01BL-01">结算</span>
+								<span class="mjorder01BL-02"></span>
+							</div>
+							<div class="mjOrder01BLCC">
+								<span class="mjorder01BL-01">配送状态</span>
+								<span class="mjorder01BL-02"></span>
+							</div>
+							<?php /*?>
+							<div class="mjOrder01BLCC">
+								<span class="mjorder01BL-01">已退款</span>
+								<span class="mjorder01BL-02"></span>
+							</div>
+							<div class="mjOrder01BLCC mjOrder01BLCC01">
+								<span class="mjorder01BL-01">已发送佣金</span>
+								<span class="mjorder01BL-02"></span>
+							</div>
+							<?php */?>
+						</div>
+					</div>
+					<div class="mjLine fl"></div>
+					<div class="mjOrder01BR fl">
+						<h3>客户信息</h3>
+						<div class="mjOrder01BR01">
+							<div class="mjOrder01BR01C">
+								<span class="mj-xd01">下单会员</span>
+								<span class="mj-xd02">{$user['nick_name']}</span>
+							</div>
+							<div class="mjOrder01BR01C">
+								<span class="mj-xd01">下单时间</span>
+								<span class="mj-xd02">{$obj['input_time']>0?date("Y-m-d H:i:s",$obj['input_time']):''}</span>
+							</div>
+						</div>
+						<div class="mjOrder01BR02">
+							<div class="mjOrder01BR02T" style="border:0;">
+								<p class="fl"><b>发票信息</b>（普通发票）</p>
+								<a href="javascript:;" class="fr upd_fp">修改</a>
+							</div>
+							<div class="mjOrder01BR02B">
+								<span class="fl fp_tit">发票抬头：</span>
+								<span class="fpspan">{$obj['invoice_name']}</span>
+								<input type="text" id="invoice_name" class="fptxt" value="{$obj['invoice_name']}" />
+								<div class="clear"></div>
+							</div>
+							<div class="mjOrder01BR02B">
+								<span class="fl fp_tit">纳税人识别号：</span>
+								<span class="fpspan">{$obj['invoice_sn']}</span>
+								<input type="text" id="invoice_sn" class="fptxt" value="{$obj['invoice_sn']}" />
+								<div class="clear"></div>
+							</div>
+							<div class="mjOrder01BR02B fpbtn">
+								<a href="javascript:;" id="upd_fp" class="fr ddqrBtn">保存修改</a>
+							</div>
+						</div>
+						<div class="mjOrder01BR03">
+							<div class="mjOrder01BR03T">
+								<b class="fl">收货人信息</b>
+								<a href="javascript:;" class="fr upd_dizhi" _dizhi="{$obj['msarid']}">修改</a>
+							</div>
+							<div class="mjOrder01BR01C">
+								<span class="mj-xd01">收货人：</span>
+								<span class="mj-xd02">{$obj['sh_name']!=''?$obj['sh_name']:$dzobj['truename']}</span>
+							</div>
+							<div class="mjOrder01BR01C">
+								<span class="mj-xd01">联系电话：</span>
+								<span class="mj-xd02">{$obj['sh_mobile']!=''?$obj['sh_mobile']:$dzobj['mobile']}</span>
+							</div>
+							<div class="mjOrder01BR01C">
+								<span class="mj-xd01">收货地址：</span>
+								<span class="mj-xd02">{$obj['sh_area']!=''?$obj['sh_area']:$dzobj['info']}</span>
+							</div>
+						</div>
+						<div class="mjOrder01BR03">
+							<div class="mjOrder01BR03T">
+								<b class="fl">发货人信息</b>
+							</div>
+							<div class="mjOrder01BR01C">
+								<span class="mj-xd01">收货人：</span>
+								<span class="mj-xd02">{$obj['fh_name']!=''?$obj['fh_name']:$fhobj['truename']}</span>
+							</div>
+							<div class="mjOrder01BR01C">
+								<span class="mj-xd01">联系电话：</span>
+								<span class="mj-xd02">{$obj['fh_mobile']!=''?$obj['fh_mobile']:$fhobj['mobile']}</span>
+							</div>
+							<div class="mjOrder01BR01C">
+								<span class="mj-xd01">收货地址：</span>
+								<span class="mj-xd02">{$obj['fh_area']!=''?$obj['fh_area']:$fhobj['info']}</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="mjOrder02">
+				<div class="mjOrder0201">
+					<span class="spTip01">编号</span>
+					<span class="spTip02">商品名称</span>
+					<span class="spTip03">&nbsp;</span>
+					<span class="spTip04">单价</span>
+					<span class="spTip05">数量</span>
+					<span class="spTip06">小计</span>
+				</div>
+				{volist name="list" id="val"}
+				<div class="mjOrder0202">
+					<span class="spTip01">{$val['id']}</span>
+					<div class="hy-orderB02-img fl">
+						<img src="<?php echo getImgURL($val['cover']);?>" class="fl" width="60" height="60" />
+						<div style="line-height:30px;">
+						<div>{$val['title']}</div>
+						<div>
+						{php}if($val['snvidone']>0){ echo $shopnorms[$val['snidone']]['name'].'：'.$snormsval[$val['snvidone']]['name']; }{/php}&nbsp;
+						{php}if($val['snvidtwo']>0){ echo $shopnorms[$val['snidtwo']]['name'].'：'.$snormsval[$val['snvidtwo']]['name']; }{/php}&nbsp;
+						{php}if($val['snvidthree']>0){ echo $shopnorms[$val['snidthree']]['name'].'：'.$snormsval[$val['snvidthree']]['name']; }{/php}
+						</div>
+						</div>
+					</div>
+					<span class="spTip03">
+					</span>
+					<span class="spTip04">￥{$val['price']}</span>
+					<span class="spTip05">{$val['num']}</span>
+					<span class="spTip06">￥{$val['amount']}</span>
+				</div>
+				{/volist}
+			</div>
+			<?php /*?>
+			<div class="mjOrder03">
+				<div class="mjOrder03B">
+					<h3>订单日志</h3>
+					<div class="mjOrder03BC">
+						<div class="mjOrder03BC-01">
+							<span class="ddrz01">日志编号</span>
+							<span class="ddrz02">时间</span>
+							<span class="ddrz03">操作人</span>
+							<span class="ddrz04">行为</span>
+							<span class="ddrz05">结果</span>
+							<span class="ddrz06">备注</span>
+						</div>
+						<div class="mjOrder03BC-02">
+							<span class="ddrz01">2</span>
+							<span class="ddrz02">2018/9/21 12:33</span>
+							<span class="ddrz03">anicho</span>
+							<span class="ddrz04">创建订单</span>
+							<span class="ddrz05">成功</span>
+							<span class="ddrz06">创建订单</span>
+						</div><div class="mjOrder03BC-02">
+							<span class="ddrz01">2</span>
+							<span class="ddrz02">2018/9/21 12:33</span>
+							<span class="ddrz03">anicho</span>
+							<span class="ddrz04">创建订单</span>
+							<span class="ddrz05">成功</span>
+							<span class="ddrz06">创建订单</span>
+						</div>
+						<div class="mjOrder03BC-02">
+							<span class="ddrz01">2</span>
+							<span class="ddrz02">2018/9/21 12:33</span>
+							<span class="ddrz03">anicho</span>
+							<span class="ddrz04">创建订单</span>
+							<span class="ddrz05">成功</span>
+							<span class="ddrz06">创建订单</span>
+						</div>
+						<div class="mjOrder03BC-02">
+							<span class="ddrz01">2</span>
+							<span class="ddrz02">2018/9/21 12:33</span>
+							<span class="ddrz03">anicho</span>
+							<span class="ddrz04">创建订单</span>
+							<span class="ddrz05">成功</span>
+							<span class="ddrz06">创建订单</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<?php */?>
+		</div>
+    </div>
+</div>
+<!-- 非头尾的内容 END -->
+<div class="pop_box" id="ord_sts">
+  <div class="pop_boxc01 pop_boxc03">
+	<div class="pop_boxc01T">
+		<h3 class="fl">订单发货</h3>
+		<a href="javascript:;" class="fr close">x</a>
+	</div>
+	<form id="addform" method="post" action="{:url('home/mshangpin/setorderfahuo','sn='.$obj['ordsn'])}">
+	<div class="pop_boxc02M">
+		<div class="pop_boxc02MT">
+			<p>发货地址：</p>
+			<select name="fh_id" id="fh_id" style="width:420px;">
+				<option value="">请选择</option>
+				{volist name="dizhilist" id="val"}
+				{php}$is_s='';if($val['is_default']==2){ $is_s='selected'; }{/php}
+				{php}$info=$area[$val['province']]['name'].$area[$val['city']]['name'].$area[$val['county']]['name'].$val['address'];{/php}
+				<option value="{$val['id']}" {$is_s}>{$val['truename']} {$val['mobile']} {$info}</option>
+				{/volist}
+			</select>
+		</div>
+		<div class="pop_boxc02MT">
+			<p>物流公司：
+			<select id="xz_wuliugs" style="width:150px;">
+				<option value="">请选择</option>
+				{volist name="logistics_gs" id="val"}
+				<option value="{$key}">{$val}</option>
+				{/volist}
+			</select>
+			</p>
+			<input type="text" name="fh_logistics" id="fh_logistics" style="width:412px;margin-top:5px;" />
+		</div>
+		<div class="pop_boxc02MT">
+			<p>运单号：</p>
+			<input type="text" name="fh_waybillno" id="fh_waybillno" style="width:412px;" />
+		</div>
+	</div>
+	</form>
+	<div class="pop_boxc01B">
+		<a href="javascript:;" id="submit" class="aSubmit">确认</a>
+		<a href="javascript:;" class="aClose close">关闭</a>
+	</div>
+  </div>
+</div>
+<div class="pop_box" id="upd_shdz">
+  <div class="pop_boxc01 pop_boxc03">
+	<div class="pop_boxc01T">
+		<h3 class="fl">修改订单收货地址</h3>
+		<a href="javascript:;" class="fr close">x</a>
+	</div>
+	<div class="pop_boxc03M">
+		<div class="pop_boxc03M-01">
+			<div class="pop_boxc03M-01L fl"><span>* </span>收货人</div>
+			<div class="pop_boxc03M-01R fl">
+				<input type="text" name="truename" id="truename" style="width:195px;" />
+			</div>
+		</div>
+		<div class="pop_boxc03M-01">
+			<div class="pop_boxc03M-01L fl"><span>* </span>联系电话</div>
+			<div class="pop_boxc03M-01R fl">
+				<input type="text" name="mobile" id="mobile" style="width:195px;" />
+			</div>
+		</div>
+		<div class="pop_boxc03M-01">
+			<div class="pop_boxc03M-01L fl"><span>* </span>配送地区</div>
+			<div class="pop_boxc03M-01R fl">
+				<select name="province" id="province" class="fl">
+					<option value="">请选择</option>
+					{volist name="areaerji" id="val"}
+					<option value="{$val['id']}">{$val['name']}</option>
+					{/volist}
+				</select>
+				<select name="city" id="city" class="fl">
+					<option value="">请选择</option>
+				</select>
+				<select name="county" id="county" class="fl">
+					<option value="">请选择</option>
+				</select>
+			</div>
+		</div>
+		<div class="pop_boxc03M-01">
+			<div class="pop_boxc03M-01L fl"><span>* </span>收货地址</div>
+			<div class="pop_boxc03M-01R fl">
+				<input type="text" name="address" id="address" style="width:340px;" />
+			</div>
+		</div>
+	</div>
+	<div class="pop_boxc01B pop_boxc01B-">
+		<input type="hidden" name="id" id="id" value="" />
+		<a href="javascript:;" id="upddzsm" class="aSubmit">确认</a>
+		<a href="javascript:;" class="aClose close">关闭</a>
+	</div>
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$(".pop_box .close").click(function(){
+		$("#ord_sts").hide();
+	});
+	$("#updsts").click(function(){
+		$("#ord_sts").show();
+	});
+	$("#xz_wuliugs").change(function(){
+		var text = $(this).find("option:selected").text();
+		$("#fh_logistics").val(text);
+	});
+	$("#submit").click(function(){
+		if(!($("#fh_id").val()>0)){
+			alert("请选择发货地址！");
+			return false;
+		}
+		if($("#fh_logistics").val().length < 1){
+			alert("请输入物流公司");
+			$("#fh_logistics").focus();
+			return false;
+		}
+		if($("#fh_waybillno").val().length < 1){
+			alert("请输入运单号");
+			$("#fh_waybillno").focus();
+			return false;
+		}
+		$("#addform").submit();
+	});
+	//修改发票信息
+	$(".upd_fp").click(function(){
+		if(confirm("您确定要修改发票信息吗？")){
+			$(".fpspan").hide();
+			$(".fptxt").show();
+			$(".fpbtn").show();
+		}
+	});
+	$("#upd_fp").click(function(){
+		var invoice_name = $("#invoice_name").val();
+		var invoice_sn = $("#invoice_sn").val();
+		var url = "{:url('home/mshangpin/updorderinvoice','sn='.$obj['ordsn'])}";
+		$.post(url,{invoice_name:invoice_name,invoice_sn:invoice_sn},function(data){
+			location.reload();
+		});
+	});
+});
+</script>
+<script type="text/javascript">
+$(function(){
+	$(".pop_box .close").click(function(){
+		$("#upd_shdz").hide();
+	});
+	$("#upddzsm").click(function(){
+		if($('#truename').val().length<1) {
+			alert('收货人不能为空！');
+			$('#truename').focus();
+			return false;
+		}
+		if($('#mobile').val().length<1) {
+			alert('电话不能为空！');
+			$('#mobile').focus();
+			return false;
+		}
+		if(!($('#province').val()>0) || !($('#city').val()>0) || !($('#county').val()>0)) {
+			alert('请选择配送地区！');
+			return false;
+		}
+		if($('#address').val().length<1) {
+			alert('收货地址不能为空！');
+			$('#address').focus();
+			return false;
+		}
+		var truename = $("#truename").val();
+		var mobile = $("#mobile").val();
+		var province = $("#province").find("option:selected").text();
+		var city = $("#city").find("option:selected").text();
+		var county = $("#county").find("option:selected").text();
+		var address = $("#address").val();
+		var info = province+""+city+""+county+""+address;
+		var url = "{:url('home/mshangpin/updordership','sn='.$obj['ordsn'])}";
+		$.post(url,{truename:truename,mobile:mobile,info:info},function(data){
+			location.reload();
+		},'json');
+	});
+	//编辑
+	$(".upd_dizhi").click(function(){
+		$("#upd_shdz").show();
+		var id = $(this).attr("_dizhi");
+		$.post("{:url('home/member/getdizhiobj')}",{id:id},function(data){
+			if(data.id>0){
+				$('#id').val(data.id);
+				$('#truename').val(data.truename);
+				$('#mobile').val(data.mobile);
+				$('#address').val(data.address);
+				$('#zipcode').val(data.zipcode);
+				$("#province").find("option[value='"+data.province+"']").attr("selected",true);
+				$("#city").empty();
+				$("#county").empty();
+				$("#city").append("<option value='"+data.city+"'>"+data.city_name+"</option>");
+				$("#county").append("<option value='"+data.county+"'>"+data.county_name+"</option>");
+			}
+		},"json");
+	});
+	//区域联动-省
+	$("#province").change(function(){
+		var id = $(this).val();
+		$.post("{:url('home/Aajax/getareabypid')}",{id:id},function(data){
+			$("#city").empty();
+			$("#city").append("<option value=''>请选择</option>");
+			$("#county").empty();
+			$("#county").append("<option value=''>请选择</option>");
+			$.each(data,function(key, val){
+				$("#city").append("<option value='"+val.id+"'>"+val.name+"</option>");
+			});
+		},"json");
+	});
+	//区域联动-市
+	$("#city").change(function(){
+		var id = $(this).val();
+		$.post("{:url('home/Aajax/getareabypid')}",{id:id},function(data){
+			$("#county").empty();
+			$.each(data,function(key, val){
+				$("#county").append("<option value='"+val.id+"'>"+val.name+"</option>");
+			});
+		},"json");
+	});
+});
+</script>
+
+{include file="/member/m_footer"}
+
+</body>
+</html>

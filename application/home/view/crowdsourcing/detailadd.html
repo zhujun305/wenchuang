@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>众包设计</title>
+{include file="/common/c_header"}
+<link rel="stylesheet" type="text/css" href="{$Think.config.web_root}/layui/css/layui.css">
+<script src="{$Think.config.web_root}/layui/layui.js"></script>
+<script charset="utf-8" src="__STATIC__/kindeditor/kindeditor-all.js"></script>
+<script charset="utf-8" src="__STATIC__/kindeditor/lang/zh-CN.js"></script>
+<script charset="utf-8" src="__STATIC__/kindeditor/config.js"></script>
+<script>
+KindEditor.ready(function(K) {
+	_base.width=840;
+	_base.height=200;
+	_base.uploadJson='/home/Aajax/kindimage';
+	_base.afterBlur=function(){this.sync();} //js提交表单后端获取内容
+	window.editor = K.create('#content',_base);
+});
+</script>
+<style>
+.crowd_dt_tit1 i{font-size:20px;}
+.crowd_dt_tit1 input{font-size:20px;padding:0px 3px;}
+.jiage_lie{width:200px;height:35px;margin-right:6px;}
+#moreimg{display:block;border:1px solid #ccc;width:840px;min-height:80px;
+background:url({$Think.config.web_home}/images/down.png) no-repeat 10px 20px;}
+#zipfile{width:830px;height:30px;margin-top:10px;padding:0px 5px;border:1px solid #ccc;}
+.cover_div img{max-width:120px;}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+{include file="/common/c_top"}
+
+  <div class="unionbg padw clear">
+    <div class="crowd_con clear">
+      <div class="crowd_show left">
+        <div class="crowd_dt clear">
+          <div class="crowd_dt_tit">
+			【<font>{$catelist[$obj['cate']]['title']}</font>】{$obj['title']}
+		  </div>
+          <div class="crowd_dt_price">
+          	预算金额：<font>￥<i><?php echo intval($obj['price'])?>{$obj.price_max>0?' - '.intval($obj.price_max):''}</i></font>
+		  </div>
+          <div class="crowd_dt_gz clear">
+          	<?php $djstime = ($obj['end_time']-time());?>
+            <div class="cd_time left">距投标截止：
+				<b><?php echo date('d',$djstime);?></b>天
+				<b><?php echo date('H',$djstime);?></b>时
+				<b><?php echo date('i',$djstime);?></b>分
+				<b><?php echo date('s',$djstime);?></b>秒
+			</div>
+            <div class="cd_money left">赏金分配：单人中标，一人独享赏金。</div>
+            <div class="clear0"></div>
+          </div>
+          <ul class="crowd_dt_prog">
+            <li class="cur">发布任务</li>
+            <li class="cur">平台审核</li>
+            <li <?php echo $obj['status']>2?'class="cur"':''?>>设计投稿</li>
+            <li <?php echo $obj['status']>3?'class="cur"':''?>>需方选稿</li>
+            <li <?php echo $obj['status']>4?'class="cur"':''?>>线下签约</li>
+            <li <?php echo $obj['status']>5?'class="cur"':''?>>设计创作</li>
+            <li <?php echo $obj['status']>6?'class="cur"':''?>>成果上传</li>
+          </ul>
+          <div class="crowd_dt_tit1">
+          	本项目发布单位：<i style="color:#326fc2;">{$fbmember['nick_name']}</i>
+		  </div>
+          <form id="addfrom" action="{:url('home/crowdsourcing/detail','id='.$obj['id'])}" method="post" enctype="multipart/form-data">
+          <div class="crowd_dt_tit1">
+          	我的报价：<input type="text" name="price" id="price" class="jiage_lie" /><i>元</i>
+		  </div>
+          <div class="crowd_dt_tit1">
+          	完成周期：<input type="text" name="cycle" id="cycle" class="jiage_lie" /><i>天</i>
+		  </div>
+          <div class="crowd_dt_tit1">上传封面：
+		  		<a class="cover_div"><img src="{$Think.config.web_member}/img/addd.png" /></a>
+				<input type="hidden" name="cover" id="cover" value="" />
+				<input type="file" id="cover_file" style="display:none;" />
+		  </div>
+          <div class="crowd_dt_tit1">
+          	上传样稿：<i style="font-size:16px;color:#888;">（样稿打包为ZIP或RAR格式后再上传，大小不要超过50M）</i>
+		  </div>
+          <div class="crowd_dt_txt">
+			<a href="javascript:void(0);" id="moreimg"></a>
+			<input type="text" name="filename" id="zipfile" readonly="readonly" />
+		  </div>
+          <div class="crowd_dt_tit1">详情说明：</div>
+          <div class="crowd_dt_txt">
+				<textarea name="content" id="content"></textarea>
+		  </div>
+          <div class="crowd_but">
+          	<a href="javascript:;" id="submit">我要交稿</a>
+		  </div>
+		  </from>
+        </div>
+      </div>
+      <div class="crowd_rt right">
+        <div class="crowd_Pattern clear">
+          <h3>众包模式的特点</h3>
+          <p>1. 是对外包的颠覆</p>
+          <p>2. 携手用户协同创新</p>
+          <p>3. 延伸了创新边界</p>
+          <p>4. 借社会资源为己所用</p>
+          <p>5. 草根的创新愈发成为主流</p>
+          <h4>您有好的IDEA，那就交给平台吧，现在就发布..</h4>
+          <a onClick="location='{:url('home/mzhongbao/mzbadd')}'" href="javascript:void(0);">发布文创众包项目</a>
+        </div>
+        <div class="crowd_other clear">
+          <h3>其它项目信息</h3>
+          <ul>
+      		{volist name="otherlist" id="val"}
+            <li><a onClick="location='{:url('home/crowdsourcing/detail','id='.$val.id)}'" href="javascript:void(0);">
+            	<p><font>￥{$val.price}元</font></p><p>{$val.title}</p></a></li>
+			{/volist}
+          </ul>
+        </div>
+      </div>
+      <div class="clear0"></div>
+    </div>
+  </div>
+
+{include file="/common/c_footer"}
+</div>
+<script type="text/javascript">
+$(function(){
+	$("#submit").click(function(){
+		if(!($('#price').val()>0)) {
+			alert('报价必须大于0！');
+			$('#price').focus();
+			return false;
+		}
+		if(!($('#cycle').val()>0)) {
+			alert('周期必须大于0！');
+			$('#cycle').focus();
+			return false;
+		}
+		if($('#cover').val().length<1) {
+			alert('请上传封面！');
+			return false;
+		}
+		if($('#zipfile').val().length<1) {
+			alert('请上传样稿！');
+			return false;
+		}
+		$('#addfrom').submit();
+	});
+});
+</script>
+{include file="/common/upimage"}
+<script>
+$(function () {
+	//上传封面图
+	var div_cover = $(".cover_div");
+	var file_cover = $("#cover_file");
+	var name_cover = $("#cover");
+	div_cover.click(function(){
+		file_cover.attr("val","1");
+		document.getElementById("cover_file").click(); //js触发其他标签click事件
+	});
+	file_cover.change(function () {
+		let files = $(this)[0].files[0]; //获取files对象
+		//参数2为按比例缩小压缩后宽高
+		$.compress(files,1000).then((url)=>{
+			div_cover.find("img").attr("src",url);
+			//上传到服务器
+			$.post("{:url('home/Aajax/ajaxupimages')}",{imgsource:url},function(data){
+				name_cover.val(data.imgurl);
+				div_cover.find("img").attr("src",data.imgurl);
+			},"json");
+		});
+	});
+});
+</script>
+<script type="text/javascript">
+layui.use('upload', function(){
+  var $ = layui.jquery,upload = layui.upload;
+  upload.render({ //允许上传的文件后缀
+    elem: '#moreimg'
+    ,url: "{:url('home/Aajax/ajaxupfiles')}"
+    ,accept: 'file' //普通文件
+	,data: {type:'zipfile'} //type文件目录
+    ,exts: 'zip|rar|7z' //只允许上传压缩文件
+    ,done: function(res){
+	  $("#zipfile").val(res.data.filepath);
+    }
+  });
+});
+</script>
+
+</body>
+</html>

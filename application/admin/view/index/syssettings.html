@@ -1,0 +1,65 @@
+{include file="/common/main_top"}
+<script>
+$(function(){
+});
+</script>
+<style>
+.inp_summary{font-size:14px;line-height:200%;min-height:150px;min-width:670px;max-width:900px;}
+</style>
+<div class="allpagetop">后台管理中心<strong>/</strong>系统设置</div>
+<div class="mains">
+	<div class="h1tit">
+		<div class="h1">系统设置</div>
+		<div class="topnav">
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="toptit">系统设置</div>
+	<form id="addform" method="post" action="">
+	<div class="form_main width150">
+		<div class="fl">平台名称:</div>
+		<div class="fr">
+			<div><input type="text" name="platname" value="{$obj['platname']}" maxlength="50" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl">联系手机:</div>
+		<div class="fr">
+			<div><input type="text" name="mobile" value="{$obj['mobile']}" maxlength="20" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl">联系电话:</div>
+		<div class="fr">
+			<div><input type="text" name="phone" value="{$obj['phone']}" maxlength="30" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl">客服热线:</div>
+		<div class="fr">
+			<div><input type="text" name="kefu_phone" value="{$obj['kefu_phone']}" maxlength="20" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl">地址:</div>
+		<div class="fr">
+			<div><input type="text" name="address" value="{$obj['address']}" maxlength="100" class="input_text_default" /></div>
+		</div>
+		<div class="fl">备案号:</div>
+		<div class="fr">
+			<div><input type="text" name="keeprecord" value="{$obj['keeprecord']}" maxlength="100" class="input_text_default" /></div>
+		</div>
+		<div class="fl">是否启用水印:</div>
+		<div class="fr">
+			<div style="line-height:30px;">
+				<label><input type="radio" name="iswater" value="1" {$obj['iswater']!=2?'checked="true"':''} /> 关闭</label>&nbsp;
+				<label><input type="radio" name="iswater" value="2" {$obj['iswater']==2?'checked="true"':''} /> 开启</label>
+			</div>
+		</div>
+		<div class="fl">图片水印文字:</div>
+		<div class="fr">
+			<div><input type="text" name="watertext" value="{$obj['watertext']}" maxlength="50" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl"></div>
+		<div class="fr">
+			<input type="submit" class="admin_submit" value="保 存" />
+		</div>
+		<div class="clear"></div>
+	</div>
+	</form>
+</div>
+
+{include file="/common/main_footer"}

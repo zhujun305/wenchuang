@@ -1,0 +1,48 @@
+{include file="/common/main_top"}
+<script>
+$(function(){
+	//全选
+	$('.admin_submit').click(function(){
+		if($("#title").val().length < 1){
+			alert("众包分类名称不能为空");
+			$("#title").focus();
+			return false;
+		}
+		$("#addform").submit();
+	});
+});
+</script>
+<div class="allpagetop">后台管理中心<strong>/</strong>众包分类管理<strong>/</strong>编辑</div>
+<div class="mains">
+	<div class="h1tit">
+		<div class="h1">众包分类管理</div>
+		<div class="topnav">
+			<a href="{:url('/Admin/crowdsourcing/browse')}">众包列表</a>
+			<a href="{:url('/Admin/crowdsourcingwtb/browse')}">投稿列表</a>
+			<a href="{:url('/Admin/crowdsourcingcate/browse')}">分类列表</a>
+			<a href="{:url('/Admin/crowdsourcingcate/create')}" class="select">添加分类</a>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="toptit">编辑众包分类</div>
+	<form id="addform" method="post" action="">
+	<div class="form_main width150">
+		<div class="fl">名称:</div>
+		<div class="fr">
+			<div><input type="text" name="title" id="title" value="{$detail['title']}" maxlength="50" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl">排序:</div>
+		<div class="fr">
+			<div><input type="text" name="sort" value="{$detail['sort']}" maxlength="10" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl"></div>
+		<div class="fr">
+			<input type="submit" class="admin_submit" value="保 存" />
+		</div>
+		<div class="clear"></div>
+	</div>
+	</form>
+</div>
+
+{include file="/common/main_footer"}

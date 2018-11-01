@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>新闻动态</title>
+{include file="/webmember/a_header"}
+<style>
+.newslist li{}
+.newslist li h3{font-weight:bold;}
+.newslist li dl{line-height:23px;height:80px;overflow:hidden;text-overflow:ellipsis;}
+</style>
+</head>
+
+<body>
+{include file="/webmember/a_top"}
+
+<div class="clearfix body w">
+{include file="/webmember/a_left"}
+	<div class="right_m">
+		<h4 class="tit">最新动态</h4>
+		<ul class="newslist">
+		{volist name="list" id="val"}
+		<li>
+			<div class="img"><a href="{:url('home/webmember/lmtrendsxx','uid='.$userobj['uid'].'&id='.$val['id'])}">
+				<img src="<?php echo getImgURL($val['cover']);?>" width="182" height="120" alt="{$val['title']}" /></a></div>
+			<div class="jianjie">
+				<h3><a href="{:url('home/webmember/lmtrendsxx','uid='.$userobj['uid'].'&id='.$val['id'])}" title="{$val['title']}">{$val['title']}</a></h3>
+				<dl>{$val['summary']}</dl>
+				<p>发布时间：{$val['input_time']>0?date("Y-m-d",$val['input_time']):''}</p>
+			</div>
+		</li>
+		{/volist}
+		</ul>
+	</div>
+	<div class="pagetwo">
+		{$list->render()}
+	</div>
+</div>
+
+{include file="/webmember/a_footer"}
+
+</body>
+</html>

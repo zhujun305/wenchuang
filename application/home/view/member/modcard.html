@@ -27,7 +27,12 @@
     	  <div class="forms">
 			<form action="{:url('home/Member/modcard')}" method="post">
 			<div class="row">
-				<span><i>* </i>昵称</span> <input type="text" name="nick_name" id="nick_name" value="{$member['nick_name']}" placeholder="输入昵称" autofocus="autofocus" />
+				<span><i>* </i>昵称</span> 
+				<input type="text" name="nick_name" id="nick_name" value="{$member['nick_name']}" placeholder="输入昵称" autofocus="autofocus" />
+			</div>
+			<div class="row">
+				<span><i>* </i>个性签名</span> 
+				<input type="text" name="sign" id="sign" value="{$member['sign']}" placeholder="输入个性签名，不超过20个字" />
 			</div>
 			<div class="row">
 				<span>性别</span> 
@@ -80,6 +85,11 @@ $(function(){
 		}else if(_uname.length>50) {
 			alert('您的昵称长度必须小于50个字符！');
 			_unameobj.focus();
+			return false;
+		}
+		if($('#sign').val().length>20) {
+			alert('个性签名不要超过20个字！');
+			$('#sign').focus();
 			return false;
 		}
 		return true;

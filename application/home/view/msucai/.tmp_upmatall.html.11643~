@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>素材管理-会员中心</title>
+{include file="/member/m_header"}
+<style>
+.in_con{min-height:19px;}
+.cho_btn{background-color:#1E9FFF;display:inline-block;height:38px;line-height:38px;padding:0 18px;color:#fff;
+white-space:nowrap;text-align:center;font-size:14px;border:none;border-radius:2px;cursor:pointer;}
+.cho_btn:hover{opacity:.8;filter:alpha(opacity=80);color:#fff;}
+.cho_btn:active{opacity:1;filter:alpha(opacity=100);}
+</style>
+</head>
+
+<body>
+
+<!--头部开始-->
+{include file="/member/m_top"}
+<!-- 非头尾的内容 START -->
+<!--面包屑导航开始-->
+<div class="breadcrumb clearfix " >
+</div>
+<!--面包屑导航结束-->
+
+<div class="main clearfix" >
+{include file="/member/m_left"}
+    <div class="contents fr m20">
+		<div class="lm">
+			<a class="on">excel导入</a>
+		</div>
+    	<div class="border">
+			<div class="ts4">
+			第一步：上传按照模板标准整理好的素材基本信息表格
+			</div>
+			<div class="ts6">当前仅支持xls，xlsx，csv格式文件（大小在10M以内）下载文件模板 
+			    <p>   必须严格按照模板内容填入素材数据 ，否则可能会出现导入异常。</p>
+			</div>
+			<div class="ts4">
+				<span>下载模版：</span>
+				<a href="/uploads/download/文创元素元数据样例.xlsx" target="_blank">文创元素元数据样例.xlsx</a>
+			</div>
+			<div class="ts5">
+				<span>* </span>导入数据      
+				<form method="post" action="{:url('home/Msucai/upmatall')}" enctype="multipart/form-data" >
+				<input type="file" name="excel" id="excel" class="form-control">
+				<a class="cho_btn" id="impexcel">导入EXCEL文件</a>
+				</form>
+			</div>
+			<div class="clearfix" style="height:10px "></div>
+		</div>
+    </div>
+</div>
+<!-- 非头尾的内容 END -->
+<script type="text/javascript">
+$(function(){
+	$("#impexcel").click(function(){
+		var excel = $("#excel").val();
+		if(excel != ''){
+			$("form").submit();
+		}
+	});
+});
+</script>
+
+
+{include file="/member/m_footer"}
+
+</body>
+</html>

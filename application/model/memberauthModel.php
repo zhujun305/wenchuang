@@ -98,10 +98,10 @@ class memberauthModel extends commonModel
     /**
      * 根据where条件查询列表
      */
-    static public function getListByWhere($where = array(), $field = array(), $order="id desc")
+    static public function getListByWhere($where = array(), $field = array(), $order="uid desc", $limit='')
     {
     	$where['is_del'] = 1;
-        $return = Db::table(self::$table_name)->where($where)->field($field)->order($order)->select();
+        $return = Db::table(self::$table_name)->where($where)->field($field)->order($order)->limit($limit)->select();
         return $return;
     }
     

@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>编辑详细介绍-会员中心</title>
+{include file="/member/m_header"}
+<script charset="utf-8" src="__STATIC__/kindeditor/kindeditor-all.js"></script>
+<script charset="utf-8" src="__STATIC__/kindeditor/lang/zh-CN.js"></script>
+<script charset="utf-8" src="__STATIC__/kindeditor/config.js"></script>
+<script>
+KindEditor.ready(function(K) {
+	_base.width=840;
+	_base.height=800;
+	_base.uploadJson='/home/Aajax/kindimage';
+	_base.afterBlur=function(){this.sync();} //js提交表单后端获取内容
+	window.editor = K.create('#content',_base);
+});
+</script>
+</head>
+
+<body>
+
+<!--头部开始-->
+{include file="/member/m_top"}
+<!-- 非头尾的内容 START -->
+<!--面包屑导航开始-->
+<div class="breadcrumb clearfix " >
+</div>
+<!--面包屑导航结束-->
+
+<div class="main clearfix" >
+{include file="/member/m_left"}
+    <div class="contents fr m20">
+		{include file="/member/ad"}
+		
+		<div class="lm">
+			<a class="on">修改介绍</a>
+		</div>
+    	<div class="border">
+			<form action="{:url('home/Member/modcontent')}" method="post">
+			<div style="margin-left:35px;margin-top:30px;">
+				<textarea name="content" id="content">{$memobj['info']}</textarea>
+			</div>
+			<div style="padding:35px 230px 50px;">
+			<input type="submit" value="确认保存" class="submit" />
+			</div>
+			</form>
+    	</div>
+    </div>
+</div>
+<!-- 非头尾的内容 END -->
+
+{include file="/member/m_footer"}
+
+</body>
+</html>

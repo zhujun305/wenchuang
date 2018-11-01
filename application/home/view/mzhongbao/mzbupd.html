@@ -21,6 +21,7 @@ KindEditor.ready(function(K) {
 <style>
 .beizhusm{float:left;max-width:500px;padding:25px 25px 15px;background-color:#fcf8e3;
 text-align:left;font-size:14px;color:#ff3000;line-height:22px;}
+#summary{float:left;padding:5px;width:666px;height:120px;line-height:25px;}
 </style>
 </head>
 
@@ -44,21 +45,21 @@ text-align:left;font-size:14px;color:#ff3000;line-height:22px;}
 				<input type="text" class="txt" id="seatxt" value="" placeholder="搜索" /> 
 				<input type="image" src="{$Think.config.web_member}/img/fff.png" class="ss" id="seaform" />
 			</div>
-			<a class="on" href="javascript:void(0);">发布众包项目</a>
+			<a class="on" href="javascript:void(0);">编辑众包项目</a>
 		</div>
     	<div class="border">
           	<form id="addfrom" action="{:url('home/mzhongbao/mzbupd','id='.$obj['id'])}" method="post" enctype="multipart/form-data">
 			<div class="forms2">
 				<div class="row">
 					<span><i>* </i>项目名称</span>
-					<input type="text" name="title" id="title" value="{$obj['title']}" placeholder="输入您的法人代表名称" />
+					<input type="text" name="title" id="title" value="{$obj['title']}" placeholder="输入您的项目名称" />
 				</div>
 				<div class="row">
 					<span><i>* </i>所属分类</span>
 					<select name="cate" id="cate">
 						<option value="">请选择项目分类</option>
 						{volist name="catelist" id="val"}
-						<option value="{$val.id}" <?php echo $val['id']==$obj['cate']?'selected':'';?>>{$val.csname}</option>
+						<option value="{$val.id}" <?php echo $val['id']==$obj['cate']?'selected':'';?>>{$val.title}</option>
 						{/volist}
 					</select>
 				</div>
@@ -77,7 +78,7 @@ text-align:left;font-size:14px;color:#ff3000;line-height:22px;}
 				</div>
 				<div class="row">
 					<span class="fl" style="margin-right:14px;"><i>* </i>项目封面</span>
-					<a class="ups2 fl cover_div"><img src="{$obj['cover_path']}" />项目封面</a>
+					<a class="ups2 fl cover_div"><img src="{$obj['cover_path']}" width="120" />项目封面</a>
 					<input type="hidden" name="cover" id="cover" value="{$obj['cover']}" />
 					<input type="file" id="cover_file" style="display:none;" />
 					<div class="beizhusm">请注意，项目封面是在前台项目浏览时，一个示例小样图，才便设计师有一个初步映像，图片大小为：540*400px。</div>
@@ -87,7 +88,11 @@ text-align:left;font-size:14px;color:#ff3000;line-height:22px;}
 					<a class="ups2 fl zipfile_div" _src="{$Think.config.web_root}/images/zipfileimg01b.jpg">
 						<img src="{$Think.config.web_root}/images/zipfileimg01{$obj['filename']!=''?'b':'a'}.jpg" width="100" alt="点击上传" />压缩包</a>
 					<input type="text" name="filename" id="zipfile" value="{$obj['file_path']}" readonly="readonly" />
-					<div class="beizhusm">创意素材包是根据需求，要提供给设计师的一些素材源言语件，打包为ZIP格式后再上传，大小不要超过50M。</div>
+					<div class="beizhusm">创意素材包是根据需求，要提供给设计师的一些素材源言语件，打包为ZIP或RAR格式后再上传，大小不要超过50M。</div>
+				</div>
+				<div class="row">
+					<span class="fl">项目简介</span>
+					<textarea name="summary" id="summary" placeholder="请输入项目名称简介，少于255个字">{$obj['summary']}</textarea>
 				</div>
 				<div class="row">
 					<span>设计要求</span>

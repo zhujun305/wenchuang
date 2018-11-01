@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>联系我们</title>
+{include file="/common/c_header"}
+<link type="text/css" rel="stylesheet" href="__STATIC__/webhome/css/css_new.css" />
+<style>
+.title_9{ text-align:center; line-height:220%; font-size:24px; color:#282728; padding-top:25px}
+.date_9{ text-align:center; color:#9a9c9c; line-height:180%}
+</style>
+<style>
+</style>
+</head>
+<body>
+<div class="wrap">
+{include file="/common/c_top"}
+
+<div class="news_bg_9">
+	<div class="w">
+		<div class="news_left">
+			<div class="title_9">{$obj['title']}</div>
+			<div class="date_9">
+				<span style="margin-right:30px;">{$cate_arr[$obj['cate']]}</span>
+				<span>发布时间：{$obj['input_time']>0?date("Y-m-d H:i",$obj['input_time']):''}</span>
+			</div>
+			<div class="news_content2_9" style="font-size:16px;">
+				{$obj['content']}
+			</div>
+		</div>
+		<div class="news_right">
+			<div class="ad_pic">
+				{php}echo $ads;{/php}
+			</div>
+			<div class="news_hot">
+			<h3>热点新闻</h3>
+				<ul>
+				{volist name="xwlist" id="val"}
+		        <li><a href="{:url('home/article/detail','id='.$val['id'])}">{$val['title']}</a></li>
+				{/volist}
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>
+
+{include file="/common/c_footer"}
+</div>
+</body>
+</html>

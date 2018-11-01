@@ -18,43 +18,69 @@ $(document).ready(function () {
 	<div class="form_main width150">
 		<div class="fl">登录名:</div>
 		<div class="fr">
-			<div style="padding-top:12px;">{$detail['user_name']}</div>
+			<div>{$obj['user_name']}</div>
 		</div>
 		<div class="fl">昵称:</div>
 		<div class="fr">
-			<div style="padding-top:12px;">{$detail['nick_name']}</div>
+			<div>{$obj['nick_name']} - 【{$membercate[$obj['cate']]}】</div>
 		</div>
 		<div class="fl">性别:</div>
 		<div class="fr">
-			<div style="padding-top:12px;">{$sexarr[$detail['sex']]}</div>
+			<div>{$sexarr[$obj['sex']]}</div>
 		</div>
 		<div class="fl">头像logo:</div>
 		<div class="fr">
-			<div><img src="<?php echo getImgURL($detail['imgurl'],'memberlogo','');?>" width="133" height="99" /></div>
+			<div><img src="<?php echo getImgURL($obj['imgurl'],'memberlogo','');?>" class="suotu_div" _shuiyin="2" width="133" height="99" /></div>
 		</div>
 		<div class="fl">手机:</div>
 		<div class="fr">
-			<div style="padding-top:12px;">{$detail['mobile']}</div>
+			<div>{$obj['mobile']}</div>
 		</div>
 		<div class="fl">qq:</div>
 		<div class="fr">
-			<div style="padding-top:12px;">{$detail['qq']}</div>
+			<div>{$obj['qq']}</div>
 		</div>
 		<div class="fl">微信号:</div>
 		<div class="fr">
-			<div style="padding-top:12px;">{$detail['weixin']}</div>
+			<div>{$obj['weixin']}</div>
 		</div>
 		<div class="fl">邮箱:</div>
 		<div class="fr">
-			<div style="padding-top:12px;">{$detail['email']}</div>
+			<div>{$obj['email']}</div>
+		</div>
+		<div class="fl">技能:</div>
+		<div class="fr">
+			<div>{$strtags}</div>
 		</div>
 		<div class="fl">积分余额:</div>
 		<div class="fr">
-			<div style="padding-top:12px;">{$detail['email']}</div>
+			<div>{$obj['balance']}</div>
 		</div>
 		<div class="fl">累计获得积分:</div>
 		<div class="fr">
-			<div style="padding-top:12px;">{$detail['email']}</div>
+			<div>{$obj['total_balance']}</div>
+		</div>
+		<div class="fl">最近登录:</div>
+		<div class="fr">
+			<div>
+			<?php echo $val['logintime']>0?date("Y-m-d H:i:s",$val['logintime']):'<font color="red">未登录</font>'?>
+			</div>
+		</div>
+		<div class="fl">上次登录:</div>
+		<div class="fr">
+			<div>
+			<?php echo $val['lastlogintime']>0?date("Y-m-d H:i:s",$val['lastlogintime']):'<font color="red">未登录</font>'?>
+			</div>
+		</div>
+		<div class="fl">注册时间:</div>
+		<div class="fr">
+			<div>
+			<?php echo $val['input_time']>0?date("Y-m-d H:i:s",$val['input_time']):''?>
+			</div>
+		</div>
+		<div class="fl">个性签名:</div>
+		<div class="fr">
+			<div>{$obj['sign']}</div>
 		</div>
 		<div class="fl"></div>
 		<div class="fr">

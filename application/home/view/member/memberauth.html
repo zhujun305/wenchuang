@@ -25,11 +25,14 @@
 		</div>
 		<div class="border">
 			<div class="reg_tow2">
-				<?php if($is_member_auth==1){?>
+				<?php if(isset($renzobj) && $renzobj['is_chk']==2){?>
 				<div class="ts" style="text-align:left;">会员已完成账号认证</div>
 				<?php }?>
+				<?php if(isset($renzobj) && $renzobj['is_chk']==1){?>
+				<div class="ts" style="text-align:left;">会员账号认证审核中</div>
+				<?php }?>
 				<ul>
-				<?php if($is_member_auth!=1 || ($is_member_auth==1 && $member['cate']==4)){?>
+				<?php if(!isset($renzobj) || (isset($renzobj) && $member['cate']==4)){?>
 				<li class="s1" val="{:url('home/Member/memberauth','cate=4')}">
 					<div class="img"><img src="{$Think.config.web_member}/img/tx.png" /><p>联盟成员</p></div>
 					<div class="bz">
@@ -43,7 +46,7 @@
 					</div>
 				</li>
 				<?php }?>
-				<?php if($is_member_auth!=1 || ($is_member_auth==1 && $member['cate']==3)){?>
+				<?php if(!isset($renzobj) || (isset($renzobj) && $member['cate']==3)){?>
 				<li class="s2" val="{:url('home/Member/memberauth','cate=3')}">
 					<div class="img"><img src="{$Think.config.web_member}/img/tx.png" /><p>设计与制作<br/>（公司）</p></div>
 					<div class="bz">
@@ -56,7 +59,7 @@
 					</div>
 				</li>
 				<?php }?>
-				<?php if($is_member_auth!=1 || ($is_member_auth==1 && $member['cate']==2)){?>
+				<?php if(!isset($renzobj) || (isset($renzobj) && $member['cate']==2)){?>
 				<li class="s3" val="{:url('home/Member/memberauth','cate=2')}">
 					<div class="img"><img src="{$Think.config.web_member}/img/tx.png" /><p>设计师或工匠<br/>(个人)</p></div>
 					<div class="bz">
@@ -69,7 +72,7 @@
 					</div>
 				</li>
 				<?php }?>
-				<?php if($is_member_auth!=1 || ($is_member_auth==1 && $member['cate']==1)){?>
+				<?php if(!isset($renzobj) || (isset($renzobj) && $member['cate']==1)){?>
 				<li class="s4" val="{:url('home/Member/memberauth','cate=1')}">
 					<div class="img"><img src="{$Think.config.web_member}/img/tx.png" /><p>普通会员</p></div>
 					<div class="bz">

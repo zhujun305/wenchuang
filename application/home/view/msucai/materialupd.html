@@ -4,6 +4,9 @@
 <title>发布项目-会员中心</title>
 {include file="/member/m_header"}
 <script src="{$Think.config.web_root}/js/calendar.js"></script>
+<style>
+textarea{width:588px;height:120px;padding:5px;}
+</style>
 </head>
 
 <body>
@@ -54,12 +57,19 @@
 					</div></li>
                 <li><em>空间范围</em><div class="in_con">
                 	<input type="text" name="roomarea" id="roomarea" value="{$detail['roomarea']}" class="c_u_intxt" placeholder="资源内容反映的地域" /></div></li>
+				<li><em>内容描述</em>
+					<div class="in_con">
+					<textarea name="desc" id="desc">{$detail['desc']}</textarea>
+					</div>
+				</li>
                 <li><em>素材封面</em><div class="in_con">
 					<a class="upload_file cover_div"><img src="<?php echo getImgURL($detail['cover']);?>" width="258px" /></a>
 					<input type="hidden" name="cover" id="cover" value="{$detail['cover']}" />
 					<input type="file" id="cover_file" style="display:none;" />
 					</div></li>
-                <li><input type="submit" value="保存" class="release" id="submit" /></li>
+                <li>
+                	<input type="submit" value="保存" class="release" id="submit" />
+				</li>
               	</form>
               </ul>
             </div>

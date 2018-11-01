@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>我的积分-会员中心</title>
+{include file="/member/m_header"}
+<link type="text/css" rel="stylesheet" href="__STATIC__/webmember/css/style.css"/>
+<style>
+span.jf02-004{width:80px;color:#333;}
+span.jf02-005{width:80px;}
+span.jf02-007{width:318px;}
+</style>
+</head>
+
+<body>
+
+<!--头部开始-->
+{include file="/member/m_top"}
+<!-- 非头尾的内容 START -->
+<!--面包屑导航开始-->
+<div class="breadcrumb clearfix " >
+</div>
+<!--面包屑导航结束-->
+
+<div class="main clearfix" >
+{include file="/member/m_left"}
+	<div class="contents fr m20">
+		<div class="clearfix">
+			<div class="location">会员中心  > 积分明细</div>
+			<div class="q-jf01">
+				<ul class="fl">
+					<li>
+						<span>累计</span>
+						<p>{$member['total_balance']}积分</p>
+					</li>
+					<li class="q-jf01-li">
+						<span>当前</span>
+						<p>{$member['balance']}积分</p>
+					</li>
+				</ul>
+				<a href="{:url('home/member/integraladd')}" class="jf-czBtn fr">积分充值</a>
+			</div>
+			<div class="q-jf02">
+				<ul>
+				<div class="q-jf02-01 q-jf02-02">
+					<span class="fl jf02-001">编号</span>
+					<span class="fl jf02-002">时间</span>
+					<span class="fl jf02-003">交易类型</span>
+					<span class="fl jf02-004">收入类型</span>
+					<span class="fl jf02-005">支出类型</span>
+					<span class="fl jf02-006">积分</span>
+					<span class="fl jf02-007">交易备注</span>
+				</div>
+				{volist name="list" id="val"}
+				<div class="q-jf02-01">
+					<span class="fl jf02-001">{$val['id']}</span>
+					<span class="fl jf02-002">{$val['input_time']>0?date("Y-m-d H:i:s",$val['input_time']):''}</span>
+					<span class="fl jf02-003">
+						{$val['cate']==1?'<font color="green">收入</font>':'<font color="red">支出</font>'}
+					</span>
+					<span class="fl jf02-004">
+						{$val['cate']==1?$income_arr[$val['income']]['name']:''}
+					</span>
+					<span class="fl jf02-005">
+						{$val['cate']==2?$payjf_arr[$val['payjf']]:''}
+					</span>
+					<span class="fl jf02-006">
+						<font color="{$val['cate']==1?'green':'red'}">{$val['cate']==1?'+':'-'}{$val['score']}</font>
+					</span>
+					<span class="fl jf02-007">{$val['desc']}</span>
+				</div>
+				{/volist}
+			</div>
+			<div class="page">
+				{$list->render()}
+			</div>
+			<div class="clearfix" style="height:10px;"></div>
+		</div>
+	</div>
+</div>
+<!-- 非头尾的内容 END -->
+
+{include file="/member/m_footer"}
+
+</body>
+</html>

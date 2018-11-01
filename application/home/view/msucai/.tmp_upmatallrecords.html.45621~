@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>素材管理-会员中心</title>
+{include file="/member/m_header"}
+<style>
+</style>
+</head>
+
+<body>
+
+<!--头部开始-->
+{include file="/member/m_top"}
+<!-- 非头尾的内容 START -->
+<!--面包屑导航开始-->
+<div class="breadcrumb clearfix " >
+</div>
+<!--面包屑导航结束-->
+
+<div class="main clearfix" >
+{include file="/member/m_left"}
+    <div class="contents fr m20">
+		<div class="lm">
+			<a class="on">批量上传记录</a>
+		</div>
+    	<div class="border">
+			<ul class="c_up_infor" style="padding-left:50px;padding-top:8px;">
+                <li class="more_file">
+                  <table class="more_f_tab" width="100%" cellpadding="0" cellspacing="1" bgcolor="#e6e6e6">
+                  	<thead>
+                    <tr>
+                      <th>文件名</th>
+                      <th width="100">记录</th>
+                      <th width="60">批次</th>
+                      <th width="150">日期</th>
+                      <th width="100">操作</th>
+                    </tr>
+					</thead>
+					<tbody id="demoList">
+        			{volist name="list" id="val"}
+                    <tr>
+                      <td>{$val.filename}</td>
+                      <td style="line-height:30px;">
+                      	<div>素材创建 {$val.filenum_suc}</div>
+                      	<div>图片上传 {$val.picnum}</div>
+					  </td>
+                      <td>{$val.batch}</td>
+                      <td><?php echo date("Y-m-d H:i:s",$val['input_time']);?></td>
+                      <td style="line-height:30px;">
+                      	<a onClick="location='{:url('home/Msucai/upmatallinfo','id='.$val.id)}'" href="javascript:void(0);">详细</a><br/>
+                      	<a href="javascript:void(0);" id="impexcel" _id="{$val.id}">生成缩略图</a>
+                      </td>
+                    </tr>
+					{/volist}
+					</tbody>
+                  </table>
+                </li>
+			</ul>
+			<div class="page">
+				{$list->render()}
+			</div>
+			<div class="clearfix" style="height:10px "></div>
+		</div>
+    </div>
+</div>
+<!-- 非头尾的内容 END -->
+<script type="text/javascript">
+$(function(){
+	$("#impexcel").click(function(){
+		var _id = $(this).attr("_id");
+		$.post("{:url('home/Msucai/upmatallimgmaking')}",{id:_id},function(data){
+			$.each(data,function(index,value){
+				var url = "{:url('home/Msucai/matimgmaking')}?id="+value;
+				$.get(url);
+			});
+		},'json');
+	});
+});
+</script>
+
+
+{include file="/member/m_footer"}
+
+</body>
+</html>

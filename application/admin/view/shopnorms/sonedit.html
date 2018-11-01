@@ -1,0 +1,102 @@
+{include file="/common/main_top"}
+<script>
+$(function(){
+	//全选
+	$('.admin_submit').click(function(){
+		if($("#title").val().length < 1){
+			alert("商品规格值名称不能为空");
+			$("#title").focus();
+			return false;
+		}
+		$("#addform").submit();
+	});
+});
+</script>
+<div class="allpagetop">后台管理中心<strong>/</strong>商品规格值管理<strong>/</strong>编辑</div>
+<div class="mains">
+	<div class="h1tit">
+		<div class="h1">商品规格值管理</div>
+		<div class="topnav">
+			<a href="{:url('/Admin/shopnorms/browse')}">规格列表</a>
+			<a href="{:url('/Admin/shopnormsval/browse','pid='.$pid)}">规格值列表</a>
+			<a href="{:url('/Admin/shopnormsval/create','pid='.$pid)}" class="select">添加规格值</a>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="toptit">编辑商品规格值</div>
+	<form id="addform" method="post" action="">
+	<div class="form_main width150">
+		<div class="fl">名称:</div>
+		<div class="fr">
+			<div><input type="text" name="name" id="name" value="{$obj['name']}" maxlength="50" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl">别名:</div>
+		<div class="fr">
+			<div><input type="text" name="alias" id="alias" value="{$obj['alias']}" maxlength="50" class="input_text_default middle" /></div>
+		</div>
+		{php}if(isset($tobj) && $tobj['cate']==2){{/php}
+		<div class="fl">默认规格图片:</div>
+		<div class="fr">
+			<div class="up_img_div">
+			<a class="ups f_l cover_div"><img src="{php}echo getImgURL($obj['cover']);{/php}" width="180px" /></a>
+			<div class="f_l">
+			<a class="imgbtn cover_div">选择图片...</a>
+			<a class="imgbtn clear_img">清除图片</a>
+			<div class="clear"></div>
+			<input type="text" name="cover" id="cover" value="{$obj['cover']}" class="imgtext" readonly="readonly" />
+			<input type="file" id="cover_file" style="display:none;" />
+			</div>
+			</div>
+		</div>
+		{php}}{/php}
+		<div class="fl">排序:</div>
+		<div class="fr">
+			<div><input type="text" name="sort" value="{$obj['sort']}" maxlength="10" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl"></div>
+		<div class="fr">
+			<input type="submit" class="admin_submit" value="保 存" />
+		</div>
+		<div class="clear"></div>
+	</div>
+	</form>
+</div>
+{include file="/common/upimage"}
+<style>
+.cover_div{margin-right:12px;}
+.cover_div img{max-width:180px;}
+.imgbtn{display:block;float:left;margin-bottom:10px;padding:0px 8px;height:25px;line-height:25px;
+text-align:center;background-color:#f1f1f1;border:1px solid #ccc;border-radius:5px;cursor:pointer;}
+.imgtext{padding:0px 5px;width:360px;height:35px;border:1px dashed #ccc;}
+</style>
+<script>
+$(function () {
+	$(".clear_img").click(function(){
+		$("#cover").val('');
+		div_cover.find("img").attr("src","__STATIC__/images/default.jpg");
+	});
+	//上传封面图
+	var div_cover = $(".cover_div");
+	var file_cover = $("#cover_file");
+	var name_cover = $("#cover");
+	div_cover.click(function(){
+		file_cover.attr("val","1");
+		document.getElementById("cover_file").click(); //js触发其他标签click事件
+	});
+	file_cover.change(function () {
+		let files = $(this)[0].files[0]; //获取files对象
+		//参数2为按比例缩小压缩后宽高
+		$.compress(files,1000).then((url)=>{
+			div_cover.find("img").attr("src",url);
+			//上传到服务器
+			$.post("{:url('admin/Aajax/ajaxupimages')}",{imgsource:url},function(data){
+				name_cover.val(data.imgurl);
+				div_cover.find("img").attr("src",data.imgurl);
+			},"json");
+		});
+	});
+});
+</script>
+
+{include file="/common/main_footer"}

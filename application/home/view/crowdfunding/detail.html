@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>{$obj['title']}-众筹项目</title>
+{include file="/common/c_header"}
+<style>
+a.coll_a{margin:0;}
+a.coll_bg{background:#a6937c;}
+div.crowd_pop{width:470px;height:260px;}
+div.crowd_popc1{margin:11px 0px 25px;line-height:35px;}
+div.crowd_popc1 a{text-decoration:line-through;}
+div.crowd_popc1 font{font-size:18px;}
+div.crowd_popc1 em,div.crowd_popc1 i{margin-top:6px;}
+input.cd_intxt{width:320px;height:35px;}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+{include file="/common/c_top"}
+
+  <div class="unionbg padw clear">
+    <div class="raise_show clear">
+      <div class="raise_pic left">
+      	<img class="hot" src="{php}echo getImgURL($obj['cover']);{/php}" width="752" height="560" />
+	  </div>
+      <div class="raise_txt right">
+        <h2>{$obj['title']}</h2>
+        <div class="raise_prog">
+          <em>已筹到</em>
+          <div class="price">￥<font>{$obj['zhe_price']}</font></div>
+          <div class="progress1"><i style="width:{$obj['percent']}%;"></i></div>
+          <p>当前进度<font>{$obj['percent']}%</font></p>
+		  <?php $jjbfb=round((($obj['price']-$obj['new_price'])/$obj['price']),2)*100;?>
+          <p>当前认筹单价:<font>{$obj['new_price']}元</font>比起始价降<font>{$jjbfb}%</font></p>
+        </div>
+        <div class="raise_but">
+        	<a href="javascript:void(0);" id="renchou">我要认筹</a>
+        	<?php if($obj['collid']>0){?>
+			<a href="javascript:void(0);" class="coll_a coll_bg" _collid="{$obj['collid']}">已收藏</a>
+			<?php }else{?>
+			<a href="javascript:void(0);" class="coll_a" _collid="0">收藏项目</a>
+			<?php }?>
+		</div>
+        <div class="raise_prog">
+			<?php $sjcha=($obj['end_time']-time()); $day=0; if($sjcha>0){ $day=intval(date("d",$sjcha)); }?>
+          <p>此项目必须在<font>{$obj['end_time']>0?date("Y年m月d日",$obj['end_time']):''}</font>前得到
+		  ￥{$obj['tot_price']}的支持才可成功或者众筹产品件数达到{$obj['tot_num']}件算成功！目前剩余{$day}天!</p>
+        </div>
+        <div class="raise_logo">
+          <img src="{php}echo $fbmember['logo_path'];{/php}" width="59" height="67" class="imgs" />
+          <p>发起单位：<font>{$fbmember['nick_name']}</font></p>
+          <p>会员等级：<font>联盟成员馆</font></p>
+          <p>发起项目：<font>{$fqxmnum}个</font>支持项目：<font>{$rgxmnum}个</font></p>
+        </div>
+        <div class="raise_prog">
+          <p>签名：{$fbmember['sign']}</p>
+        </div>
+      </div>
+      <div class="clear0"></div>
+    </div>
+    <div class="raise_show_b clear">
+      <div class="raise_dt left">
+      	{$obj['content']}
+      </div>
+      <div class="raise_dt_rt right">
+		<h3>认购快报</h3>
+		<ul>
+			{volist name="ordlist" id="val"}
+			<li>
+				<a class="imgs" href="{:url('home/webmember/index','uid='.$val['uid'])}">
+				<img src="{php}echo getImgURL($mlist[$val['uid']]['imgurl'],'memberlogo');{/php}" width="45" height="45" /></a>
+				<p>{php}echo $val['input_time']>0?date("Y-m-d",$val['input_time']):'';{/php}</p>
+				<p><em>{$mlist[$val['uid']]['nick_name']}</em><em>认筹数量{$val['num']}件</em></p>
+			</li>
+			{/volist}
+		</ul>
+      </div>
+      <div class="clear0"></div>
+    </div>
+  </div>
+
+<div class="crowd_pop" id="crowd_pop">
+	<h3><a class="del" href="javascript:void(0);">×</a>【<font>{$obj['title']}</font>】认筹</h3>
+	<div class="crowd_popc1">
+		{php}if($obj['price']==$obj['new_price']){{/php}
+		<em>单价：</em><i><font color="red">{$obj['new_price']}</font> 元/件</i>
+		{php}}else{{/php}
+		<em>原价：</em><i><a>{$obj['price']}</a> 元/件</i>
+		<em>现价：</em><i><font color="red">{$obj['new_price']}</font> 元/件</i>
+		{php}}{/php}
+	</div>
+	<form id="addfrom" action="{:url('home/crowdfunding/rcorder','id='.$obj['id'])}" method="post">
+	<div class="crowd_popc1">
+		<em>认筹数量：</em><input type="text" name="rcnum" id="rcnum" class="cd_intxt" /><i>件</i>
+	</div>
+	<input type="hidden" name="id" value="{$obj['id']}" />
+	<a class="agree" href="javascript:void(0);">确认提交</a>
+	</form>
+</div>
+{include file="/common/c_footer"}
+</div>
+<script type="text/javascript">
+$(function(){
+	var uid = "{$member['uid']}";
+	$(".coll_a").click(function(){
+		if(!(uid>0)){
+			if(confirm("收藏众筹项目，请先登录。")){
+				location.href = "{:url('home/Index/login')}";
+			}
+			return false;
+		}else{
+			var _collid = $(this).attr("_collid");
+			if(_collid>0){
+			  if (confirm("确定不在收藏此众筹项目吗？")) {
+				var url = "{:url('home/member/delmembercoll')}";
+				$.post(url,{id:_collid},function(data){
+					if(data>0){
+						$(".coll_a").removeClass("coll_bg");
+						$(".coll_a").html("收藏");
+						$(".coll_a").attr("_collid", ""); //修改属性
+					}
+				},'json');
+			  }
+			}else{
+				var url = "{:url('home/member/addmembercoll')}";
+				var cate = 4; //1会员2素材3众筹4众筹5商品
+				$.post(url,{cate:cate,id:"{$obj['id']}"},function(data){
+					if(data>0){
+						$(".coll_a").addClass("coll_bg");
+						$(".coll_a").html("已收藏");
+						$(".coll_a").attr("_collid", data); //修改属性
+						alert("收藏成功。");
+					}
+				},'json');
+			}
+		}
+	});
+});
+$(function(){
+	$("#renchou").click(function(){
+		if(!("{$member['uid']}">0)){
+			if(confirm("收藏众筹项目，请先登录。")){
+				location.href = "{:url('home/Index/login')}";
+			}
+			return false;
+		}
+		var membercate = "{$member['cate']}";
+		if(membercate!=4){
+			alert('非联盟会员不能认筹！');
+			return false;
+		}
+		$("#crowd_pop").show();
+	});
+	$("#crowd_pop h3 .del").click(function(){
+		$("#crowd_pop").hide();
+	});
+	var uid = "{$member['uid']}";
+	$(".agree").click(function(){
+		if(!(uid>0)){
+			if(confirm("认购众筹项目，请先登录。")){
+				location.href = "{:url('home/Index/login')}";
+			}
+			return false;
+		}else{
+			if($("#rcnum").val()>0){
+				$("#addfrom").submit();
+			}else{
+				alert("请输入大于0的数字");
+				$("#rcnum").focus();
+				return false;
+			}
+			$("#crowd_pop").hide();
+		}
+	});
+});
+</script>
+
+</body>
+</html>

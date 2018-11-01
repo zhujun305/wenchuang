@@ -85,7 +85,8 @@ class materialModel extends commonModel
 		if(!empty($findObj)){
 			if(!empty($findObj['title'])) $where['title'] = ['like', '%'.$findObj['title'].'%'];
 			if(!empty($findObj['topic'])) $where['topic_str'] = ['like', '%,'.$findObj['topic'].',%'];
-			if(isset($findObj['cate']) && $findObj['cate']>0) $where['cate'] = ['in',$findObj['cate']];
+			if(isset($findObj['uid']) && $findObj['uid']>0) $where['uid'] = ($findObj['uid']);
+			if(isset($findObj['cate']) && !empty($findObj['cate'])) $where['cate'] = ['in',$findObj['cate']];
 			if(isset($findObj['is_chk']) && $findObj['is_chk']>0) $where['is_chk'] = ($findObj['is_chk']);
 			if(isset($findObj['is_lock']) && $findObj['is_lock']>0) $where['is_lock'] = ($findObj['is_lock']);
 		}
@@ -99,7 +100,7 @@ class materialModel extends commonModel
     /**
      * 根据where条件查询列表
      */
-    static public function getListByWhere($where=array(), $field=array(), $order="id desc", $limit='10')
+    static public function getListByWhere($where=array(), $field=array(), $order="id desc", $limit='')
     {
     	$where['is_del'] = 1;
         $return = Db::table(self::$table_name)->where($where)->field($field)->order($order)->limit($limit)->select();

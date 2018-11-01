@@ -39,6 +39,7 @@ class Materialuprecord extends Adminbase
 		$findObj = [];
 		$fields = 'filename,is_daoru,is_shangc';
 		$this->getFindObj($findObj, $find, $fields);
+		$this->assign("findObj", $findObj);
 		$list = materialuprecordModel::getList($findObj);
 		$this->assign("list", $list);
 		//会员uid列表
@@ -49,14 +50,9 @@ class Materialuprecord extends Adminbase
 			}
 		}
 		$uidarr = array_unique(array_filter($uidarr));
-		$memberlist = memberModel::getListByWhere(['uid'=>['in',$uidarr]],'uid,nick_name');
+		$memberlist = memberModel::getListByWhere(['uid'=>['in',$uidarr]],['uid','nick_name']);
 		$memberlist = convert_arr_key($memberlist,'uid');
 		$this->assign("memberlist", $memberlist);
-		//空判断
-		$findObj['filename'] = isset($findObj['filename'])?$findObj['filename']:'';
-		$findObj['is_daoru'] = isset($findObj['is_daoru'])?$findObj['is_daoru']:'';
-		$findObj['is_shangc'] = isset($findObj['is_shangc'])?$findObj['is_shangc']:'';
-		$this->assign("findObj", $findObj);
 		return $this->fetch();
 	}
 	

@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>会员首页</title>
+{include file="/webmember/a_header"}
+</head>
+
+<body>
+{include file="/webmember/a_top"}
+
+<div class="clearfix body w">
+{include file="/webmember/a_left"}
+	<div class="right_m">
+		<h3 class="tit">详细介绍</h3>
+		<div class="con">
+			{$userobj['info']}
+		</div>
+		{php}if($userauth['cate']==2 || $userauth['cate']==3){{/php}
+		<h4 class="tit">技能标签</h4>
+		<div class="tag">
+			{volist name="xzarr" id="val"}
+			<a href="javascript:void(0);" _id="{$val}">{$catelist[$val]['name']}</a>
+			{/volist}
+		</div>
+		<h4 class="tit">推荐作品</h4>
+		<div class="plist">
+			<ul>
+				{volist name="zplist" id="val"}
+				<li onClick="location='{:url('home/webmember/sjcsworksdetail','uid='.$userauth['uid'].'&id='.$val['id'])}'">
+					<img src="{php}echo getImgURL($val['cover']);{/php}" width="200" height="148" /></li>
+				{/volist}
+			</ul>
+		</div>
+		{php}}elseif($userauth['cate']==4){{/php}
+		<h4 class="tit"><a href="{:url('home/webmember/lmmaterial','uid='.$userobj['uid'])}">更多&gt;&gt;</a>推荐素材</h4>
+		<div class="plist">
+			<ul>
+				{volist name="sclist" id="val"}
+				<li onClick="location='{:url('home/webmember/sjcsworksdetail','uid='.$userauth['uid'].'&id='.$val['id'])}'">
+					<img src="{php}echo getImgURL($val['cover']);{/php}" width="200" height="148" /></li>
+				{/volist}
+			</ul>
+		</div>
+		{php}}{/php}
+	</div>
+</div>
+
+{include file="/webmember/a_footer"}
+
+</body>
+</html>

@@ -1,0 +1,132 @@
+{include file="/common/main_top"}
+<script>
+$(function(){
+	//全选
+	$('#chkall').click(function(){
+		var chk = $(this).is(":checked");
+		$('.chklie').each(function(){
+			$(this).attr('checked' , chk);
+		});
+	});
+	//查询
+	$('#findbtn').click(function(){
+		var arr=[];
+		arr.push($('#title').val());
+		arr.push($('#pay_status').val());
+		arr.push($('#status').val());
+		arr.push($('#is_lock').val());
+		var find = "?find="+arr.join("{$search_separ}");
+		var url = "{:url('/Admin/shoporders/browse')}";
+		location.href = url+find;
+	});
+});
+</script>
+<style>
+.list_tr div.td{line-height:30px;}
+</style>
+<div class="allpagetop">后台管理中心<strong>/</strong>订单管理</div>
+<div class="mains">
+	<div class="h1tit">
+		<div class="h1">订单管理</div>
+		<div class="topnav">
+			<a href="{:url('/Admin/shoporders/browse')}" class="select">订单列表</a>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="sea_div mt_10">
+		<div class="sea_clearbtn f_r mr_20" id="clearbtn">清除</div>
+		<div class="sea_btn f_r" id="findbtn">查询</div>
+		<select id="is_lock" class="gg_select w100 f_r ml_20">
+			<option value="" selected="selected">是否锁定</option>
+			<option value="1" <?php echo $findObj['is_lock']==1?'selected':''?>>未锁定</option>
+			<option value="2" <?php echo $findObj['is_lock']==2?'selected':''?>>已锁定</option>
+		</select>
+		<select id="status" class="gg_select w100 f_r ml_20">
+			<option value="" selected="selected">订单状态</option>
+			{volist name="status_arr" id="val"}
+			<option value="{$key}" <?php echo $findObj['status']==$key?'selected':''?>>{$val}</option>
+			{/volist}
+		</select>
+		<select id="pay_status" class="gg_select w100 f_r ml_20">
+			<option value="" selected="selected">付款状态</option>
+			<option value="1" <?php echo $findObj['pay_status']==1?'selected':''?>>未付款</option>
+			<option value="2" <?php echo $findObj['pay_status']==2?'selected':''?>>已付款</option>
+		</select>
+		<div class="sea_text f_r">
+			<div class="sobox">
+			<div class="sotype">内容</div>
+			<input type="text" id="title" class="sinput" value="{$findObj['title']}" />
+			</div>
+		</div>
+	</div>
+	<div class="clear"></div>
+	
+	<div class="list_th">
+		<div class="td" style="width:6%;">
+			<label class="left_padding">
+				<input type="checkbox" id="chkall" title="全选/反选"/>ID
+			</label>
+		</div>
+		<div class="td" style="width:7%;">订单编号</div>
+		<div class="td" style="width:10%;">订单内容</div>
+		<div class="td" style="width:10%;">订单金额</div>
+		<div class="td" style="width:7%;">付款状态</div>
+		<div class="td" style="width:10%;">付款金额/时间</div>
+		<div class="td" style="width:10%;">下单时间</div>
+		<div class="td" style="width:7%;">订单状态</div>
+		<div class="td" style="width:10%;">下单会员</div>
+		<div class="td" style="width:7%;">锁定状态</div>
+		<div class="td" style="width:10%;">操作</div>
+		<div class="clear"></div>
+	</div>
+	<?php if(empty($list)){?>
+	<div class="list_empty">没有任何信息！</div>
+	<?php }else{?>
+	{volist name="list" id="val"}
+	<div class="list_tr link_black">
+		<div class="td" style="width:6%;">
+			<div class="left_padding striking link_blue">
+			<input type="checkbox" name="id[]" class="chklie" value="{$val.id}"/>{$val['id']}
+			</div>
+		</div>
+		<div class="td" style="width:7%;">{$val['ordsn']}</div>
+		<div class="td" style="width:10%;">{$val['title']}</div>
+		<div class="td" style="width:10%;">&nbsp;{$val['amount']} 元</div>
+		<div class="td" style="width:7%;">
+			<?php echo $val['pay_status']==2?'<font color="red">已付款</font>':'未付款';?>
+		</div>
+		<div class="td" style="width:10%;">&nbsp;{$val['pay_amount']} 元<br/>
+			<?php echo $val['pay_time']>0?date("Y-m-d H:i:s",$val['pay_time']):''?>
+		</div>
+		<div class="td" style="width:10%;">
+			<?php echo $val['input_time']>0?date("Y-m-d H:i:s",$val['input_time']):''?>
+		</div>
+		<div class="td" style="width:7%;">{$status_arr[$val['status']]}</div>
+		<div class="td" style="width:10%;">
+			<a href="{:url('/Admin/member/browse','find='.$val['uid'])}">
+			{$mlist[$val['uid']]['nick_name']}</a>
+		</div>
+		<div class="td" style="width:7%;">
+			<?php echo $val['is_lock']==2?'<font color="red">锁定</font>':'正常';?>
+		</div>
+		<div class="td edit" style="width:10%;">
+			<a href="{:url('/Admin/shoporders/detail','id='.$val.id)}">查看详细</a>
+			<br/>
+			<?php if($val['is_lock']==1){?>
+			<a href="{:url('/Admin/shoporders/lock','id='.$val.id)}" class="gray">锁定</a>
+			<?php }else{?>
+			<a href="{:url('/Admin/shoporders/unlock','id='.$val.id)}">解锁</a>
+			<?php }?>
+			<a href="{:url('/Admin/shoporders/del','id='.$val.id)}" class="gray" onclick="return confirm('你确定要删除吗？')">删除</a>
+		</div>
+		<div class="clear"></div>
+	</div>
+	{/volist}
+	<?php }?>
+	<div class="pages">
+		{$list->render()}
+	</div>
+</div>
+
+{include file="/common/main_footer"}

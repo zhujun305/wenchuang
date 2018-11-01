@@ -1,0 +1,153 @@
+{include file="/common/main_top"}
+<script>
+$(function(){
+	//全选
+	$('#chkall').click(function(){
+		var chk = $(this).is(":checked");
+		$('.chklie').each(function(){
+			$(this).attr('checked' , chk);
+		});
+	});
+	//查询
+	$('#findbtn').click(function(){
+		var arr=[];
+		arr.push($('#type').val());
+		arr.push($('#fuid').val());
+		arr.push($('#suid').val());
+		arr.push($('#content').val());
+		arr.push($('#status').val());
+		arr.push($('#time1').val());
+		arr.push($('#time2').val());
+		var find = "?find="+arr.join("{$search_separ}");
+		var url = "{:url('/Admin/msgrecords/browse')}";
+		location.href = url+find;
+	});
+});
+</script>
+<div class="allpagetop">后台管理中心<strong>/</strong>消息管理</div>
+<div class="mains">
+	<div class="h1tit">
+		<div class="h1">消息管理</div>
+		<div class="topnav">
+			<a href="{:url('/Admin/msgrecords/browse')}" class="select">消息列表</a>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="sea_div mt_10">
+		<div class="sea_text f_r" style="margin-right:204px;">
+			<div class="sobox">
+			<div class="sotype">内容</div>
+			<input type="text" id="content" class="sinput" value="{$findObj['content']}" placeholder="请输入关键字搜索" />
+			</div>
+		</div>
+		<div class="sea_text f_r">
+			<div class="sobox">
+			<div class="sotype">收信人</div>
+			<input type="text" id="suid" class="sinput" value="{$findObj['suid']}" placeholder="请输入收信人uid搜索" />
+			</div>
+		</div>
+		<div class="sea_text f_r">
+			<div class="sobox">
+			<div class="sotype">发信人</div>
+			<input type="text" id="fuid" class="sinput" value="{$findObj['fuid']}" placeholder="请输入发信人uid搜索" />
+			</div>
+		</div>
+		<select id="status" class="gg_select w100 f_r ml_20">
+			<option value="" selected="selected">阅读状态</option>
+			<option value="1" <?php echo $findObj['status']==1?'selected':''?>>未读</option>
+			<option value="2" <?php echo $findObj['status']==2?'selected':''?>>已读</option>
+		</select>
+		<select id="type" class="gg_select w100 f_r ml_20">
+			<option value="" selected="selected">消息类型</option>
+			<option value="1" <?php echo $findObj['type']==1?'selected':''?>>系统</option>
+			<option value="2" <?php echo $findObj['type']==2?'selected':''?>>私信</option>
+		</select>
+	</div>
+	<div class="clear"></div>
+	<div class="sea_div mt_10">
+		<div class="sea_clearbtn f_r mr_20" id="clearbtn">清除</div>
+		<div class="sea_btn f_r" id="findbtn">查询</div>
+		<div class="sea_text f_r">
+			<div class="sobox">
+			<div class="sotype">结束时间</div>
+			<input type="text" id="time2" value="{$findObj['time2']}" class="sinput" onClick="new Calendar().show(this);" readonly="readonly" />
+			</div>
+		</div>
+		<div class="sea_text f_r">
+			<div class="sobox">
+			<div class="sotype">开始时间</div>
+			<input type="text" id="time1" value="{$findObj['time1']}" class="sinput" onClick="new Calendar().show(this);" readonly="readonly" />
+			</div>
+		</div>
+	</div>
+	<div class="clear"></div>
+	
+	<div class="list_th">
+		<div class="td" style="width:8%;">
+			<label class="left_padding">
+				<input type="checkbox" id="chkall" title="全选/反选"/>ID
+			</label>
+		</div>
+		<div class="td" style="width:7%;">消息类型</div>
+		<div class="td" style="width:15%;">发信人</div>
+		<div class="td" style="width:35%;">内容</div>
+		<div class="td" style="width:15%;">收信人</div>
+		<div class="td" style="width:10%;">阅读状态</div>
+		<div class="td" style="width:10%;">发送时间</div>
+		<div class="td" style="width:8%;">操作</div>
+		<div class="clear"></div>
+	</div>
+	<?php if(empty($list)){?>
+	<div class="list_empty">没有任何信息！</div>
+	<?php }else{?>
+	{volist name="list" id="val"}
+	<div class="list_tr link_black">
+		<div class="td" style="width:8%;">
+			<div class="left_padding striking link_blue">
+			<input type="checkbox" name="id[]" class="chklie" value="{$val.id}"/>{$val.id}
+			</div>
+		</div>
+		<div class="td" style="width:7%;">&nbsp;{php}if($val['type']==1){echo '系统消息';}else{echo '私信消息';}{/php}</div>
+		<div class="td" style="width:15%;">&nbsp;
+			{php}if($val['type']==2 && $val['input_uid']>0){{/php}
+			<a href="{:url('/Admin/member/browse','find='.$val['input_uid'])}">
+			<img src="<?php echo getImgURL($memberlist[$val['input_uid']]['imgurl'],'memberlogo');?>" class="suotu_div f_l" _shuiyin="2" width="133" height="99" />
+			<div class="f_l ml_10">{$val.input_uid}<br/>{$memberlist[$val['input_uid']]['nick_name']}</div>
+			</a>
+			{php}}else{{/php}
+			系统
+			{php}}{/php}
+			<div class="clear"></div>
+		</div>
+		<div class="td" style="width:35%;">
+			<div class="">
+			&nbsp;{$val.content}
+			</div>
+		</div>
+		<div class="td" style="width:15%;">&nbsp;
+			<a href="{:url('/Admin/member/browse','find='.$val['uid'])}">
+			<img src="<?php echo getImgURL($memberlist[$val['uid']]['imgurl'],'memberlogo');?>" class="suotu_div f_l" _shuiyin="2" width="133" height="99" />
+			<div class="f_l ml_10">{$val.uid}<br/>{$memberlist[$val['uid']]['nick_name']}</div>
+			</a>
+			<div class="clear"></div>
+		</div>
+		<div class="td" style="width:10%;">&nbsp;<?php echo $val['status']==2?'<font color="green">已读</font>':'未读';?></div>
+		<div class="td" style="width:10%;">
+			<?php echo $val['input_time']>0?date("Y-m-d H:i:s",$val['input_time']):''?>
+		</div>
+		<div class="td edit" style="width:8%;">
+			<?php /*?>
+			<a href="{:url('/Admin/msgrecords/del','id='.$val.id)}" class="gray" onclick="return confirm('你确定要删除吗？')">删除</a>
+			<?php */?>
+		</div>
+		<div class="clear"></div>
+	</div>
+	{/volist}
+	<?php }?>
+	<div class="pages">
+		{$list->render()}
+	</div>
+</div>
+
+{include file="/common/main_footer"}

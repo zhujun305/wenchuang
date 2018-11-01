@@ -1,0 +1,177 @@
+{include file="/common/main_top"}
+<script>
+$(function(){
+	$("#catetop").change(function(){
+		var pid = $(this).val();
+		$("#cate .idlie").removeAttr("selected");
+		$("#cate .idlie").addClass("d_n");
+		$("#cate .pid_"+pid).removeClass("d_n");
+	});
+	//专题选择
+	$(".pop_sc h3 a").click(function(){ $(".pop_sc").hide(); });
+	$("#xz_topic").click(function(){ $(".pop_sc").show(); });
+	$("#cho_topic").click(function(){
+		var arr = new Array();
+		var arrtit = [];
+        $(".pop_scs li input:checkbox[checked]").each(function(i){
+            arr[i] = $(this).val();
+			arrtit[i] = $(this).attr("_tit");
+        });
+        var ids = arr.join(",");
+        var tit_str = arrtit.join(",");
+		$("#xz_topic").val(tit_str);
+		$("#topic_str").val(ids);
+		$(".pop_sc").hide();
+	});
+	//提交
+	$('.admin_submit').click(function(){
+		if($("#title").val().length < 1){
+			alert("素材名称不能为空");
+			$("#title").focus();
+			return false;
+		}
+		$("#addform").submit();
+	});
+});
+</script>
+<style>
+.pop_sc{ border:1px solid #dcdcdc; width:398px; height:318px; position:fixed; left:50%; top:50%; margin:-160px 0 0 -200px; background:#fff; -moz-box-shadow:8px 8px 8px rgba(167,167,167,.75); -webkit-box-shadow:8px 8px 8px rgba(167,167,167,.75); box-shadow:8px 8px 8px rgba(167,167,167,.75);}
+.pop_sc h3{ border-bottom:1px solid #dcdcdc; background:#eee; height:46px; line-height:46px; padding:0 15px; font-size:14px; color:#000; font-weight:500;}
+.pop_sc h3 a{ float:right; color:#000;}
+.pop_scs{ overflow:hidden; padding:15px 0 0 1px;}
+.pop_scs li{ width:108px; height:34px; line-height:34px; padding:0 0 12px 18px; float:left;}
+.pop_scs li input[type="checkbox"]{ display:none;}
+.pop_scs li input[type="checkbox"] + label{ display:inline-block; height:34px; width:108px; text-align:center; background:#eee; border-radius:9px; font-size:14px; color:#504e4e;}
+.pop_scs li input[type="checkbox"]:checked + label{ background:#448aca; color:#fff;}
+.pop_but{ display:block; margin:20px auto 0 auto; color:#fff; background:#448aca; font-size:14px; height:34px; line-height:34px; cursor:pointer; border:none; padding:0 35px;}
+.pop_but:hover{ background:#155fa3; color:#fff;}
+</style>
+<div class="allpagetop">后台管理中心<strong>/</strong>素材管理<strong>/</strong>编辑</div>
+<div class="mains">
+	<div class="h1tit">
+		<div class="h1">素材管理</div>
+		<div class="topnav">
+			<a href="{:url('/Admin/material/browse')}">素材列表</a>
+			<a href="{:url('/Admin/material/create')}" class="select">添加</a>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="toptit">编辑素材类别</div>
+	<form id="addform" method="post" action="">
+	<div class="form_main width150">
+		<div class="fl">标题:</div>
+		<div class="fr">
+			<div><input type="text" name="title" id="title" value="{$obj['title']}" maxlength="50" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl">选择上级:</div>
+		<div class="fr">
+        	<select id="catetop" class="gg_select w200">
+        		<option>请选择分类</option>
+        		{volist name="catelist" id="val"}
+				{if condition="($val['pid']==0)"}
+        		<option value="{$val.id}" {$catetop['id']==$val['id']?'selected':''}>{$val.cname}</option>
+				{/if}
+				{/volist}
+			</select>
+        	<select name="cate" id="cate" class="gg_select w200">
+        		<option>请选择分类</option>
+        		{volist name="catelist" id="val"}
+				{if condition="($val['pid']>0)"}
+        		<option value="{$val.id}" class="{$catetop['id']==$val['pid']?'':'d_n'} idlie pid_{$val['pid']}" {$obj['cate']==$val['id']?'selected':''}>{$val.cname}</option>
+				{/if}
+				{/volist}
+			</select>
+		</div>
+		<div class="fl">专题:</div>
+		<div class="fr">
+			<div><input type="text" id="xz_topic" value="{$topic_str}" class="input_text_default middle" /></div>
+			<input type="hidden" name="topic_str" id="topic_str" value="{$obj['topic_str']}" />
+		</div>
+		<div class="fl">其它题名:</div>
+		<div class="fr">
+			<div><input type="text" name="supply_tit" value="{$obj['supply_tit']}" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl">责任者名称:</div>
+		<div class="fr">
+			<div><input type="text" name="author" value="{$obj['author']}" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl">关键词:</div>
+		<div class="fr">
+			<div><input type="text" name="keywords" value="{$obj['keywords']}" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl">主题词:</div>
+		<div class="fr">
+			<div><input type="text" name="themewords" value="{$obj['themewords']}" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl">素材来源:</div>
+		<div class="fr">
+			<div><input type="text" name="source" value="{$obj['source']}" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl">素材版本:</div>
+		<div class="fr">
+			<div><input type="text" name="version" value="{$obj['version']}" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl">创作时间:</div>
+		<div class="fr">
+			<div><input type="text" name="originaltime" value="{$obj['originaltime']}" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl">制作时间:</div>
+		<div class="fr">
+			<div><input type="text" name="makingtime" value="{$obj['makingtime']}" class="input_text_default middle" onClick="new Calendar().show(this);" readonly="readonly" /></div>
+		</div>
+		<div class="fl">空间范围:</div>
+		<div class="fr">
+			<div><input type="text" name="roomarea" value="{$obj['roomarea']}" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl">封面:</div>
+		<div class="fr">
+			<a class="ups cover_div"><img src="<?php echo getImgURL($obj['cover']);?>" width="180px" /></a>
+			<input type="hidden" name="cover" id="cover" value="{$obj['cover']}" />
+			<input type="file" id="cover_file" style="display:none;" />
+		</div>
+		<div class="fl"></div>
+		<div class="fr">
+			<input type="submit" class="admin_submit" value="保 存" />
+		</div>
+		<div class="clear"></div>
+	</div>
+	</form>
+</div>
+<div class="pop_sc" style="display:none;overflow-y:scroll;">
+  <h3><a href="javascript:void(0);">X</a>请选择所属专题（可多选）</h3>
+  <ul class="pop_scs">
+	{volist name="topiclist" id="val"}
+    <li><input type="checkbox" value="{$val.id}" _tit="{$val.title}" id="opt{$val.id}" {if condition="in_array($val.id,$topic_arr)"}checked="checked"{/if} />
+	<label for="opt{$val.id}">{$val.title}</label></li>
+	{/volist}
+  </ul>
+  <input class="pop_but" type="button" value="确认选择" id="cho_topic" />
+</div>
+{include file="/common/upimage"}
+<script>
+$(function () {
+	//上传封面图
+	var div_cover = $(".cover_div");
+	var file_cover = $("#cover_file");
+	var name_cover = $("#cover");
+	div_cover.click(function(){
+		file_cover.attr("val","1");
+		document.getElementById("cover_file").click(); //js触发其他标签click事件
+	});
+	file_cover.change(function () {
+		let files = $(this)[0].files[0]; //获取files对象
+		//参数2为按比例缩小压缩后宽高
+		$.compress(files,1000).then((url)=>{
+			div_cover.find("img").attr("src",url);
+			//上传到服务器
+			$.post("{:url('admin/Aajax/ajaxupimages')}",{imgsource:url},function(data){
+				name_cover.val(data.imgurl);
+				div_cover.find("img").attr("src",data.imgurl);
+			},"json");
+		});
+	});
+});
+</script>
+
+{include file="/common/main_footer"}

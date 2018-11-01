@@ -5,6 +5,9 @@
 {include file="/common/c_header"}
 <style>
 .cho_li_bg{background:#cacaca;}
+.material ul li{height:270px;}
+.material ul li .pic{display:table-cell;text-align:center;vertical-align:middle;}
+.material ul li .pic img{max-width:270px;max-height:200px;}
 </style>
 </head>
 
@@ -34,7 +37,7 @@
       	{volist name="list" id="val"}
         <li>
           <div class="pic"><a onClick="location='{:url('home/Material/matlist','cate=&topic='.$val.id)}'" href="javascript:void(0);">
-          	<img src="<?php echo getImgURL($val['cover']);?>" width="270" height="200" /></a></div>
+          	<img src="<?php echo getImgURL($val['cover']);?>" /></a></div>
           <div class="txts">
             <h3>{$val.title}</h3>
           </div>
@@ -49,10 +52,6 @@
 
 {include file="/common/c_footer"}
 </div>
-<script type="text/javascript">
-$(function(){
-});
-</script>
 
 </body>
 </html>

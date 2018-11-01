@@ -1,0 +1,18 @@
+
+<div class="footer clear">
+    <div class="w">
+      <div class="foot_lf left">
+        <h4><a href="#">关于我们</a><a>|</a><a href="#">新手指引</a><a>|</a><a href="#">安全保障</a><a>|</a><a href="#">在线客服</a><a>|</a><a href="#">调查问卷</a><a>|</a><a href="#">版权申明</a></h4>
+        <p>地址：北京市海淀区中关村南大街33号   电话：（+86 10 88545426  88545360）</p>
+        <p>京ICP备 1234567890 号-1</p>
+      </div>
+      <div class="foot_rt right">
+        <span><img src="{$Think.config.web_home}/images/ewm.png" width="70" height="70" /><i>APP扫码下载</i></span>
+        <h4>客服热线</h4>
+        <p>工作时间：8：00-18：00</p>
+        <p>节假日有客服值班</p>
+        <em>010-88545360</em>
+      </div>
+      <div class="clear0"></div>
+    </div>
+</div>

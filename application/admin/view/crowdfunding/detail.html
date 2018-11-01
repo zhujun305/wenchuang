@@ -1,0 +1,121 @@
+{include file="/common/main_top"}
+<script>
+$(document).ready(function () {
+	$(".shen_chk").click(function(){
+		var is_chk = $(this).attr("_val");
+		$("#is_chk").val(is_chk);
+		$("#addform").submit();
+	});
+});
+</script>
+<div class="allpagetop">后台管理中心<strong>/</strong>众筹管理<strong>/</strong>众筹信息</div>
+<div class="mains">
+	<div class="h1tit">
+		<div class="h1">众筹管理</div>
+		<div class="topnav">
+			<a href="{:url('/Admin/crowdfunding/browse')}" class="select">众筹列表</a>
+			<a href="{:url('/Admin/crowdfundingcate/browse')}">分类列表</a>
+			<a href="{:url('/Admin/crowdfundingcate/create')}">添加分类</a>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="toptit">众筹信息</div>
+	<form id="addform" method="post" action="">
+	<div class="form_main width150">
+		<div class="fl">发布会员:</div>
+		<div class="fr">
+			<a href="{:url('/Admin/member/browse')}?find={$obj['uid']}">
+			<div>{$obj['uid']} {$member['nick_name']}</div></a>
+		</div>
+		<div class="fl">标题:</div>
+		<div class="fr">
+			<div>{$obj['title']}</div>
+		</div>
+		<div class="fl">分类:</div>
+		<div class="fr">
+			<div>【{$catelist[$obj['cate']]['title']}】</div>
+		</div>
+		<div class="fl">缩略图:</div>
+		<div class="fr">
+			<img src="<?php echo getImgURL($obj['cover']);?>" width="133" height="99" />
+		</div>
+		<div class="fl">单价:</div>
+		<div class="fr">
+			<div>{$obj['price']} 元</div>
+		</div>
+		<div class="fl">结算数量:</div>
+		<div class="fr">
+			<div>
+				<span class="d_b f_l w100">{$obj['tot_num']} 件</span>
+				<span class="ml_20">已筹集数量：<font color="red">{$obj['zhe_num']}</font> 件</span>
+			</div>
+		</div>
+		<div class="fl">结算金额:</div>
+		<div class="fr">
+			<div>
+				<span class="d_b f_l w100">{$obj['tot_price']} 元</span>
+				<span class="ml_20">已筹集金额：<font color="red">{$obj['zhe_price']}</font> 元</span>
+			</div>
+		</div>
+		<div class="fl">进度:</div>
+		<div class="fr">
+			<div><font color="red">{$obj['percent']}%</font></div>
+		</div>
+		<div class="fl">结算时间:</div>
+		<div class="fr">
+			<div>
+				<?php echo $obj['input_time']>0?date("Y-m-d H:i:s",$obj['input_time']):''?>
+			</div>
+		</div>
+		<div class="fl">简介:</div>
+		<div class="fr">
+			<div>{$obj['summary']}</div>
+		</div>
+		<div class="fl">content:</div>
+		<div class="fr">
+			<div>{$obj['content']}</div>
+		</div>
+		<div class="fl">备注:</div>
+		<div class="fr">
+			<pre>{$obj['remark']}</pre>
+		</div>
+		<?php if($obj['is_chk']!=2 && $type==2){?>
+		<div class="fl">审核:</div>
+		<div class="fr">
+			<textarea name="remark" cols="70" rows="3" class="input_text_default mb_10" style="font-size:12px;line-height:200%;height:150px;" placeholder="备注"></textarea>
+			<div>
+			<input type="button" class="admin_submit shen_chk" _val="2" value="审核通过" />
+			<input type="button" class="admin_submit shen_chk" _val="3" value="审核不通过" />
+			<input type="hidden" name="is_chk" id="is_chk" value="" />
+			</div>
+		</div>
+		<?php }?>
+		<div class="fl">折扣规则一:</div>
+		<div class="fr">
+			<div style="color:#11a6d0;">根据成员馆认筹数量的多少变动认购单价</div>
+			<div>
+				{volist name="list" id="val"}
+				{php}if($val['cate']==1){{/php}
+				<div>认筹数量满：{$val['num']}件，单价：<font>{$val['price']}</font> 元</div>
+				{php}}{/php}
+				{/volist}
+			</div>
+		</div>
+		<div class="fl">折扣规则一:</div>
+		<div class="fr">
+			<div style="color:#11a6d0;">根据成员馆认筹总数量的多少变动认购价格的折扣比例</div>
+			<div>
+				{volist name="list" id="val"}
+				{php}if($val['cate']==2){{/php}
+				<div>认筹数量满：{$val['num']}件，折扣：<font>{$val['agio']}</font> 折</div>
+				{php}}{/php}
+				{/volist}
+			</div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	</form>
+</div>
+
+{include file="/common/main_footer"}

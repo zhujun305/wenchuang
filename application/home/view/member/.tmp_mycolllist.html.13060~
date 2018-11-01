@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>我的收藏-会员中心</title>
+{include file="/member/m_header"}
+<link type="text/css" rel="stylesheet" href="__STATIC__/webmember/css/style.css"/>
+<style>
+.boxlie{}
+.boxlie ul{}
+.boxlie ul li{float:left;padding:12px 20px;width:410px;height:122px;overflow:hidden;}
+.boxlie ul li .pic{float:left;margin-right:10px;}
+.boxlie ul li .info{height:85px;overflow:hidden;line-height:25px;}
+.boxlie ul li .info .tit{display:block;font-size:16px;height:30px;}
+.boxlie ul li .btn{float:left;border:1px solid #ccc;line-height:30px;margin-top:5px;padding:0px 10px;border-radius:3px;}
+</style>
+</head>
+
+<body>
+
+<!--头部开始-->
+{include file="/member/m_top"}
+<!-- 非头尾的内容 START -->
+<!--面包屑导航开始-->
+<div class="breadcrumb clearfix " >
+</div>
+<!--面包屑导航结束-->
+
+<div class="main clearfix" >
+{include file="/member/m_left"}
+	<div class="contents fr m20">
+		<div class="clearfix">
+			<div class="location">会员中心  > 我的收藏</div>
+			<div class="lm">
+				<a {php}if($cate==2){echo 'class="on"';}{/php} href="{:url('home/member/mycolllist','cate=2')}">素材</a>
+				<a {php}if($cate==3){echo 'class="on"';}{/php} href="{:url('home/member/mycolllist','cate=3')}">众包</a>
+				<a {php}if($cate==4){echo 'class="on"';}{/php} href="{:url('home/member/mycolllist','cate=4')}">众筹</a>
+				<a {php}if($cate==5){echo 'class="on"';}{/php} href="{:url('home/member/mycolllist','cate=5')}">商品</a>
+			</div>
+	    	<div class="border">
+    			<div class="boxlie">
+    				<ul>
+					{volist name="list" id="val"}
+    				<li>
+					<div class="pic"><a href="{$url}?id={$mlie[$val['otherid']]['id']}" target="_blank">
+					<img src="{php}echo getImgURL($mlie[$val['otherid']]['cover']);{/php}" width="122" height="122" /></a></div>
+					<div class="info">
+						<a class="tit" href="$mlie[$val['otherid']]['id']">{$mlie[$val['otherid']]['title']}</a>
+						{php}if($cate==2){{/php}
+						<div>【{$catelist[$mlie[$val['otherid']]['cate']]['cname']}】</div>
+						{php}}elseif($cate==3){{/php}
+						<div>【{$catelist[$mlie[$val['otherid']]['cate']]['title']}】</div>
+						{php}}elseif($cate==4){{/php}
+						<div>【{$catelist[$mlie[$val['otherid']]['cate']]['title']}】</div>
+						{php}}elseif($cate==5){{/php}
+						<div>【{$catelist[$mlie[$val['otherid']]['cate']]['title']}】</div>
+						{php}}{/php}
+						<div>收藏于：{$val['input_time']>0?date("Y-m-d",$val['input_time']):''}</div>
+					</div>
+					<a class="btn delcoll" href="javascript:;" _collid="{$val['id']}">取消收藏</a>
+					<div class="clear"></div>
+    				</li>
+					{/volist}
+    				</ul>
+    			</div>
+				<div class="clear"></div>
+				<div class="page">
+					{$list->render()}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- 非头尾的内容 END -->
+<script type="text/javascript">
+$(function(){
+	//取消收藏
+	$(".delcoll").click(function(){
+		var collid = $(this).attr("_collid");
+		if(collid>0){
+			if (confirm("确定不再收藏了吗？")) {
+				var url = "{:url('home/member/delmembercoll')}";
+				$.post(url,{id:collid},function(data){
+					location.reload();
+				},'json');
+			}
+		}
+	});
+});
+</script>
+
+{include file="/member/m_footer"}
+
+</body>
+</html>

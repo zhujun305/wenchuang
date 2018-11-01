@@ -34,6 +34,7 @@ class Sysadminuser extends Adminbase
 		$findObj = [];
 		$fields = 'name,truename,mobile';
 		$this->getFindObj($findObj, $find, $fields);
+		$this->assign("findObj", $findObj);
 		$list = adminuserModel::getList($findObj);
 		$this->assign("list", $list);
 		//角色列表
@@ -44,11 +45,6 @@ class Sysadminuser extends Adminbase
 		//管理员列表
 		$adminuserlist = readCacheFile("adminuserlist");
 		$this->assign('adminuserlist', $adminuserlist);
-		//空判断
-		$findObj['name'] = isset($findObj['name'])?$findObj['name']:'';
-		$findObj['truename'] = isset($findObj['truename'])?$findObj['truename']:'';
-		$findObj['mobile'] = isset($findObj['mobile'])?$findObj['mobile']:'';
-		$this->assign("findObj", $findObj);
 		return $this->fetch();
 	}
 	
@@ -115,6 +111,24 @@ class Sysadminuser extends Adminbase
      */
     public function unlock($id){
     	$rs = adminuserModel::upd_list($id, ['is_lock'=>1]);
+		$this->cacheAdminuser(); //刷新缓存
+		$this->redirect($this->sysadminuserList);
+    }
+	
+    /**
+     * 批量锁定
+     */
+    public function lockall($ids){
+    	$rs = adminuserModel::upd_list($ids, ['is_lock'=>2]);
+		$this->cacheAdminuser(); //刷新缓存
+		$this->redirect($this->sysadminuserList);
+    }
+    
+    /**
+     * 批量解锁
+     */
+    public function unlockall($ids){
+    	$rs = adminuserModel::upd_list($ids, ['is_lock'=>1]);
 		$this->cacheAdminuser(); //刷新缓存
 		$this->redirect($this->sysadminuserList);
     }

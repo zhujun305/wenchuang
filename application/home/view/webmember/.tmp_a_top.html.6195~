@@ -1,0 +1,177 @@
+<script>
+$(window).load(function() {
+	//统计
+	var url = "{:url('home/webmember/ajaxRscount','uid='.$userobj['uid'])}";
+	$.post(url,{uid:"{$userobj['uid']}"},function(data){
+		$(".ajaxlie0").html(data.a);
+		$(".ajaxlie1").html(data.b);
+		$(".ajaxlie2").html(data.c);
+		$(".ajaxlie3").html(data.d);
+		$(".ajaxlie4").html(data.e);
+	},'json');
+});
+$(function(){
+	var uid = "{$member['uid']}";
+	$(".coll_a").click(function(){
+		if(!(uid>0)){
+			if(confirm("关注此用户，请先登录。")){
+				location.href = "{:url('home/Index/login')}";
+			}
+		}else{
+			var collid = $(this).attr("_collid");
+			if(collid>0){
+			  if (confirm("确定不在关注此用户吗？")) {
+				var url = "{:url('home/member/delmembercoll')}";
+				$.post(url,{id:collid},function(data){
+					if(data>0){
+						$(".coll_a").removeClass("guan_zhu");
+						$(".coll_a").html("关注");
+						$(".coll_a").attr("_collid", ""); //修改属性
+					}
+				},'json');
+			  }
+			}else{
+				var url = "{:url('home/member/addmembercoll')}";
+				var cate = 1; //1会员2素材3众包4众筹5商品
+				$.post(url,{cate:cate,id:"{$userobj['uid']}"},function(data){
+					if(data>0){
+						$(".coll_a").addClass("guan_zhu");
+						$(".coll_a").html("已关注");
+						$(".coll_a").attr("_collid", data); //修改属性
+						alert("关注成功。");
+					}
+				},'json');
+			}
+		}
+	});
+});
+$(function(){
+	$("#send_msg").click(function(){
+		var is_open = 0;
+		if("{$member['uid']>0?0:1}"=="1"){
+			if(confirm("发送私信，请先登录用户。")){
+				location.href = "{:url('home/Index/login')}";
+			}
+		}else{
+			is_open = 1;
+		}
+		if(is_open == 1){
+			$("#content").val("");
+			var _suid = $(this).attr("_suid");
+			$("#crowd_pop .agree").attr("_suid",_suid);
+			$("#crowd_pop h3 font").html("给【{$userobj['nick_name']}】发私信");
+			$("#csid").val($(this).attr("_csid"));
+			$("#crowd_pop").show();
+		}
+	});
+	$("#crowd_pop h3 a").click(function(){
+		$("#crowd_pop").hide();
+	});
+	$("#crowd_pop .agree").click(function(){
+		var fuid = "{$member['uid']}";
+		var suid = "{$userobj['uid']}";
+		var content = $("#content").val();
+		var url = "{:url('home/webmember/uidsendmsg','uid='.$userobj['uid'])}";
+		$.post(url,{fuid:fuid,suid:suid,content:content},function(data){
+			if(data){
+				alert("私信发送成功。");
+			}else{
+				alert("私信发送失败。");
+			}
+			$("#crowd_pop").hide();
+		},'json');
+	});
+});
+</script>
+<div class="top">
+	<div class="w">
+		<h1 class="logo">
+			<a href="{:url('/home/Index/index')}">
+			<img src="{$Think.config.web_home}/images/logo2.png" alt="全国图书馆文创产品开发联盟" /></a>
+		</h1>
+		<div class="nav">
+			<a href="{:url('home/Index/index')}" title="首页">首页</a>
+			<a href="{:url('home/Material/index')}" title="文创素材">文创素材</a>
+			<a href="{:url('home/Crowdsourcing/index')}" title="文创设计">众包设计</a>
+			<a href="{:url('home/Crowdfunding/index')}" title="文创众筹">产品众筹</a>
+			<a href="{:url('home/Product/index')}" title="文创产品">产品展示</a>
+			<a href="{:url('home/About/index')}" title="联系我们">联系我们</a>
+		</div>
+		<div class="search">
+			<input type="text" placeholder="素材关键字" />
+			<input type="submit" value="" />
+		</div>
+	</div>
+</div>
+
+<div class="banner{php}if($userauth['cate']==4){echo '1';}{/php}">
+	<div class="w">
+		<div class="works">
+			<div><img src="{php}echo getImgURL($userobj['imgurl'],'memberlogo','');{/php}" width="125" height="125" /><br/>{$member['nick_name']}</div>
+			{php}if($userauth['cate']==2 || $userauth['cate']==3){{/php}
+			<dl>
+				作品 <span class="ajaxlie1">0</span>
+				项目 <span class="ajaxlie2">0</span>
+				关注 <span class="ajaxlie0">0</span>
+			</dl>
+			{php}}elseif($userauth['cate']==4){{/php}
+			<dl>
+				素材 <span class="ajaxlie1">0</span>
+				商品 <span class="ajaxlie2">0</span>
+				众包 <span class="ajaxlie3">0</span>
+				众筹 <span class="ajaxlie4">0</span>
+				关注 <span class="ajaxlie0">0</span>
+			</dl>
+			{php}}{/php}
+			<p>
+				{php}if($collid>0){{/php}
+				<a href="javascript:void(0);" class="coll_a guan_zhu" _collid="{$collid}">已关注</a>
+				{php}}else{{/php}
+				<a href="javascript:void(0);" class="coll_a" _collid="">关注</a>
+				{php}}{/php}
+				<a href="javascript:void(0);" id="send_msg">私信</a>
+			</p>
+		</div>
+	</div>
+</div>
+<div class="crowd_pop" id="crowd_pop">
+	<h3><font>发私信</font><a href="javascript:void(0);">关闭</a></h3>
+	<div class="clearfix" style="height:10px;"></div>
+	<div>
+		<input type="hidden" id="csid" />
+		<textarea id="content" placeholder="私信不得超过100个字"></textarea>
+	</div>
+	<a class="agree" href="javascript:void(0);">确认提交</a>
+</div>
+
+<div class="location">
+	<div class="w">
+		<div class="location_l">
+			<a href="{:url('home/webmember/index','uid='.$userobj['uid'])}" <?php if($method=='index'){echo 'class="hover"';}?> title="首页">首页</a>
+			{php}if($userauth['cate']==2 || $userauth['cate']==3){{/php}
+            <a href="{:url('home/webmember/sjcsworks','uid='.$userobj['uid'])}" <?php if($method=='sjcsworks' || $method=='sjcsworksdetail'){echo 'class="hover"';}?> title="作品">作品</a>
+            <a href="{:url('home/webmember/sjcsbao','uid='.$userobj['uid'])}" <?php if($method=='sjcsbao'){echo 'class="hover"';}?> title="项目">项目</a>
+			{php}}elseif($userauth['cate']==4){{/php}
+            <a href="{:url('home/webmember/lmmaterial','uid='.$userobj['uid'])}" <?php if($method=='lmmaterial'){echo 'class="hover"';}?> title="素材">素材</a>
+            <a href="{:url('home/webmember/lmgoods','uid='.$userobj['uid'])}" <?php if($method=='lmgoods'){echo 'class="hover"';}?> title="商品">商品</a>
+            <a href="{:url('home/webmember/lmcsourcing','uid='.$userobj['uid'])}" <?php if($method=='lmcsourcing'){echo 'class="hover"';}?> title="众包">众包</a>
+            <a href="{:url('home/webmember/lmcfunding','uid='.$userobj['uid'])}" <?php if($method=='lmcfunding'){echo 'class="hover"';}?> title="众筹">众筹</a>
+            <a href="{:url('home/webmember/lmtrends','uid='.$userobj['uid'])}" <?php if($method=='lmtrends'){echo 'class="hover"';}?> title="动态">动态</a>
+			{php}}{/php}
+		</div>
+		<div class="location_r">
+			<ul>
+				<li class="home"><a href="{:url('/home/Index/index')}"><img src="__STATIC__/webnlc/images/home.png" /></a></li>
+      			{if condition="!($userobj['uid']>0)"}
+				<li class="xl">
+				    <a href="javascript:void(0);"></a>
+					<div class="menu">
+						<a class="reg" onClick="location='{:url('home/index/register')}'"><p></p>注册</a>
+						<a class="login" onClick="location='{:url('home/index/login')}'"><p></p>登录</a>
+					</div>
+				</li>
+				{/if}
+			</ul>
+		</div>
+	</div>
+</div>

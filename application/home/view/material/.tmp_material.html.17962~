@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>文创素材</title>
+{include file="/common/c_header"}
+<style>
+.ny_ban2,.ny_ban2 .bd li,.ny_ban2 .bd li a{height:380px;}
+.material_tit a{padding:0 15px;}
+.material_tit a:hover{border-bottom:2px solid #326fc1;color:#3d3d3d;}
+.material ul li{height:270px;}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+{include file="/common/c_top"}
+
+  <div class="banner ny_ban2">
+  	{php}echo $ads;{/php}
+  </div>
+  <div class="w Projects clear">
+    <div class="tit1">
+      <h2>专题IP</h2>
+      <p>Recommended topics</p>
+    </div>
+    <div class="ProjectScroll">
+      <ul>
+      	{volist name="topiclist" id="val"}
+        <li><a onClick="location='{:url('home/Material/matlist','cate=&topic='.$val.id)}'" href="javascript:void(0);">
+        	<img src="<?php echo getImgURL($val['cover']);?>" width="230" height="170" /></a></li>
+		{/volist}
+      </ul>
+      <a class="prev"></a>
+      <a class="next"></a>
+    </div>
+    <div class="pro_s_more clear"><a onClick="location='{:url('home/Material/topiclist')}'" href="javascript:void(0);">更多专题---></a></div>
+  </div>
+  <div class="material_pic clear" id="catemap">
+    <div class="w material_tit clear">
+      <em>
+      	<a onClick="location='{:url('home/Material/matlist')}'" href="javascript:void(0);">全部素材</a>
+      	{volist name="catelist" id="val"}
+		<a onClick="location='{:url('home/Material/matlist','cate='.$val.id)}'" href="javascript:void(0);" <?php echo $cate==$val['id']?'class="cur"':''?>>{$val.cname}</a>
+		{/volist}
+	  </em>
+    </div>
+    <div class="material clear">
+      <ul>
+      	{volist name="list" id="val"}
+        <li>
+          <div class="pic"><a onClick="location='{:url('home/Material/detail','id='.$val.id)}'" href="javascript:void(0);">
+          	<img src="<?php echo getImgURL($val['cover']);?>" width="270" height="200" /></a></div>
+          <div class="txts">
+            <h3>{$val.title}</h3>
+            <p>{$catearr[$val.cate]['cname']}</p>
+          </div>
+        </li>
+		{/volist}
+      </ul>
+	  <?php if(!empty($list)){?>
+      <div class="mem_more clear" _pageID="{$pageID}"><a href="javascript:void(0);">查看更多</a></div>
+	  <?php }?>
+    </div>
+  </div>
+
+{include file="/common/c_footer"}
+</div>
+<script type="text/javascript">
+$(function(){
+	$(".mem_more").click(function(){
+		var pageID = parseInt($(this).attr("_pageID"))+1;
+		$.post("{:url('home/Material/getajaxlist')}",{page:pageID},function(data){
+			if(!$.isEmptyObject(data)){
+				$.each(data,function(key,item){
+					$phtml = '<li>'+
+			          '<div class="pic"><a onClick="location=\''+item.url+'\'" href="javascript:void(0);">'+
+			          	'<img src="'+item.imgsrc+'" width="270" height="200" /></a></div>'+
+			          '<div class="txts">'+
+			            '<h3>'+item.title+'</h3>'+
+			            '<p>'+item.cname+'</p>'+
+			          '</div>'+
+			        '</li>';
+					$(".material ul").append($phtml);
+				});
+				$(".mem_more").attr("_pageID",pageID); //页码重新赋值
+			}else{
+				$(".mem_more").hide();
+				$(".mem_more").after('<div style="text-align:center;">没有更多了</div>');
+			}
+		},'json');
+	});
+});
+</script>
+<script type="text/javascript">
+jQuery(".banner").slide({titCell:".hd em",mainCell:".bd ul",effect:"fold",interTime:6000,autoPlay:true});
+jQuery(".ProjectScroll").slide({ mainCell:"ul",autoPlay:true,effect:"leftLoop", vis:4, scroll:1, autoPage:true});
+</script>
+
+</body>
+</html>

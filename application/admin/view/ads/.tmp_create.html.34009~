@@ -1,0 +1,211 @@
+{include file="/common/main_top"}
+<link rel="stylesheet" type="text/css" href="__STATIC__/layui/css/layui.css">
+<script src="__STATIC__/layui/layui.js"></script>
+<style>
+#upimg_more{width:850px;overflow:hidden;margin-top:20px;}
+.imglie{float:left;width:132px;height:255px;overflow:hidden;text-align:center;
+margin-right:35px;margin-bottom:20px;}
+.imglie img{width:132px;height:132px;}
+.imglie span{display:block;}
+.imglie .namearr,.imglie .urlarr{
+width:128px;height:24px;margin:3px 0px;
+}
+.imglie .mforward{background-color:#999;}
+.imglie button{display:inline-block;color:#fff;white-space:nowrap;text-align:center;margin:6px 8px 0px;
+border:none;border-radius:2px;cursor:pointer;height:22px;line-height:22px;padding:0 5px;font-size:12px;}
+.imglie button:hover{opacity:.8;filter:alpha(opacity=80);color:#fff;}
+.imglie button.demo-reload{background-color:#009688;display:none;}
+.imglie button.demo-delete{background-color:#FF5722;}
+.cho_btn{background-color:#1E9FFF;display:inline-block;height:38px;line-height:38px;padding:0 18px;color:#fff;
+white-space:nowrap;text-align:center;font-size:14px;border:none;border-radius:2px;cursor:pointer;float:left;}
+.cho_btn:hover{opacity:.8;filter:alpha(opacity=80);color:#fff;}
+.cho_btn:active{opacity:1;filter:alpha(opacity=100);}
+</style>
+<script>
+$(function(){
+	//全选
+	$('.admin_submit').click(function(){
+		if($("#code").val() < 1){
+			alert("请选择广告位。");
+			return false;
+		}
+		if($("#title").val().length < 1){
+			alert("广告名称不能为空。");
+			$("#title").focus();
+			return false;
+		}
+		if($("#start_time").val().length < 1){
+			alert("请选择广告开始时间。");
+			$("#start_time").focus();
+			return false;
+		}
+		if ($("#end_time").val() != '') {
+			if($("#end_time").val() <= $("#start_time").val()){
+				alert("广告结束时间必须大于开始时间。");
+				$("#end_time").focus();
+				return false;
+			}
+		}
+		if($("#width").val().length < 1){
+			alert("请输入广告宽度。");
+			$("#width").focus();
+			return false;
+		}
+		if($("#height").val().length < 1){
+			alert("请输入广告高度。");
+			$("#height").focus();
+			return false;
+		}
+		$("#addform").submit();
+	});
+});
+</script>
+<div class="allpagetop">后台管理中心<strong>/</strong>广告管理<strong>/</strong>新增</div>
+<div class="mains">
+	<div class="h1tit">
+		<div class="h1">广告管理</div>
+		<div class="topnav">
+			<a href="{:url('/Admin/ads/browse')}">广告列表</a>
+			<a href="{:url('/Admin/ads/create')}" class="select">添加广告</a>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="toptit">新增广告</div>
+	<form id="addform" method="post" action="">
+	<div class="form_main width150">
+		<div class="fl"><i>* </i>广告位:</div>
+		<div class="fr">
+			<select name="code" id="code" class="gg_select w200">
+				<option value="" selected="selected">选择类型</option>
+				{volist name="adspos_arr" id="val"}
+				<option value="{$key}">{$val}</option>
+				{/volist}
+			</select>
+		</div>
+		<div class="fl"><i>* </i>名称:</div>
+		<div class="fr">
+			<div><input type="text" name="title" id="title" value="" maxlength="50" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl"><i>* </i>开始时间:</div>
+		<div class="fr">
+			<input type="text" name="start_time" id="start_time" value="" class="input_text_default middle" onClick="new Calendar().show(this);" readonly="readonly" />
+		</div>
+		<div class="fl">结束时间:</div>
+		<div class="fr">
+			<input type="text" name="end_time" id="end_time" value="" class="input_text_default middle" onClick="new Calendar().show(this);" readonly="readonly" />
+			<span class="f_dakgray"> * 不填则为长期有效</span>
+		</div>
+		<div class="fl"><i>* </i>类型:</div>
+		<div class="fr">
+			<div class="lh_35">
+			<label>
+			<input type="radio" name="type" value="1" checked="checked" /> 
+			<span>单张图片广告（宽度百分比）</span>
+			</label>
+			<label>
+			<input type="radio" name="type" value="2" /> 
+			<span>图片Flash广告（像素宽高）</span>
+			</label>
+			</div>
+		</div>
+		<div class="fl">广告图批量上传:</div>
+		<div class="fr">
+			<div>
+			<a class="cho_btn" id="moreimg">选择图片</a>
+			</div>
+			<div class="clear"></div>
+			<div id="upimg_more">
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="fl"><i>* </i>广告宽度:</div>
+		<div class="fr">
+			<div><input type="text" name="width" id="width" value="" class="input_text_default small" /> px</div>
+		</div>
+		<div class="fl"><i>* </i>广告高度:</div>
+		<div class="fr">
+			<div><input type="text" name="height" id="height" value="" class="input_text_default small" /> px</div>
+		</div>
+		<div class="fl">排序:</div>
+		<div class="fr">
+			<div><input type="text" name="sort" value="0" class="input_text_default small" /></div>
+		</div>
+		<div class="fl"></div>
+		<div class="fr">
+			<input type="submit" class="admin_submit" value="保 存" />
+		</div>
+		<div class="clear"></div>
+	</div>
+	</form>
+</div>
+
+{include file="/common/main_footer"}
+<script>
+$(function(){
+	$(".mforward").live('click',function(){
+		var sprev = $(this).parent('.imglie').prev();
+		$(this).parent('.imglie').insertBefore(sprev);
+	});
+});
+layui.use('upload', function(){
+  var $ = layui.jquery,upload = layui.upload;
+  //多文件列表示例
+  var demoListView = $('#upimg_more'),uploadListIns = upload.render({
+	elem: '#moreimg'
+    ,multiple: true //允许多文件
+	,auto: true //不自动上传
+    ,url: "{:url('home/Aajax/ajaxupfiles')}"
+	,data: {type:'img'} //扩展名验证
+    ,exts: 'jpg|jpeg|gif|png|bmp' //可上传文件后缀
+    ,acceptMime: 'image/*' //只允许上传图片
+	,number: 10 //限制一次最多上传数量
+	,choose: function(obj){
+      var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
+      //读取本地文件
+      obj.preview(function(index, file, result){
+	  	var html = $(['<div class="imglie" id="upload-'+ index +'">'
+					,'<img src="'+result+'" />'
+					,'<input type="hidden" name="picpath[]" class="picarr" value="" />'
+					,'<input type="text" name="picname[]" class="namearr" value="" placeholder="图片描述" />'
+					,'<input type="text" name="url[]" class="urlarr" value="" placeholder="图片跳转url地址" />'
+					,'<span>等待上传</span>'
+					,'<button type="button" class="mforward">前移</button>'
+					,'<button type="button" class="demo-reload">重传</button>'
+					,'<button type="button" class="demo-delete">删除</button>'
+				,'</div>'].join(''));
+        //单个重传
+        html.find('.demo-reload').on('click', function(){
+          obj.upload(index, file);
+        });
+        //删除
+        html.find('.demo-delete').on('click', function(){
+          delete files[index]; //删除对应的文件
+          html.remove();
+          uploadListIns.config.elem.next()[0].value = ''; //清空 input file 值，以免删除后出现同名文件不可选
+        });
+        demoListView.append(html); //元素插入到div
+      });
+	}
+	,done: function(res, index, upload){
+      if(res.code == 0){ //上传成功
+        var tr = demoListView.find('#upload-'+ index);
+        tr.find("span").html('上传成功').css({"color":"#5FB878"});
+        tr.find(".picarr").val(res.data.src);
+        return delete this.files[index]; //删除文件队列已经上传成功的文件
+      }
+      this.error(index, upload);
+	}
+	,allDone: function(obj){ //当文件全部被提交后，才触发
+	  console.log(obj.total); //得到总文件数
+	  console.log(obj.successful); //请求成功的文件数
+	  console.log(obj.aborted); //请求失败的文件数
+	}
+	,error: function(index, upload){
+      var tr = demoListView.find('#upload-'+ index);
+      tr.find("span").html('上传失败').css({"color":"#FF5722"});
+      tr.find(".demo-reload").show(); //显示重传
+	}
+  });
+});
+</script>

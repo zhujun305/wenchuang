@@ -1,0 +1,325 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>{$obj['title']}-作品</title>
+{include file="/common/c_header"}
+<link type="text/css" rel="stylesheet" href="__STATIC__/webhome/css/css_new.css" />
+<link type="text/css" rel="stylesheet" href="__STATIC__/webhome/css/work.min.css" />
+<style>
+.crowd_pop{position:fixed;top:50%;left:50%;width:450px;height:350px;padding:30px 30px 0 30px;display:none;
+margin-top:-205px;margin-left:-250px;background:#fff;border:1px solid #b5b5b5;z-index:99;box-shadow:5px 5px 15px rgba(0,0,0,.17);
+-moz-box-shadow:5px 5px 15px rgba(0,0,0,.17);-webkit-box-shadow:5px 5px 15px rgba(0,0,0,.17);}
+.crowd_pop h3{display:block;height:30px;font-size:16px;}
+.crowd_pop h3 font{float:left;}
+.crowd_pop h3 a{float:right;}
+.crowd_pop textarea{width:440px;height:220px;padding:5px;}
+.crowd_pop .agree{color:#fff;cursor:pointer;background:#326fc2;font-size:16px;border-radius:3px;
+border:1px solid #b5b5b5;width:110px;text-align:center;height:35px;line-height:35px;display:block;margin:10px auto 0 auto;}
+.news_kunag_9 .tit_right .coll_a{display:block;float:left;width:88px;height:35px;border:1px solid #c9c9c9;
+border-radius:5px;text-align:center;line-height:35px;font-size:15px;}
+.gz_lv{background-color:#31e2ea;}
+.gz_hui{background-color:#f1f1f1;}
+.ping_9{min-width:1170px;max-width:1170px;min-height:100px;}
+.csw_dz{cursor:pointer;}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+{include file="/common/c_top"}
+
+<div class="news_bg_9">
+	<div class="w">
+		<div class="news_kunag_9">
+		<div class="tit">
+			<div class="tit_left">
+				<h3>{$obj['title']}</h3>
+				<p>发布时间：{$obj['input_time']>0?date("Y-m-d",$obj['input_time']):''}</p>
+				<dl>{$catelist[$obj['cate']]['title']}</dl>
+				<div class="view">
+					<?php $pv=$obj['pv']; 
+					if(strlen($obj['pv'])>4){
+						$pv=round(($obj['pv']/10000),1)."万";
+					}?>
+					<span class="s1">{$pv}</span>
+					<span class="s2">{$obj['pingnum']}</span>
+					<span class="s3">{$obj['likes']}</span>
+				</div>
+			</div>
+			<div class="tit_right">
+				<div class="logo"><img src="{php}echo getImgURL($wuser['imgurl'],'memberlogo');{/php}" width="85" height="85" /></div>
+				<div class="jianjie">
+					<h3>{$wuser['nick_name']}</h3>
+					<p>平台认证设计{$wuser['cate']==3?'团队':'师'}</p>
+					{php}if($collid>0){{/php}
+					<a class="coll_a gz_hui" href="javascript:void(0);" _collid="{$collid}">已关注</a>
+					{php}}else{{/php}
+					<a class="coll_a gz_lv" href="javascript:void(0);" _collid="">关注</a>
+					{php}}{/php}
+					<a class="a2" href="javascript:void(0);" id="send_msg">私信</a>
+				</div>
+			</div>
+		</div>
+		<div class="clear"></div>
+		
+		<div class="news_content_9">
+			<div style="font-size:16px;">{$obj['desc']}</div>
+			{volist name="imglist" id="val"}
+			<div class="reveal-work-wrap" data-index="{$key}">
+			<img src="<?php echo getImgURL($val['pic']);?>" data-src="<?php echo getImgURL($val['pic']);?>" data-width="1600" data-height="800" class="lazy-img-class" style="max-width:980px;" />
+			</div>
+			{/volist}
+			<div class="zhan_9 dz_likes">
+				<a href="javascript:void(0);"><i>{$obj['likes']}</i></a>
+			</div>
+		</div>
+		</div>
+	</div>
+	
+	<div class="w" id="mapdz">
+		<textarea class="ping_9 csw_dz_cont"></textarea>
+		<div class="btn_9 csw_dz" _pid="0"><a>点评</a></div>
+	</div>
+	<div class="w">
+		<div class="news_kunag_9">
+			<div class="ping_list">
+				<ul>
+				{volist name="dplist" id="val"}
+				{php}if($val['pid']==0){{/php}
+				<li>
+					<div style="position:relative;">
+					<div class="img">
+						<img src="{php}echo getImgURL($mlist[$val['uid']]['imgurl'],'memberlogo');{/php}" width="53" height="53" />
+					</div>
+					<div class="bz">
+						<h5><span>{$val['input_time']>0?date("Y-m-d H:i:s",$val['input_time']):''}</span>{$mlist[$val['uid']]['nick_name']} </h5>
+						<p>{$val['content']}</p>
+					</div>
+					{php}if($member['uid']!=$val['uid']){{/php}
+					<a class="huifu" href="javascript:void(0)" style="bottom:5px;">回复</a>
+					<div class="clear"></div>
+					<div class="message_9">
+						<textarea class="csw_dz_cont"></textarea>
+						<a class="tj_9 csw_dz" _pid="{$val['id']}">提交</a>
+					</div>
+					</div>
+					{php}}{/php}
+					{volist name="dplist" id="vvv"}
+					{php}if($vvv['pid']==$val['id']){{/php}
+					<div style="position:relative;">
+					<div class="img2">
+						<img src="{php}echo getImgURL($mlist[$vvv['uid']]['imgurl'],'memberlogo');{/php}" width="53" height="53" />
+					</div>
+					<div class="bz2">
+						<h5><span>{$vvv['input_time']>0?date("Y-m-d H:i:s",$vvv['input_time']):''}</span>{$mlist[$vvv['uid']]['nick_name']} </h5>
+						<p>{$vvv['content']}</p>
+					</div>
+					{php}if($member['uid']!=$vvv['uid']){{/php}
+					<a class="huifu" href="javascript:void(0)" style="bottom:5px;">回复</a>
+					<div class="clear"></div>
+					<div class="message_9">
+						<textarea class="csw_dz_cont"></textarea>
+						<a class="tj_9 csw_dz" _pid="{$val['id']}">提交</a>
+					</div>
+					</div>
+					{php}}{/php}
+					{php}}{/php}
+					{/volist}
+				</li>
+				{php}}{/php}
+				{/volist}
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+{include file="/common/c_footer"}
+</div>
+<div class="crowd_pop" id="crowd_pop">
+	<h3><font>发私信</font><a href="javascript:void(0);">关闭</a></h3>
+	<div class="clearfix" style="height:10px;"></div>
+	<div>
+		<input type="hidden" id="csid" />
+		<textarea id="content" placeholder="私信不得超过100个字"></textarea>
+	</div>
+	<a class="agree" href="javascript:void(0);">确认提交</a>
+</div>
+<script>
+$(function(){
+	$(".dz_likes").click(function(){
+		var dznum = parseInt($(this).find("a i").html())+1;
+		var url = "{:url('home/webmember/dzlikes','uid='.$userobj['uid'])}";
+		$.post(url,{id:"{$obj['id']}"},function(data){
+			if(data.rs>0){
+				$(this).find("a i").html(dznum);
+			}
+			alert(data.msg);
+		},'json');
+	});
+});
+$(function(){
+	var uid = "{$member['uid']}";
+	$(".coll_a").click(function(){
+		if(!(uid>0)){
+			if(confirm("关注此用户，请先登录。")){
+				location.href = "{:url('home/Index/login')}";
+			}
+		}else{
+			var collid = $(this).attr("_collid");
+			if(collid>0){
+			  if (confirm("确定不在关注此用户吗？")) {
+				var url = "{:url('home/member/delmembercoll')}";
+				$.post(url,{id:collid},function(data){
+					if(data>0){
+						$(".coll_a").removeClass("gz_hui").addClass("gz_lv");
+						$(".coll_a").html("关注");
+						$(".coll_a").attr("_collid", ""); //修改属性
+					}
+				},'json');
+			  }
+			}else{
+				var url = "{:url('home/member/addmembercoll')}";
+				var cate = 1; //1会员2素材3众包4众筹5商品
+				$.post(url,{cate:cate,id:"{$userobj['uid']}"},function(data){
+					if(data>0){
+						$(".coll_a").removeClass("gz_lv").addClass("gz_hui");
+						$(".coll_a").html("已关注");
+						$(".coll_a").attr("_collid", data); //修改属性
+						alert("关注成功。");
+					}
+				},'json');
+			}
+		}
+	});
+});
+$(function(){
+	$("#send_msg").click(function(){
+		var is_open = 0;
+		if("{$member['uid']>0?0:1}"=="1"){
+			if(confirm("发送私信，请先登录用户。")){
+				location.href = "{:url('home/Index/login')}";
+			}
+		}else{
+			is_open = 1;
+		}
+		if(is_open == 1){
+			$("#content").val("");
+			var _suid = $(this).attr("_suid");
+			$("#crowd_pop .agree").attr("_suid",_suid);
+			$("#crowd_pop h3 font").html("给【{$userobj['nick_name']}】发私信");
+			$("#csid").val($(this).attr("_csid"));
+			$("#crowd_pop").show();
+		}
+	});
+	$("#crowd_pop h3 a").click(function(){
+		$("#crowd_pop").hide();
+	});
+	$("#crowd_pop .agree").click(function(){
+		var fuid = "{$member['uid']}";
+		var suid = "{$userobj['uid']}";
+		var content = $("#content").val();
+		var url = "{:url('home/webmember/uidsendmsg','uid='.$userobj['uid'])}";
+		$.post(url,{fuid:fuid,suid:suid,content:content},function(data){
+			if(data){
+				alert("私信发送成功。");
+			}else{
+				alert("私信发送失败。");
+			}
+			$("#crowd_pop").hide();
+		},'json');
+	});
+});
+</script>
+<script>
+$(function(){
+	$(".ping_list li .huifu").each(function(index){
+		$(this).click(function(){
+			if(!("{$member['uid']}">0)){
+				if(confirm("回复，请先登录用户。")){
+					location.href = "{:url('home/Index/login')}";
+				}
+			}else{
+				$('.message_9').css('display','none');
+				$(".message_9:eq("+index+")").css('display','block');
+			}
+		});
+	});
+	$(".csw_dz").click(function(){
+		if(!("{$member['uid']}">0)){
+			if(confirm("点评作品，请先登录用户。")){
+				location.href = "{:url('home/Index/login')}";
+			}
+		}else{
+			var id = "{$obj['id']}";
+			var uid = "{$member['uid']}";
+			var pid = $(this).attr("_pid");
+			var content = $(this).prev(".csw_dz_cont").val();
+			var url = "{:url('home/webmember/csworksping','uid='.$userobj['uid'])}";
+			if(content==''){
+				alert("请输入点评内容。");
+				return false;
+			}
+			$.post(url,{id:id,uid:uid,pid:pid,content:content},function(data){
+				alert(data.msg);
+				location.href = "{:url('home/webmember/sjcsworksdetail','uid='.$userobj['uid'].'&id='.$obj['id'])}";
+			},'json');
+		}
+	});
+})
+</script>
+<!-- 查看大图 -->
+<!-- 弹层 -->
+<div class="Elastic_layer work-project-bigpic-layer" style="display:none;">
+    <div class="layerBannar">
+        <input type="hidden" name="" data-id="0" class="works" />
+        <div id="lightbox-img-wrap" class="bannarBox swiper-container swiper-container-horizontal swiper-container-fade">
+            <ul class="swiper-wrapper" style="transition-duration:0ms;">
+			{volist name="imglist" id="val"}
+			<li class="swiper-slide lightbox-content zoomable" data-index="{$key}" style="width:1600px;opacity:0;transform:translate3d(0px, 0px, 0px);transition-duration:0ms;">
+			<div class="light-slide-content">
+			<img src="<?php echo getImgURL($val['pic']);?>" data-title="点击查看原图" data-width="1600" data-height="800" class="swiper-lazy swiper-lazy-loaded" />
+			</div>
+			</li>
+			{/volist}
+            </ul>
+            <div>
+            </div>
+            <div class="swiper-prev-wrap" style="opacity:1;z-index:11;">
+                <a href="javascript:;" class="leftaw swiper-button-prev" style="display:none;"></a>
+            </div>
+            <div class="swiper-next-wrap" style="opacity:1;z-index:11;">
+                <a href="javascript:;" class="rightaw swiper-button-next" style="display:none;"></a>
+            </div>
+            <a href="javascript:;" class="closebtn js-big-pic-close" style="display:none;opacity:1;z-index:11;"></a>
+            <div class="newcon" style="display:none;opacity:1;z-index:11;">
+                <p>
+                    <span id="detail-recommend-bigImage" class="zan normal" z-st="recommend_1">
+                        <i></i>
+                        <span class="recommend-number"></span>
+                    </span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+gogoupDomain = '';
+hellorfDomain = 'hellorf.com';
+passportDomain = '';
+staticDomain = '';
+zMyDomain = '';
+zMainDomain = '';
+zRootDomain = '';
+oldRootDomain = '';
+appId = '1006';
+zUploadDomain = '';
+zProtocol = 'https://';
+logDomain = '';
+</script>
+<script type="text/javascript" src="__STATIC__/webhome/js/messagesWeb.js"></script>
+<script type="text/javascript" src="__STATIC__/webhome/js/libs.min.js"></script>
+<script type="text/javascript" src="__STATIC__/webhome/js/work.min.js"></script>
+
+</body>
+</html>

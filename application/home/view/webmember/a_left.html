@@ -1,0 +1,23 @@
+
+<div class="jb_left ">
+	<div class="l_logo">
+	<img src="{php}echo getImgURL($userobj['imgurl'],'memberlogo','');{/php}" width="200" height="200" />
+	<p>
+		<a href="javascript:void(0);"><img src="__STATIC__/webnlc/images/s1.png" /></a>
+		<a href="javascript:void(0);"><img src="__STATIC__/webnlc/images/s2.png" /></a>
+		<a href="javascript:void(0);"><img src="__STATIC__/webnlc/images/s3.png" /></a>
+	</p>
+	</div>
+	<div class="jbxx">
+		<h3>基本信息</h3>
+		<div class="con">
+		<div>名称：{$userobj['nick_name']}</div>
+		<div>单位：<?php if($userauth['cate']==2){echo $userauth['work_unit'];}else{echo $userauth['company'];}?></div>
+		<div>电话：{$userauth['a_mobile']}</div>
+		<div>地址：{$userauth['a_address']}</div>
+		<div>邮箱：{$userauth['a_email']}</div>
+		<div>签名：{$userobj['sign']}</div>
+		<p></p>
+		</div>
+	</div>
+</div>

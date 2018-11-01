@@ -1,0 +1,52 @@
+
+<div class="header clear">
+    <div class="htop">
+      <div class="w">
+      	<em>
+      	{if condition="($member['uid']>0)"}
+      	<a class="a_login" onClick="location='{:url('home/Member/index')}'" href="javascript:void(0);">{$member['nick_name']} </a>
+	    <a onClick="location='{:url('home/Index/logout')}'" href="javascript:void(0);">退出</a>
+		{else/}
+      	<a class="a_login" onClick="location='{:url('home/Index/login')}'" href="javascript:void(0);">亲，请登录 </a>
+	    <a onClick="location='{:url('home/Index/register')}'" href="javascript:void(0);">免费注册</a>
+		{/if}
+	    </em>
+	    <font>全国图书馆文化创意产品开发一体化平台</font><i>010-88545360</i>
+	    <a class="app_down" href="javascript:;">APP下载</a>
+	  </div>
+    </div>
+    <div class="head">
+      <div class="logo left">
+      	<a onClick="location='{:url('/home/Index/index')}'" href="javascript:void(0);">
+      		<img src="{$Think.config.web_home}/images/logo.png" /></a>
+	  </div>
+      <ul class="nav left">
+        <li {if condition="($controller=='Index')"}class="cur"{/if}>
+        	<a href="{:url('home/Index/index')}">首页</a></li>
+        <li {if condition="($controller=='Material')"}class="cur"{/if}>
+        	<a href="{:url('home/Material/index')}">素材</a></li>
+        <li {if condition="($controller=='Crowdsourcing')"}class="cur"{/if}>
+        	<a href="{:url('home/Crowdsourcing/index')}">众包</a></li>
+        <li {if condition="($controller=='Crowdfunding')"}class="cur"{/if}>
+        	<a href="{:url('home/Crowdfunding/index')}">众筹</a></li>
+        <li {if condition="($controller=='Shop')"}class="cur"{/if}>
+        	<a href="{:url('home/Shop/index')}">产品<img class="hot" src="{$Think.config.web_home}/images/hot.png" /></a></li>
+        <li {if condition="($controller=='About')"}class="cur"{/if}>
+        	<a href="{:url('home/About/index')}">关于</a></li>
+      </ul>
+      <div class="n_search">
+		<input type="text" id="seatxt" class="n_s_intxt" />
+		<input type="button" id="seaform" class="s_inbut right" />
+      </div>   
+      <div class="clear0"></div>
+    </div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("#seaform").click(function(){
+		var seatxt = $("#seatxt").val();
+		var url = "{:url('home/Material/matlist')}?cate=&topic=&type=&title="+seatxt+"";
+		location.href = url;
+	});
+});
+</script>

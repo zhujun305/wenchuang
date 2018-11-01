@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>众包设计</title>
+{include file="/common/c_header"}
+<style>
+.sort1 dd p a.on{background-color:#ccc;}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+{include file="/common/c_top"}
+
+  <div class="unionbg padtop clear">
+    <div class="crowdsource_class clear">
+      <div class="crowdsource_class_t">
+      	<a href="{:url('home/crowdsourcing/index')}" class="cur">需求</a>
+		<a href="{:url('home/crowdsourcing/teamer')}">团队</a>
+		<a href="{:url('home/crowdsourcing/caselist')}">案例</a>
+	  </div>
+      <dl>
+        <dt>分类</dt>
+        <dd <?php if(!($cate>0)){echo 'class="cur"';}?>>
+        	<a href="{:url('home/crowdsourcing/index')}">不限</a></dd>
+		{volist name="catelist" id="val"}
+        <dd <?php if($cate==$val['id']){echo 'class="cur"';}?>>
+        	<a href="{:url('home/crowdsourcing/index','cate='.$val.id)}">{$val.title}</a></dd>
+		{/volist}
+        <div class="clear0"></div>
+      </dl>
+      <dl class="sort1">
+        <dt>排序</dt>
+        <dd {php}if(in_array($order,[1,2])){echo 'class="cur"';}{/php}>
+        	<em><a href="javascript:;">{php}if($order==1){echo '最新发布';}elseif($order==2){echo '最早发布';}else{echo '发布时间';}{/php}<i></i></a></em>
+			<p>
+			<a {$order==1?'class="on"':''} href="{:url('home/crowdsourcing/index','cate='.$cate.'&order=1')}">最新发布</a>
+			<a {$order==2?'class="on"':''} href="{:url('home/crowdsourcing/index','cate='.$cate.'&order=2')}">最早发布</a>
+			</p>
+		</dd>
+        <dd {php}if(in_array($order,[3,4])){echo 'class="cur"';}{/php}>
+        	<em><a href="javascript:;">{php}if($order==3){echo '截稿时间最新';}elseif($order==4){echo '截稿时间倒序';}else{echo '截稿时间';}{/php}<i></i></a></em>
+			<p>
+			<a {$order==3?'class="on"':''} href="{:url('home/crowdsourcing/index','cate='.$cate.'&order=3')}">最新</a>
+			<a {$order==4?'class="on"':''} href="{:url('home/crowdsourcing/index','cate='.$cate.'&order=4')}">最早</a>
+			</p>
+		</dd>
+        <dd {php}if(in_array($order,[5,6])){echo 'class="cur"';}{/php}>
+        	<em><a href="javascript:;">{php}if($order==5){echo '人数顺序';}elseif($order==6){echo '人数倒序';}else{echo '参与人数';}{/php}<i></i></a></em>
+			<p>
+			<a {$order==5?'class="on"':''} href="{:url('home/crowdsourcing/index','cate='.$cate.'&order=5')}">人数顺序</a>
+			<a {$order==6?'class="on"':''} href="{:url('home/crowdsourcing/index','cate='.$cate.'&order=6')}">人数倒序</a>
+			</p>
+		</dd>
+        <dd {php}if(in_array($order,[7,8])){echo 'class="cur"';}{/php}>
+        	<em><a href="javascript:;">{php}if($order==7){echo '从高到低';}elseif($order==8){echo '从低到高';}else{echo '预算价格';}{/php}<i></i></a></em>
+			<p>
+			<a {$order==7?'class="on"':''} href="{:url('home/crowdsourcing/index','cate='.$cate.'&order=7')}">从高到低</a>
+			<a {$order==8?'class="on"':''} href="{:url('home/crowdsourcing/index','cate='.$cate.'&order=8')}">从低到高</a>
+			</p>
+		</dd>
+        <div class="clear0"></div>
+      </dl>
+    </div>
+    <div class="crowdsource clear">
+      <ul>
+      	{volist name="list" id="val"}
+        <li>
+          <div class="pic"><a href="{:url('home/crowdsourcing/detail','id='.$val.id)}">
+          	<img src="<?php echo getImgURL($val['cover']);?>" width="270" height="200" /></a></div>
+          <div class="txts">
+            <h3><a href="javascript:void(0);">{$val.title}</a></h3>
+            <p>￥<?php echo intval($val['price']);?>{$val.price_max>0?' - '.intval($val.price_max):''}</p>
+            <em>{$val.wtb_num}个团队参与创作</em>
+            <h4><a onClick="location='{:url('home/crowdsourcing/detail','id='.$val.id)}'" href="javascript:void(0);">我要投稿</a></h4>
+          </div>
+        </li>
+		{/volist}
+      </ul>
+    </div>
+	  <div class="pagetwo">
+		{$list->render()}
+	  </div>
+  </div>
+
+{include file="/common/c_footer"}
+</div>
+<script type="text/javascript">
+jQuery(".sort1").slide({ type:"menu",titCell:"dd",targetCell:"p",delayTime:0,defaultPlay:false});
+</script>
+
+</body>
+</html>

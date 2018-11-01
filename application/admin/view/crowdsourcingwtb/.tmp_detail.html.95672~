@@ -1,0 +1,68 @@
+{include file="/common/main_top"}
+<div class="allpagetop">后台管理中心<strong>/</strong>投稿管理<strong>/</strong>投稿信息</div>
+<div class="mains">
+	<div class="h1tit">
+		<div class="h1">投稿管理</div>
+		<div class="topnav">
+			<a href="{:url('/Admin/crowdsourcing/browse')}">众包列表</a>
+			<a href="{:url('/Admin/crowdsourcingwtb/browse')}" class="select">投稿列表</a>
+			<a href="{:url('/Admin/crowdsourcingcate/browse')}">分类列表</a>
+			<a href="{:url('/Admin/crowdsourcingcate/create')}">添加分类</a>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="toptit">投稿信息</div>
+	<form id="addform" method="post" action="">
+	<div class="form_main width150">
+		<div class="fl">投稿会员:</div>
+		<div class="fr">
+			<a href="{:url('/Admin/member/browse')}?find={$obj['uid']}">
+			<div style="padding-top:12px;">{$obj['uid']} {$member['nick_name']}</div></a>
+		</div>
+		<div class="fl">交稿时间:</div>
+		<div class="fr">
+			<div style="padding-top:12px;">
+				<?php echo $obj['input_time']>0?date("Y-m-d H:i:s",$obj['input_time']):''?>
+			</div>
+		</div>
+		<div class="fl">状态:</div>
+		<div class="fr">
+			<div style="padding-top:12px;">{$status_arr[$obj['status']]}</div>
+		</div>
+		<div class="fl">报价:</div>
+		<div class="fr">
+			<div style="padding-top:12px;">{$obj['price']} 元</div>
+		</div>
+		<div class="fl">周期:</div>
+		<div class="fr">
+			<div style="padding-top:12px;">{$obj['cycle']} 天</div>
+		</div>
+		<div class="fl">封面:</div>
+		<div class="fr">
+			<img src="<?php echo getImgURL($obj['cover']);?>" width="133" height="99" />
+		</div>
+		<div class="fl">附件:</div>
+		<div class="fr">
+			<div style="padding-top:12px;">
+				<?php $filepath = getFileURL($obj['filename'],'zipfile');?>
+				<?php echo $filepath;?>
+				<font color="red" class="ml_10">
+					<?php if(!file_exists(ROOT_PATH.$filepath)){echo '文件不存在';}?>
+				</font>
+			</div>
+		</div>
+		<div class="fl">详细说明:</div>
+		<div class="fr">
+			<div style="padding-top:12px;">{$obj['content']}</div>
+		</div>
+		<div class="fl">稿件评价:</div>
+		<div class="fr">
+			<div style="padding-top:12px;">{$obj['comment']}</div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	</form>
+</div>
+
+{include file="/common/main_footer"}

@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>认筹管理-会员中心</title>
+{include file="/member/m_header"}
+<style>
+div.zc_tit{margin-top:20px;}
+div.zc_tit i.li1{width:200px;}
+div.zc_tit i.li3{width:310px;}
+div.zc_tit i.li4{width:100px;}
+div.zc_tit i.li5{width:80px;}
+div.zc_list{}
+div.zc_list li{}
+div.zc_list li.calli{background:#f1f1f1;}
+div.zc_list div.dd1{width:200px;overflow:hidden;float:left;line-height:25px;}
+div.zc_list div.dd3{width:310px;overflow:hidden;float:left;line-height:25px;}
+div.zc_list div.dd3 a{float:left;margin-right:5px;}
+div.zc_list div.dd4{width:100px;overflow:hidden;float:left;line-height:25px;}
+div.zc_list div.dd5{width:80px;overflow:hidden;float:left;padding-top:10px;}
+.delxian{text-decoration:line-through;}
+.crowd_pop{display:none;padding:15px 40px 0 40px;width:470px;height:260px;z-index:99;
+position:fixed;left:50%;margin-left:-235px;top:50%;margin-top:-130px;border:1px solid #b5b5b5;background:#fff;
+-moz-box-shadow:5px 5px 15px rgba(0,0,0,.17);-webkit-box-shadow:5px 5px 15px rgba(0,0,0,.17);box-shadow:5px 5px 15px rgba(0,0,0,.17);}
+.crowd_pop h3{color:#696464;font-size:16px;line-height:36px;}
+.crowd_pop h3 font{ color:#326fc2; font-size:16px;}
+.crowd_pop h3 .dell{ float:right;font-size:20px;}
+.crowd_popc1{margin:11px 0px 25px;color:#696464;font-size:16px;line-height:35px;overflow:hidden;}
+.crowd_popc1 em{display:block;float:left;width:80px;height:35px;color:#696464;font-size:16px;}
+.crowd_popc1 a{text-decoration:line-through;}
+.crowd_popc1 input{margin-top:5px;padding:5px 5px;width:450px;}
+.crowd_popc1 font{font-size:18px;}
+.crowd_pop .agree {display:block;width:110px;height:35px;margin:10px auto 0 auto;cursor:pointer;
+background:#326fc2;border-radius:3px;border:1px solid #b5b5b5;text-align:center;font-size:16px;color:#fff;line-height:35px;}
+</style>
+</head>
+
+<body>
+
+<!--头部开始-->
+{include file="/member/m_top"}
+<!-- 非头尾的内容 START -->
+<!--面包屑导航开始-->
+<div class="breadcrumb clearfix " >
+</div>
+<!--面包屑导航结束-->
+
+<div class="main clearfix" >
+{include file="/member/m_left"}
+    <div class="contents fr m20">
+		{include file="/member/ad"}
+		
+		<div class="lm">
+			<div class="search">
+				<input type="text" class="txt" id="seatxt" value="{$find}" placeholder="搜索" /> 
+				<input type="image" src="{$Think.config.web_member}/img/fff.png" class="ss" id="seaform" />
+			</div>
+			<a class="on" href="javascript:void(0);">认筹管理</a>
+		</div>
+    	<div class="border">
+			<div class="zc_tit">
+				<i class="li1">订单信息</i>
+				<i class="li3">认筹项目</i>
+				<i class="li4">订单状态</i>
+				<i class="li5">操作</i>
+			</div>
+			<div class="zc_list">
+				<ul>
+				{volist name="list" id="val"}
+				<li {php}if($val['status']==3){echo 'class="calli"';}{/php}>
+					<div class="dd1">
+						<div>{$val['ordsn']}</div>
+						<div>认购数量：{$val['num']}</div>
+						<div>原价：<font class="delxian">{$val['old_price']}</font></div>
+						<div>打折后：<font color="red">{$val['tot_price']}</font></div>
+					</div>
+					<div class="dd3">
+						<a href="{:url('home/crowdfunding/detail','id='.$val['cfid'])}">
+						<img src="{php}echo getImgURL($mlist[$val['cfid']]['cover']);{/php}" width="130" height="98" /></a>
+						<div>{$mlist[$val['cfid']]['title']}</div>
+						{php}if($mlist[$val['cfid']]['price']==$mlist[$val['cfid']]['new_price']){{/php}
+						<div>单价：<font color="red">{$mlist[$val['cfid']]['new_price']}</font></div>
+						{php}}else{{/php}
+						<div>单价：<span class="delxian">{$mlist[$val['cfid']]['price']}</span></div>
+						<div>单价：<font color="red">{$mlist[$val['cfid']]['new_price']}</font></div>
+						{php}}{/php}
+					</div>
+					<div class="dd4">&nbsp;{$cforder_status[$val['status']]}</div>
+					<div class="dd5">
+						<a href="javascript:void(0);" class="cancel" _oid="{$val['id']}">取消订单</a>
+					</div>
+				</li>
+				{/volist}
+				</ul>
+			</div>
+			<div class="page">
+				{$list->render()}
+			</div>
+			<div class="clearfix"></div>
+		</div>
+    </div>
+</div>
+<!-- 非头尾的内容 END -->
+<div class="crowd_pop" id="crowd_pop">
+	<h3><a class="dell" href="javascript:void(0);">X</a><font>取消订单</font></h3>
+	<div class="crowd_popc1">
+		<em>取消理由：</em>
+		<input type="text" name="cancel" id="cancel" />
+	</div>
+	<input type="hidden" name="oid" id="oid" value="" />
+	<a class="agree" href="javascript:void(0);">确认提交</a>
+</div>
+<script type="text/javascript">
+$(function(){
+	$(".cancel").click(function(){
+		$("#oid").val($(this).attr("_oid"));
+		$("#crowd_pop").show();
+	});
+	$("#crowd_pop h3 .dell").click(function(){
+		$("#crowd_pop").hide();
+	});
+	var uid = "{$member['uid']}";
+	$(".agree").click(function(){
+		var url = "{:url('home/mzhongchou/askcancelorder')}";
+		var oid = $("#oid").val();
+		var text = $("#cancel").val();
+		if(!($("#oid").val()>0)){
+			alert("请重新选择！");
+			return false;
+		}
+		if($("#cancel").val()==''){
+			alert("请输入取消理由！");
+			$("#cancel").focus();
+			return false;
+		}
+		$.post(url,{id:oid,text:text},function(data){
+			if(data){
+				alert("取消订单申请成功！");
+			}else{
+				alert("取消订单申请失败！");
+			}
+		},'json');
+		$("#crowd_pop").hide();
+	});
+});
+</script>
+
+{include file="/member/m_footer"}
+
+</body>
+</html>

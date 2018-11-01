@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>联盟成员馆</title>
+{include file="/common/c_header"}
+<style>
+.shop_pro ul li h3{display:block;height:30px;overflow:hidden;}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+{include file="/common/c_top"}
+
+  {include file="/shop/shopmenu"}
+  <div class="unionbg">
+    <div class="w location">
+    	当前位置：<a href="{:url('home/shop/shopgoods')}">文创产品</a><i>&gt;</i>联盟成员馆
+	</div>
+    <div class="cd_team clear">
+      <ul>
+		{volist name="list" id="val"}
+        <li>
+          <div class="pic"><a href="{:url('home/webmember/index','uid='.$val['uid'])}">
+          	<img src="<?php echo getImgURL($mlist[$val['uid']]['imgurl'],'memberlogo');?>" width="188" height="188" /></a></div>
+          <h3><a href="{:url('home/webmember/index','uid='.$mlist[$val['uid']]['uid'])}">{$mlist[$val['uid']]['nick_name']}</a></h3>
+          <p>{$val['sign']}</p>
+        </li>
+		{/volist}
+      </ul>
+    </div>
+      <div class="pagetwo">
+		{$list->render()}
+	  </div>
+  </div>
+
+{include file="/common/c_footer"}
+</div>
+<script type="text/javascript">
+jQuery(".sider").slide({ type:"menu",titCell:".mainCate",targetCell:".subCate",delayTime:0,triggerTime:0,defaultPlay:false,returnDefault:true });
+jQuery(".nav_hover").slide({ type:"menu",titCell:".n_lf",targetCell:".sider",delayTime:0,triggerTime:0,defaultPlay:false,returnDefault:true });
+</script>
+
+</body>
+</html>

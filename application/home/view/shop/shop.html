@@ -1,0 +1,262 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>商品展示</title>
+{include file="/common/c_header"}
+<style>
+.shop_pro ul li .btn a.coll_bg{background-position:0 -32px;color:#600000;}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+{include file="/common/c_top"}
+
+  {include file="/shop/shopmenu"}
+  <div class="banner ny_ban1">
+  	{php}echo $ads;{/php}
+  </div>
+  <div class="w pavilion clear">
+    <div class="titc">
+      <h2>联盟成员馆导航</h2>
+      <div class="pavilions coms">
+        <ul>
+          {volist name="cyglist" id="val"}
+          <li>
+			<div class="cspic"><img src="{php}echo getImgURL($val['logo'],'memberauth');{/php}" /></div>
+			<div class="p_txt">
+				<h3>{$mlist[$val['uid']]['nick_name']}</h3>
+				<a href="{:url('home/webmember/index','uid='.$val['uid'])}">点击进入</a>
+			</div>
+		  </li>
+		  {/volist}
+          <li><em>虚位<br/>以待</em></li>
+          <li><em>虚位<br/>以待</em></li>
+          <li><em>虚位<br/>以待</em></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  <div class="w tabc com_slide clear">
+    <div class="hd tab_tit"><em>最新商品</em><em>热销商品</em></div>
+    <div class="bd shop_pro coms">
+      <ul>
+      	{volist name="zxlist" id="val"}
+        <li>
+          <div class="pic"><a href="{:url('home/shop/detail','id='.$val['id'])}">
+          	<img src="{php}echo getImgURL($val['cover']);{/php}" width="260" height="260" /></a></div>
+          <div class="btn">
+        	<?php if(isset($colllist[$val['id']])){?>
+          	<a href="javascript:;" class="coll_a coll_bg" _collid="{$colllist[$val['id']]}">已收藏</a>
+			<?php }else{?>
+          	<a href="javascript:;" class="coll_a" _id="{$val['id']}" _collid="0">收藏</a>
+			<?php }?>
+			<a class="cart" href="{:url('home/shop/detail','id='.$val['id'])}">购物车</a>
+		  </div>
+          <div class="txts">
+            <h3>{$val['title']}</br>【{$catelist[$val['cate']]['title']}{$val['cate_san']>0?('（'.$catelist[$val['cate_san']]['title'].'）'):''}】</h3>
+            <p><a href="{:url('home/shop/detail','id='.$val['id'])}">查看详情</a>￥{$val['price']}</p>
+          </div>
+        </li>
+		{/volist}
+      </ul>
+      <ul>
+      	{volist name="rmlist" id="val"}
+        <li>
+          <div class="pic"><a href="{:url('home/shop/detail','id='.$val['id'])}">
+          	<img src="{php}echo getImgURL($val['cover']);{/php}" width="260" height="260" /></a></div>
+          <div class="btn">
+        	<?php if(isset($colllist[$val['id']])){?>
+          	<a href="javascript:;" class="coll_a coll_bg" _collid="{$colllist[$val['id']]}">已收藏</a>
+			<?php }else{?>
+          	<a href="javascript:;" class="coll_a" _id="{$val['id']}" _collid="0">收藏</a>
+			<?php }?>
+			<a class="cart" href="{:url('home/shop/detail','id='.$val['id'])}">购物车</a>
+		  </div>
+          <div class="txts">
+            <h3>{$val['title']}</br>【{$catelist[$val['cate']]['title']}{$val['cate_san']>0?('（'.$catelist[$val['cate_san']]['title'].'）'):''}】</h3>
+            <p><a href="{:url('home/shop/detail','id='.$val['id'])}">查看详情</a>￥{$val['price']}</p>
+          </div>
+        </li>
+		{/volist}
+      </ul>
+    </div>
+  </div>
+  
+  <div class="pro_class clear">
+    <div class="w pro_classc">
+      <div class="pro_class_con">
+        <div class="pro_class_w all_class left">
+          <div class="hd">{$cid_a['title']}<ul></ul></div>
+          <div class="bd">
+            <ul class="s_pro1">
+              {php}$iii=1;{/php}
+              {volist name="list_ta" id="val"}
+              {php}if($iii%3==1){echo '<li>';}{/php}
+                {php}if($iii%3==1 || $iii%3==2){echo '<p>';}{/php}
+                <a href="{:url('home/shop/detail','id='.$val['id'])}">
+                <img src="{php}echo getImgURL($val['cover']);{/php}" 
+				width="{php}if($iii%3==1){echo '350';}else{echo '169';}{/php}" 
+				height="{php}if($iii%3==1){echo '180';}else{echo '170';}{/php}" /></a>
+                {php}if($iii%3==1 || $iii%3==0){echo '</p>';}{/php}
+			  {php}if($iii%3==0){echo '</li>';}{/php}
+			  {php}$iii++;{/php}
+			  {/volist}
+            </ul>
+          </div>
+        </div>
+        <div class="pro_class_w all_class left">
+          <div class="hd">{$cid_b['title']}<ul></ul></div>
+          <div class="bd">
+            <ul>
+              {php}$iii=1;{/php}
+              {volist name="list_tb" id="val"}
+			  {php}if($iii%4==1){echo '<li><dl class="s_pro2">';}{/php}
+                  <dd>
+                    <div class="cspic"><a href="{:url('home/shop/detail','id='.$val['id'])}">
+                    	<img src="{php}echo getImgURL($val['cover']);{/php}" /></a></div>
+                    <h4><a href="{:url('home/shop/detail','id='.$val['id'])}">{$catelist[$val['cate']]['title']} {$val['cate_san']>0?('（'.$catelist[$val['cate_san']]['title'].'）'):''}</a></h4>
+                    <p>{$val['title']}</p>
+                  </dd>
+			  {php}if($iii%4==0){echo '</dl></li>';}{/php}
+			  {php}$iii++;{/php}
+			  {/volist}
+            </ul>
+          </div>
+        </div>
+        <div class="pro_class_w all_class left">
+          <div class="hd">{$cid_c['title']}<ul></ul></div>
+          <div class="bd">
+            <ul class="s_pro1">
+              {php}$iii=1;{/php}
+              {volist name="list_tc" id="val"}
+			  {php}if($iii%4==1){echo '<li>';}{/php}
+			    {php}if($iii%4==1 || $iii%4==2){echo '<p>';}{/php}
+                <a href="{:url('home/shop/detail','id='.$val['id'])}">
+                <img src="{php}echo getImgURL($val['cover']);{/php}"
+				width="{php}if($iii%4==1){echo '350';}else{echo '108';}{/php}" 
+				height="{php}if($iii%4==1){echo '250';}else{echo '100';}{/php}" /></a>
+			    {php}if($iii%4==1 || $iii%4==0){echo '</p>';}{/php}
+			  {php}if($iii%4==0){echo '</li>';}{/php}
+			  {php}$iii++;{/php}
+			  {/volist}
+            </ul>
+          </div>
+        </div>
+        <div class="pro_class_w all_class left">
+          <div class="hd">{$cid_d['title']}<ul></ul></div>
+          <div class="bd">
+            <ul>
+              {php}$iii=1;{/php}
+              {volist name="list_td" id="val"}
+			  {php}if($iii%4==1){echo '<li><dl class="s_pro2">';}{/php}
+                  <dd>
+                    <div class="cspic"><a href="{:url('home/shop/detail','id='.$val['id'])}">
+                    	<img src="{php}echo getImgURL($val['cover']);{/php}" /></a></div>
+                    <h4><a href="{:url('home/shop/detail','id='.$val['id'])}">{$catelist[$val['cate']]['title']} {$val['cate_san']>0?('（'.$catelist[$val['cate_san']]['title'].'）'):''}</a></h4>
+                    <p>{$val['title']}</p>
+                  </dd>
+			  {php}if($iii%4==0){echo '</dl></li>';}{/php}
+			  {php}$iii++;{/php}
+			  {/volist}
+            </ul>
+          </div>
+        </div>
+        <div class="pro_class_w all_class left">
+          <div class="hd">{$cid_e['title']}<ul></ul></div>
+          <div class="bd">
+            <ul class="s_pro1">
+              {php}$iii=1;{/php}
+              {volist name="list_te" id="val"}
+			  {php}if($iii%2==1){echo '<li>';}{/php}
+                <p><a href="{:url('home/shop/detail','id='.$val['id'])}">
+                <img src="{php}echo getImgURL($val['cover']);{/php}" width="350" height="175" /></a></p>
+			  {php}if($iii%2==0){echo '</li>';}{/php}
+			  {php}$iii++;{/php}
+			  {/volist}
+            </ul>
+          </div>
+        </div>
+        <div class="pro_class_w all_class left">
+          <div class="hd">{$cid_f['title']}<ul></ul></div>
+          <div class="bd">
+            <ul>
+              {php}$iii=1;{/php}
+              {volist name="list_tf" id="val"}
+			  {php}if($iii%4==1){echo '<li><dl class="s_pro2">';}{/php}
+                  <dd>
+                    <div class="cspic"><a href="{:url('home/shop/detail','id='.$val['id'])}">
+                    	<img src="{php}echo getImgURL($val['cover']);{/php}" /></a></div>
+                    <h4><a href="{:url('home/shop/detail','id='.$val['id'])}">{$catelist[$val['cate']]['title']} {$val['cate_san']>0?('（'.$catelist[$val['cate_san']]['title'].'）'):''}</a></h4>
+                    <p>{$val['title']}</p>
+                  </dd>
+			  {php}if($iii%4==0){echo '</dl></li>';}{/php}
+			  {php}$iii++;{/php}
+			  {/volist}
+            </ul>
+          </div>
+        </div>
+        <div class="clear0"></div>
+      </div>
+    </div>
+  </div>
+
+{include file="/common/c_footer"}
+</div>
+<script type="text/javascript">
+$(function(){
+	$(".coms ul li").hover(function(){
+		$(this).addClass("lihover")},function(){$(this).removeClass("lihover");
+	});
+});
+$(function(){
+	var uid = "{$member['uid']}";
+	$(".coll_a").click(function(){
+		if(!(uid>0)){
+			if(confirm("收藏商品，请先登录。")){
+				location.href = "{:url('home/Index/login')}";
+			}
+			return false;
+		}else{
+			var obj = $(this);
+			var _collid = $(this).attr("_collid");
+			if(_collid>0){
+			  if (confirm("确定不在收藏此商品吗？")) {
+				var url = "{:url('home/member/delmembercoll')}";
+				$.post(url,{id:_collid},function(data){
+					if(data>0){
+						obj.removeClass("coll_bg");
+						obj.html("收藏");
+						obj.attr("_collid", "0"); //修改属性
+					}
+				},'json');
+			  }
+			}else{
+				var url = "{:url('home/member/addmembercoll')}";
+				var cate = 5; //1会员2素材3众筹4众筹5商品
+				var id = $(this).attr("_id");
+				$.post(url,{cate:cate,id:id},function(data){
+					if(data>0){
+						obj.addClass("coll_bg");
+						obj.html("已收藏");
+						obj.attr("_collid", data); //修改属性
+						alert("收藏成功。");
+					}
+				},'json');
+			}
+		}
+	});
+});
+</script>
+<script type="text/javascript">
+jQuery(".sider").slide({ type:"menu",titCell:".mainCate",targetCell:".subCate",delayTime:0,triggerTime:0,defaultPlay:false,returnDefault:true });
+jQuery(".nav_hover").slide({ type:"menu",titCell:".n_lf",targetCell:".sider",delayTime:0,triggerTime:0,defaultPlay:false,returnDefault:true });
+jQuery(".banner").slide({titCell:".hd em",mainCell:".bd ul",effect:"fold",interTime:6000,autoPlay:true});
+jQuery(".com_slide").slide({titCell:".hd em"});
+jQuery(".all_class").slide({titCell:".hd ul",mainCell:".bd ul",autoPage:true,effect:"leftLoop",autoPlay:true,pnLoop:false});
+</script>
+
+</body>
+</html>

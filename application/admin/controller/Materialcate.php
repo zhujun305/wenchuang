@@ -39,17 +39,12 @@ class Materialcate extends Adminbase
 		$findObj = [];
 		$fields = 'cname,cno,pid,is_lock';
 		$this->getFindObj($findObj, $find, $fields);
+		$this->assign("findObj", $findObj);
 		$list = materialcateModel::getList($findObj,[],'20','sort desc,pid asc,id asc');
 		$this->assign("list", $list);
 		//管理员列表
 		$adminuserlist = readCacheFile("adminuserlist");
 		$this->assign('adminuserlist', $adminuserlist);
-		//空判断
-		$findObj['cname'] = isset($findObj['cname'])?$findObj['cname']:'';
-		$findObj['cno'] = isset($findObj['cno'])?$findObj['cno']:'';
-		$findObj['pid'] = isset($findObj['pid'])?$findObj['pid']:'';
-		$findObj['is_lock'] = isset($findObj['is_lock'])?$findObj['is_lock']:'';
-		$this->assign("findObj", $findObj);
 		return $this->fetch();
 	}
 	
@@ -70,6 +65,7 @@ class Materialcate extends Adminbase
 			}
 			$data['cno'] = $cno;
 			$id = materialcateModel::add_data($data);
+    		$this->cacheMaterialcate(); //刷新缓存
 			$this->success('添加成功。', $this->materialcateList);
 		}
 		return $this->fetch();
@@ -87,13 +83,14 @@ class Materialcate extends Adminbase
 			$data['cname'] = isset($post['cname'])?$post['cname']:'';
 			$data['sort'] = isset($post['sort'])?$post['sort']:'';
 			$cno = isset($post['cno'])?$post['cno']:'';
-			$cnoobj = materialcateModel::getOneByWhere(['cno'=>$cno,'id'=>['neq',$id]]);
+			$cnoobj = materialcateModel::getOneByWhere(['cno'=>$cno]);
 			if(!empty($cnoobj)){
 				$this->error('分类编号重复。', $this->materialcateList);
 			}
 			$data['cno'] = $cno;
 			$where = ['id'=>$id];
 			$rs = materialcateModel::upd_data($where, $data);
+    		$this->cacheMaterialcate(); //刷新缓存
 			$this->success('编辑成功。', $this->materialcateList);
 		}
 		return $this->fetch();
@@ -117,6 +114,24 @@ class Materialcate extends Adminbase
 		$this->redirect($this->materialcateList);
     }
 	
+    /**
+     * 批量锁定
+     */
+    public function lockall($ids){
+    	$rs = materialcateModel::upd_list($ids, ['is_lock'=>2]);
+    	$this->cacheMaterialcate(); //刷新缓存
+		$this->redirect($this->materialcateList);
+    }
+    
+    /**
+     * 批量解锁
+     */
+    public function unlockall($ids){
+    	$rs = materialcateModel::upd_list($ids, ['is_lock'=>1]);
+    	$this->cacheMaterialcate(); //刷新缓存
+		$this->redirect($this->materialcateList);
+    }
+	
 	/**
 	 * 删除
 	 */
@@ -132,7 +147,9 @@ class Materialcate extends Adminbase
 	public function upd_sort($type='sort'){
 		$id = Request::instance()->post("id");
 		$sort = Request::instance()->post("sort");
-		echo materialcateModel::updsort($type, $id, $sort);
+		$rs = materialcateModel::updsort($type, $id, $sort);
+		$this->cacheMaterialcate(); //刷新缓存
+		echo $rs;
 	}
 	
 }

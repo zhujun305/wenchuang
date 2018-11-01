@@ -1,0 +1,274 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>订单详情-会员中心</title>
+{include file="/member/m_header"}
+<link rel="stylesheet" type="text/css" href="{$Think.config.web_member}/css/style.css"/>
+<style>
+.garybtn{margin-top:10px;padding:10px 20px;background-color:#ccc;color:#fff;border-radius:5px;}
+a.ddqrBtn{display:block;margin-top:8px;padding:0 10px;height:26px;line-height:26px;
+background:#35518a;border:1px solid #273c67;border-radius:2px;text-align:center;color:#fff;}
+.pop_box{display:none;}
+.pop_boxc03{margin:-220px 0 0 -250px;}
+.pop_box textarea{width:420px;height:220px;padding:5px;}
+</style>
+</head>
+
+<body>
+
+<!--头部开始-->
+{include file="/member/m_top"}
+<!-- 非头尾的内容 START -->
+<!--面包屑导航开始-->
+<div class="breadcrumb clearfix " >
+</div>
+<!--面包屑导航结束-->
+
+<div class="main clearfix" >
+{include file="/member/m_left"}
+    <div class="contents fr m20">
+        <div class="clearfix">
+			<div class="location">会员中心  > 订单管理   > 订单详情</div>
+			<div class="mjOrder">
+				<div class="mjOrder-01">
+					<p class="fl">订单号：{$obj['ordsn']}&nbsp;下单时间：{$obj['input_time']>0?date("Y-m-d",$obj['input_time']):''}</p>
+					{php}if($obj['pay_status']!=2 && $obj['status']<3){{/php}
+					<a href="javascript:;" class="fr orderdel">取消此订单</a>
+					{php}}{/php}
+					{php}if($obj['pay_status']==2 && $obj['status']==4){{/php}
+					<a href="{:url('home/mshangpin/setordershouhuo','sn='.$obj['ordsn'])}" class="fr ddqrBtn" onclick="return confirm('你确认订单已收货吗？')">确认收货</a>
+					{php}}{/php}
+				</div>
+				<div class="mjOrder-02">
+					{php}if($obj['status']==3){{/php}
+					<span class="fl garybtn">订单已取消</span>
+					{php}}{/php}
+					{php}if($obj['pay_status']!=2 && $obj['status']<3){{/php}
+					<a href="{:url('home/member/pay','sn='.$obj['ordsn'])}">支付订单费用</a>
+					{php}}{/php}
+					{php}if($obj['pay_status']==2 && $obj['status']==4){{/php}
+					{php}$syutime=($obj['fh_time']+10*86400)-time();{/php}
+					{php}if($syutime>0){{/php}
+					<span style="line-height:40px;">【还剩{php}echo date("d天H时",$syutime);{/php}】</span>
+					{php}}{/php}
+					{php}}{/php}
+				</div>
+				<div class="mjOrder-03">
+					<ul>
+						<li>
+							<h3>提交订单</h3>
+							<div class="mjOrder-03C">
+								<span class="fl"></span>
+								<p class="fl"></p>
+							</div>
+							<h4>{$obj['input_time']>0?date("Y-m-d H:i:s",$obj['input_time']):''}</h4>
+						</li>
+						<li {$obj['status']>3?'':'class="mjGrey"'}>
+							<h3>已发货</h3>
+							<div class="mjOrder-03C">
+								<span class="fl"></span>
+								<p class="fl"></p>
+							</div>
+							{php}if($obj['status']>2){{/php}
+							<h4>{$obj['fh_time']>0?date("Y-m-d H:i:s",$obj['fh_time']):''}<br/>
+								{$obj['fh_logistics']}：<br/>{$obj['fh_waybillno']}
+							</h4>
+							{php}}{/php}
+						</li>
+						<li {$obj['status']>4?'':'class="mjGrey"'}>
+							<h3>收货完成</h3>
+							<div class="mjOrder-03C">
+								<span class="fl"></span>
+								<p class="fl"></p>
+							</div>
+							{php}if($obj['status']>2){{/php}
+							<h4>{$obj['sh_time']>0?date("Y-m-d H:i:s",$obj['sh_time']):''}</h4>
+							{php}}{/php}
+						</li>
+						<li {$obj['status']==8?'':'class="mjGrey"'}>
+							<h3>已评论</h3>
+							<div class="mjOrder-03C">
+								<span class="fl"></span>
+								<p class="fl"></p>
+							</div>
+							<?php /*?>
+							<h4>2018-09-22 09:30</h4>
+							<?php */?>
+						</li>
+					</ul>
+				</div>
+				<div class="mjOrder-04">
+					<h3>订单跟踪</h3>
+					<div class="mjOrder-04C">
+						<div class="mjOrder-04C01">
+							<span class="ddgz01">时间</span>
+							<span class="ddgz02">处理信息</span>
+						</div>
+						<div class="mjOrder-04C02">
+							<span class="ddgz01">{$obj['input_time']>0?date("Y-m-d",$obj['input_time']):''}</span>
+							<span class="ddgz02">您的订单已提交，请耐心等待！</span>
+						</div>
+					</div>
+				</div>
+				<div class="mjOrder-04">
+					<h3>商品清单</h3>
+					<div class="spqd">
+						<div class="spqd01">
+							<span class="ddgz03">编号</span>
+							<span class="ddgz04">商品</span>
+							<span class="ddgz05">货号</span>
+							<span class="ddgz06">单价</span>
+							<span class="ddgz07">数量</span>
+							<span class="ddgz08">小计</span>
+							<span class="ddgz09">售后</span>
+						</div>
+						{php}$gidarr = [];{/php}
+						{volist name="list" id="val"}
+						<div class="spqd02">
+							<span class="ddgz03">{$val['id']}</span>
+							<div class="hy-orderB02-img fl">
+								<img src="<?php echo getImgURL($val['cover']);?>" class="fl" width="60" height="60" />
+								<p>
+									<div>{$val['title']}</div><br/>
+									<div>
+									{php}if($sgnlist[$val['sgnid']]['snvidone']>0){ echo $shopnorms[$sgnlist[$val['sgnid']]['snidone']]['name'].'：'.$snormsval[$sgnlist[$val['sgnid']]['snvidone']]['name']; }{/php}&nbsp;
+									{php}if($sgnlist[$val['sgnid']]['snvidtwo']>0){ echo $shopnorms[$sgnlist[$val['sgnid']]['snidtwo']]['name'].'：'.$snormsval[$sgnlist[$val['sgnid']]['snvidtwo']]['name']; }{/php}&nbsp;
+									{php}if($sgnlist[$val['sgnid']]['snvidthree']>0){ echo $shopnorms[$sgnlist[$val['sgnid']]['snidthree']]['name'].'：'.$snormsval[$sgnlist[$val['sgnid']]['snvidthree']]['name']; }{/php}
+									</div>
+								</p>
+							</div>
+							<span class="ddgz05">{$val['gno']}</span>
+							<span class="ddgz06">￥{$val['price']}</span>
+							<span class="ddgz07">{$val['num']}</span>
+							<span class="ddgz08">￥{$val['amount']}</span>
+							<span class="ddgz09" style="border-right:0;">
+								{php}if($obj['pay_status']==2 && $obj['status']==5){{/php}
+								{php}if(!in_array($val['gid'],$gidarr)){{/php}
+								<a href="javascript:;" class="fr ddqrBtn sp_pingjia" _id="{$val['gid']}">评价</a>
+								{php}}{/php}
+								{php}}{/php}
+							</span>
+						</div>
+						{php}$gidarr[] = $val['gid'];{/php}
+						{/volist}
+					</div>
+				</div>
+				<div class="mjOrder-04">
+					<h3>订单信息</h3>
+					<div class="ddxx">
+						<div class="ddxx01">
+							<span class="ddxx-01">订单</span>
+							<span class="ddxx-02"></span>	
+						</div>
+						<div class="ddxx02">
+							<span class="ddxx-01">支付方式</span>
+							<span class="ddxx-02">货到付款</span>
+						</div>
+						<div class="ddxx02">
+							<span class="ddxx-01">商品金额</span>
+							<span class="ddxx-02">￥{$obj['amount']}</span>
+						</div>
+						<?php /*?>
+						<div class="ddxx02">
+							<span class="ddxx-01">发票税费</span>
+							<span class="ddxx-02">￥0.00</span>
+						</div>
+						<div class="ddxx02">
+							<span class="ddxx-01">运费</span>
+							<span class="ddxx-02">￥0.00</span>
+						</div>
+						<div class="ddxx02">
+							<span class="ddxx-01">支付手续费</span>
+							<span class="ddxx-02">￥0.00</span>
+						</div>
+						<?php */?>
+						<div class="ddxx02">
+							<span class="ddxx-01">应付总额</span>
+							<span class="ddxx-02"><b>￥{$obj['amount']}</b></span>
+						</div>
+						<div class="ddxx02">
+							<span class="ddxx-01">已支付</span>
+							<span class="ddxx-02"><em>{$obj['pay_amount']}</em></span>
+						</div>
+					</div>
+					<div class="ddxx">
+						<div class="ddxx01">
+							<span class="ddxx-01">地区</span>
+							<span class="ddxx-02"></span>
+						</div>
+						<div class="ddxx02">
+							<span class="ddxx-01">收货人</span>
+							<span class="ddxx-02">{$dzobj['truename']}</span>
+						</div>
+						<div class="ddxx02">
+							<span class="ddxx-01">联系电话</span>
+							<span class="ddxx-02">{$dzobj['mobile']}</span>
+						</div>
+						<div class="ddxx02">
+							<span class="ddxx-01">收货地址</span>
+							<span class="ddxx-02">{$dzobj['info']}</span>
+						</div>
+						<div class="ddxx02">
+							<span class="ddxx-01">邮编</span>
+							<span class="ddxx-02">{$dzobj['zipcode']}</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+    </div>
+</div>
+<!-- 非头尾的内容 END -->
+<div class="pop_box" id="goods_ping">
+  <div class="pop_boxc01 pop_boxc03">
+	<div class="pop_boxc01T">
+		<h3 class="fl">商品评价</h3>
+		<a href="javascript:;" class="fr close">x</a>
+	</div>
+	<form id="addform" method="post" action="{:url('home/mshangpin/setorderpingjia','sn='.$obj['ordsn'])}">
+	<div class="pop_boxc02M">
+		<div class="pop_boxc02MT">
+			<p>评价内容：</p>
+			<textarea name="pj_cont" id="pj_cont"></textarea>
+		</div>
+	</div>
+	<input type="hidden" name="gid" id="gid" value="" />
+	</form>
+	<div class="pop_boxc01B">
+		<a href="javascript:;" id="submit" class="aSubmit">确认</a>
+		<a href="javascript:;" class="aClose close">关闭</a>
+	</div>
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$(".orderdel").click(function(){
+		if(confirm("您确认要取消此订单吗？")){
+			var url = "{:url('home/mshangpin/setorderstatus','sn='.$obj['ordsn'])}";
+			$.post(url,{status:6},function(data){
+				location.reload();
+			});
+		}
+	});
+	$(".pop_box .close").click(function(){
+		$("#goods_ping").hide();
+	});
+	$(".sp_pingjia").click(function(){
+		$("#gid").val($(this).attr("_id"));
+		$("#goods_ping").show();
+	});
+	$("#submit").click(function(){
+		if($("#pj_cont").val().length < 1){
+			alert("请输入评价内容！");
+			$("#pj_cont").focus();
+			return false;
+		}
+		$("#addform").submit();
+	});
+});
+</script>
+
+{include file="/member/m_footer"}
+
+</body>
+</html>

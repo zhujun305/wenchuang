@@ -9,7 +9,9 @@
 				<dt>{$member['nick_name']}</dt>
 				<dd>{$membercate[$member['cate']]}</dd>
 			</dl>
-			<div class="email">12</div>
+			<a href="{:url('home/member/newslist','type=1')}">
+			<div class="email">{$wdnews}</div>
+			</a>
 			<a class="quit" onClick="location='{:url('home/index/logout')}'" href="javascript:void(0);">退出</a>
 		</div>
 	</div>

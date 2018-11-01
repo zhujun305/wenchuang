@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>设置众筹规则-会员中心</title>
+{include file="/member/m_header"}
+<style>
+.gz{margin-top:15px;}
+.adda{background-color:#fff;border-radius:5px;box-shadow:0px 0px 7px #cccccc;margin-left:115px;
+padding:6px 20px;width:100px;border:1px solid #dddddd;text-align:center;color:#333333;}
+.jiesuan3{margin-left:13px;}
+.pre{margin-right:50px;border:1px solid #ccc;}
+.border .forms2 .row input[type=text].w200{width:210px;}
+</style>
+</head>
+
+<body>
+
+<!--头部开始-->
+{include file="/member/m_top"}
+<!-- 非头尾的内容 START -->
+<!--面包屑导航开始-->
+<div class="breadcrumb clearfix " >
+</div>
+<!--面包屑导航结束-->
+
+<div class="main clearfix" >
+{include file="/member/m_left"}
+    <div class="contents fr m20">
+		{include file="/member/ad"}
+		
+		<div class="lm">
+			<a class="on" href="javascript:void(0);">设置规则</a>
+		</div>
+    	<div class="border">
+    		{php}if($temp==3){{/php}
+			<div class="step2">
+				<ul>
+				<li class="on"><i>1</i> 填写项目信息</li>
+				<li class="on"><i>2</i> 设置众筹规则</li>
+				<li class="on"><i>3</i> 提交众筹项目</li>
+				</ul>
+			</div>
+			<div class="sucess">
+				<dl><img src="{$Think.config.web_member}/img/ok.png" /></dl>
+				<p>
+				<span>您已成功提交众筹项目信息，请耐心等待平台管理员的审核。</span><br/>
+				我们将在1-5个工作日完成审核，届时将通过APP或手机短信的方式通知您，<br/>
+				同时，项目经理会询问产品的情况，包括生产计划、进度、价格等等，<br/>
+				您还需要快递一个样品到项目经理这里。
+				</p>
+				<div>
+					<a class="a1" href="{:url('home/member/index')}">返回会员中心</a>
+					<a class="a2" href="{:url('home/index/index')}">返回平台首页</a>
+				</div>
+			</div>
+    		{php}}elseif($temp==2){{/php}
+			<div class="step2">
+				<ul>
+				<li class="on"><i>1</i> 填写项目信息</li>
+				<li class="on"><i>2</i> 设置众筹规则</li>
+				<li><i>3</i> 提交众筹项目</li>
+				</ul>
+			</div>
+    		{php}}{/php}
+    		{php}if($temp!=3){{/php}
+          	<form id="addfrom" action="{:url('home/mzhongchou/mzcsetrule','id='.$obj['id'].'&temp='.$temp)}" method="post" enctype="multipart/form-data">
+			<div class="forms2">
+				<div class="row">
+					<span></span>商品单价：{$obj['price']}
+				</div>
+				<div class="gz">规则一：根据成员馆认筹数量的多少变动认购单价</div>
+				{volist name="list" id="val"}
+				{php}if($val['cate']==1){{/php}
+				<div class="row">
+					<span>认筹数量满</span>
+					<input type="hidden" name="idsarr[]" value="{$val['id']}" />
+					<input type="hidden" name="catearr[]" value="{$val['cate']}" />
+					<input type="text" name="numarr[]" value="{$val['num']}" class="rlie w167" placeholder="设置认筹数量" />
+					<input type="text" name="valarr[]" value="{$val['price']}" class="rlie jiesuan3" placeholder="设置认筹金额" />
+					<a class="add delrow">移除</a>
+				</div>
+				{php}}{/php}
+				{/volist}
+				<div class="addone_bot"></div>
+				<div class="clearfix" style="height:30px;"></div>
+				<div><a class="adda" id="addrule1">添加</a></div>
+				<div class="gz">规则二：根据成员馆认筹总数量的多少变动认购价格的折扣比例</div>
+				{volist name="list" id="val"}
+				{php}if($val['cate']==2){{/php}
+				<div class="row">
+					<span>认筹数量满</span>
+					<input type="hidden" name="idsarr[]" value="{$val['id']}" />
+					<input type="hidden" name="catearr[]" value="{$val['cate']}" />
+					<input type="text" name="numarr[]" value="{$val['num']}" class="rlie w167" placeholder="设置认筹数量" />
+					<input type="text" name="valarr[]" value="{$val['agio']}" class="rlie w200 agioli" placeholder="折扣大于0小于10，最多1位小数" />
+					<a class="add delrow">移除</a>
+				</div>
+				{php}}{/php}
+				{/volist}
+				<div class="addtwo_bot"></div>
+				<div class="clearfix" style="height:30px;"></div>
+				<div><a class="adda" id="addrule2">添加</a></div>
+			</div>
+			<div class="ts3">以上规则，可以使用其中一个规则，也可以是二个规则同时使用。使用规则一时，认购的商品数量越多价格越低，使用规则二时，认筹的总数量越多时，商品的整体价格根据规则浮动。</div>
+			{php}if($temp==2){{/php}
+			<div class="submits">
+				<a class="pre" href="javascript:history.go(-1);">上一步</a>
+				<a id="submit">保存下一步</a>
+			</div>
+    		{php}}else{{/php}
+			<div class="submits">
+				<a id="submit">确认保存</a>
+			</div>
+    		{php}}{/php}
+			</form>
+    		{php}}{/php}
+			<div class="clearfix" style="height:10px;"></div>
+		</div>
+    </div>
+</div>
+<div id="dtaddone" style="display:none;">
+	<div class="row">
+		<span>认筹数量满</span>
+		<input type="hidden" name="idsarr[]" value="" />
+		<input type="hidden" name="catearr[]" value="1" />
+		<input type="text" name="numarr[]" class="rlie w167" placeholder="设置认筹数量" />
+		<input type="text" name="valarr[]" class="rlie jiesuan3" placeholder="设置认筹金额" />
+		<a class="add delrow">移除</a>
+	</div>
+</div>
+<div id="dtaddtwo" style="display:none;">
+	<div class="row">
+		<span>认筹数量满</span>
+		<input type="hidden" name="idsarr[]" value="" />
+		<input type="hidden" name="catearr[]" value="2" />
+		<input type="text" name="numtwoarr[]" class="rlie w167" placeholder="设置认筹数量" />
+		<input type="text" name="valarr[]" class="rlie w200 agioli" placeholder="折扣大于0小于10，最多1位小数" />
+		<a class="add delrow">移除</a>
+	</div>
+</div>
+<!-- 非头尾的内容 END -->
+<script type="text/javascript">
+$(function(){
+	$("#addrule1").click(function(){
+		$(".addone_bot").before($("#dtaddone").html());
+	});
+	$("#addrule2").click(function(){
+		$(".addtwo_bot").before($("#dtaddtwo").html());
+	});
+	$(".delrow").live('click',function(){
+		if(confirm("确定要删除此行数据吗？")){
+			$(this).parent(".row").remove();
+		}
+	});
+	//提交
+	var is_tijiao = true;
+	$("#submit").click(function(){
+		$(".forms2 .rlie").each(function(index){
+			if($(this).val()==''){
+				$(this).focus();
+				alert("请输入内容。");
+				is_tijiao = false;
+				return false;
+			}
+		});
+		$(".forms2 .agioli").each(function(index){
+			if($(this).val()<0 || $(this).val()>10){
+				$(this).focus();
+				alert("折扣数字必须大于0小于10。");
+				is_tijiao = false;
+				return false;
+			}
+		});
+		if(is_tijiao){
+			$('#addfrom').submit();
+		}
+	});
+});
+</script>
+
+{include file="/member/m_footer"}
+
+</body>
+</html>

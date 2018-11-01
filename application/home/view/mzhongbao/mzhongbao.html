@@ -42,7 +42,7 @@
 			<li>
 				<i class="l1">{$val.id}</i>
 				<i class="l2">
-					{$val.title}
+					<?php if($val['cover']!=''){echo '<font color="red">封面</font>-';}?>{$val.title}
 				</i>
 				<i class="l3"><?php echo '￥'.intval($val['price']);?>
 				<?php echo $val['price_max']>0?(' - '.intval($val['price_max'])):'';?>
@@ -50,8 +50,10 @@
 				<i class="l4"><?php echo $val['input_time']>0?date("Y-m-d",$val['input_time']):'';?></i>
 				<i class="l5">{$chk_arr[$val.is_chk]}</i>
 				<i class="l6">
-					<a onClick="location='{:url('home/mzhongbao/mzbupd','id='.$val.id)}'" href="javascript:void(0);">编辑</a>
-					<a id="delbtn" _var="{:url('home/mzhongbao/mzbdel','id='.$val.id)}" href="javascript:void(0);">删除</a>
+					<a title="查看方案" class="views" onClick="location='{:url('home/mzhongbao/mzbwtb','id='.$val.id)}'" href="javascript:void(0);"></a>
+					<a title="查看" class="views2" onClick="location='{:url('home/mzhongbao/mzbupd','id='.$val.id)}'" href="javascript:void(0);"></a>
+					<a title="编辑" class="edit" onClick="location='{:url('home/mzhongbao/mzbupd','id='.$val.id)}'" href="javascript:void(0);"></a>
+					<a title="删除" class="del delbtn" _var="{:url('home/mzhongbao/mzbdel','id='.$val.id)}" href="javascript:void(0);"></a>
 				</i>
 			</li>
 			{/volist}
@@ -67,7 +69,7 @@
 <!-- 非头尾的内容 END -->
 <script type="text/javascript">
 $(function(){
-	$("#delbtn").click(function(){
+	$(".delbtn").click(function(){
 		if(confirm('确定要删除选中的数据吗?')){
 			var url = $(this).attr("_var");
 			location.href = url;

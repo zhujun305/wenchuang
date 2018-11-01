@@ -3,6 +3,19 @@
 <head>
 <title>素材管理-会员中心</title>
 {include file="/member/m_header"}
+<style>
+.lie{line-height:25px;height:25px;overflow:hidden;}
+.pop_box{display:none;left:50%;top:50%;width:400px;height:200px;margin-left:-200px;margin-top:-100px;
+border:1px solid #368;}
+.pop_boxc01T{clear:both;height:30px;}
+.pop_box .pop_boxc03{background-color:#fff;padding:15px;height:170px;}
+.pop_boxc03M{height:80px;overflow:hidden;}
+.pop_boxc03M #score{width:210px;height:38px;margin-top:16px;margin-left:76px;}
+.pop_boxc01B{text-align:center;padding-top:20px;}
+.pop_boxc01B a{margin:0 15px;}
+.pop_boxc01B .aClose{padding:10px 30px;background-color:#f1f1f1;border:1px solid #ccc;border-radius:5px;}
+.pop_boxc01B .aSubmit{padding:10px 30px;background-color:#f1f1f1;border:1px solid #ccc;border-radius:5px;}
+</style>
 </head>
 
 <body>
@@ -36,8 +49,8 @@
 				<li class="l1">缩略图</li>
 				<li class="l2">名称 [类别] / 说明</li>
 				<li class="l3">审核状态</li>
-				<li class="l4">点击</li>
-				<li class="l5">发布日期</li>
+				<li class="l4">下载积分</li>
+				<li class="l5">发布日期/点击</li>
 				<li class="l6">操作</li>
 				</ul>
 			</div>
@@ -61,14 +74,23 @@
 					<dd>参数：{$val.ext} | {$size_str} | {$val.width}×{$val.height} | {$val.pixel}dpi</dd>
 					<?php }?>
 					</dl>
-					<dl class="d4">{$chk_arr[$val.is_chk]}</dl>	
-					<dl class="d5">{$val.pv}</dl>
-					<dl class="d6"><?php echo $val['input_time']>0?date("Y-m-d",$val['input_time']):'';?></dl>
+					<dl class="d4"><div class="lie">{$chk_arr[$val.is_chk]}</div></dl>	
+					<dl class="d5"><div class="lie">{$val.score}</div></dl>
+					<dl class="d6">
+						<div class="lie"><?php echo $val['input_time']>0?date("Y-m-d",$val['input_time']):'';?></div>
+						<div class="lie">{$val.pv}</div>
+					</dl>
 					<dl class="d7">
-						<div style="height:30px;">
-						<a onClick="location='{:url('home/Msucai/materialinfo','id='.$val.id)}'" href="javascript:void(0);">生成缩略图</a></div>
-						<a onClick="location='{:url('home/Msucai/materialupd','id='.$val.id)}'" href="javascript:void(0);">编辑</a>
+						<div class="lie">
+						<a href="{:url('home/Msucai/materialupd','id='.$val.id)}">编辑</a>
 						<a id="delbtn" _var="{:url('home/Msucai/materialdel','id='.$val.id)}" href="javascript:void(0);">删除</a>
+						</div>
+						<div class="lie">
+						<a href="{:url('home/Msucai/materialinfo','id='.$val.id)}">生成缩略图</a>
+						</div>
+						<div class="lie">
+						<a href="javascript:void(0);" class="scoreset" _id="{$val['id']}" _score="{$val['score']}">下载积分设置</a>
+						</div>
 					</dl>
 				</li>
 				{/volist}
@@ -81,8 +103,43 @@
     </div>
 </div>
 <!-- 非头尾的内容 END -->
+<div class="pop_box">
+  <div class="pop_boxc01 pop_boxc03">
+	<div class="pop_boxc01T">
+		<h3 class="fl">下载积分设置</h3>
+		<a href="javascript:;" class="fr box_close">x</a>
+	</div>
+	<div class="pop_boxc03M">
+		<input type="text" name="score" id="score" value="" />
+	</div>
+	<div class="pop_boxc01B pop_boxc01B-">
+		<input type="hidden" name="id" id="id" value="" />
+		<a href="javascript:;" id="submit" class="aSubmit">确认</a>
+		<a href="javascript:;" class="aClose box_close">关闭</a>
+	</div>
+  </div>
+</div>
 <script type="text/javascript">
 $(function(){
+	$(".box_close").click(function(){
+		$(".pop_box").hide();
+	});
+	$(".scoreset").click(function(){
+		$(".pop_box").show();
+		var id = $(this).attr("_id");
+		$("#id").val(id);
+		$("#score").val($(this).attr("_score"));
+	});
+	$("#submit").click(function(){
+		var id = $("#id").val();
+		var score = $("#score").val();
+		if(id>0 && score>=0){
+			$.post("{:url('home/Msucai/scoreset')}",{id:id,score:score},function(data){
+				
+			},'json');
+		}
+		location.reload();
+	});
 	$('#chkall').click(function(){
 		if($(this).is(':checked')){
 			$('input:[type="checkbox"]').attr('checked','checked');

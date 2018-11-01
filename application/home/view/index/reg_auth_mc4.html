@@ -9,7 +9,9 @@
 <!--头部开始-->
 <div class="top">
 	<div class="main">
-		<div class="logos" onClick="location='{:url('home/index/index')}'"><img src="{$Think.config.web_member}/img/logo.png" /></div>
+		<div class="logos" onClick="location='{:url('home/index/index')}'">
+			<img src="{$Think.config.web_home}/images/logo2.png" />
+		</div>
 	</div>
 </div>
 
@@ -30,10 +32,10 @@
 				<span><i>* </i>成员馆编号</span> <input type="text" name="leaguer_no" id="leaguer_no" placeholder="请输入成员馆编号，如：NCL" style="text-transform:uppercase;" />
 			</div>
 			<div class="row">
-				<span><i>* </i>公司全称</span> <input type="text" name="company" id="company" placeholder="请输入公司全称" />
+				<span><i>* </i>单位名称</span> <input type="text" name="company" id="company" placeholder="请输入单位名称" />
 			</div>
 			<div class="row">
-				<span><i>* </i>法人代表</span> <input type="text" name="legal" id="legal" placeholder="请输入法人代表名称" />
+				<span><i>* </i>负责人</span> <input type="text" name="legal" id="legal" placeholder="请输入负责人名称" />
 			</div>
 			<div class="row">
 				<span><i>* </i>成员LOGO</span> 
@@ -90,12 +92,12 @@ $(function(){
 		}
 		if(_tmp) return false;
 		if($("#company").val().length<1) {
-			alert('您的公司全称不能为空！');
+			alert('您的单位名称不能为空！');
 			$("#company").focus();
 			return false;
 		}
 		if($("#legal").val().length<1) {
-			alert('您的法人代表姓名不能为空！');
+			alert('您的负责人姓名不能为空！');
 			$("#legal").focus();
 			return false;
 		}

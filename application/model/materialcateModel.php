@@ -87,7 +87,7 @@ class materialcateModel extends commonModel
     /**
      * 根据where条件查询列表
      */
-    static public function getListByWhere($where = array(), $field = array(), $order="id asc", $limit='10')
+    static public function getListByWhere($where = array(), $field = array(), $order="id asc", $limit='')
     {
     	$where['is_del'] = 1;
         $return = Db::table(self::$table_name)->where($where)->field($field)->order($order)->limit($limit)->select();

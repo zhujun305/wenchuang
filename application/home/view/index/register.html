@@ -3,13 +3,24 @@
 <head>
 <title>注册</title>
 {include file="/member/m_header"}
+<style>
+.pop_box{display:none;}
+.pop_boxc01T{clear:both;height:30px;}
+.pop_box .pop_boxc03{position:absolute;left:50%;top:50%;background-color:#fff;padding:15px;
+margin-left:-400px;margin-top:-300px;width:800px;height:600px;}
+.pop_boxc03M{height:500px;overflow-y:scroll;}
+.pop_boxc01B{text-align:center;padding-top:20px;}
+.pop_boxc01B .aClose{padding:10px 30px;background-color:#f1f1f1;border:1px solid #ccc;border-radius:5px;}
+</style>
 </head>
 
 <body>
 <!--头部开始-->
 <div class="top">
 	<div class="main">
-		<div class="logos" onClick="location='{:url('home/index/index')}'"><img src="{$Think.config.web_member}/img/logo.png" /></div>
+		<div class="logos" onClick="location='{:url('home/index/index')}'">
+			<img src="{$Think.config.web_home}/images/logo2.png" />
+		</div>
 	</div>
 </div>
 
@@ -42,16 +53,39 @@
 				<img src="{:url('home/index/verify')}" height="33" alt="点击更新验证码" onclick="this.src=this.src" />
 			</div>
 			<div class="confirm">
-				<input type="checkbox" id="is_agree" value="" />我同意 
-				<a onClick="location='{:url('home/index/index')}'" href="javascript:void(0);">《文创联盟网站服务条款》</a>
+				<label><input type="checkbox" id="is_agree" value="" />我同意 </label>
+				<a href="javascript:void(0);" id="xieyi">《文创联盟网站服务条款》</a>
 			</div>
 			<input type="submit" value="同意协议并下一步" class="submit" />
 			</form>
 		</div>
 	</div>
 </div>
+<div class="pop_box">
+  <div class="pop_boxc01 pop_boxc03">
+	<div class="pop_boxc01T">
+		<h3 class="fl">服务协议</h3>
+		<a href="javascript:;" class="fr box_close">x</a>
+	</div>
+	<div class="pop_boxc03M">
+		{$xieyi['content']}
+	</div>
+	<div class="pop_boxc01B pop_boxc01B-">
+		<a href="javascript:;" class="aClose box_close">关闭</a>
+	</div>
+  </div>
+</div>
 <script>
 $(function(){
+	$(".box_close").click(function(){
+		$(".pop_box").hide();
+	});
+	$(".pop_box").click(function(){
+		$(".pop_box").hide();
+	});
+	$("#xieyi").click(function(){
+		$(".pop_box").show();
+	});
 	//是否同意网站服务条款
 	$("#is_agree").click(function(){
 		if($(this).is(':checked')){
@@ -72,8 +106,8 @@ $(function(){
 			alert('您的帐号长度不能为空！');
 			_unameobj.focus();
 			return false;
-		}else if(_uname.length<6 || _uname.length>16) {
-			alert('您的帐号长度必须在6位到16位之间！');
+		}else if(_uname.length<3 || _uname.length>16) {
+			alert('您的帐号长度必须在3位到16位之间！');
 			_unameobj.focus();
 			return false;
 		}else if(!(/^[\w|\d|\@|\.|\-|\_]+$/.test(_uname))) {

@@ -89,7 +89,7 @@ class syspowerModel extends commonModel
 	/**
 	 * 查询分页列表
 	 */
-	static public function getList($where=array(), $field=array(), $page="20", $order="id asc")
+	static public function getList($where=[], $field=[], $page="20", $order="id asc")
 	{
 		if(!empty($where)){
 			if(!empty($where['action'])){
@@ -108,7 +108,7 @@ class syspowerModel extends commonModel
 	/**
 	 * 根据where条件查询列表
 	 */
-	static public function getListByWhere($where=array(), $field=array(), $order="id asc")
+	static public function getListByWhere($where=[], $field=[], $order="id asc")
 	{
 		$return = Db::table(self::$table_name)->where($where)->field($field)->order($order)->select();
 		return $return;

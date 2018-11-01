@@ -1,0 +1,57 @@
+{include file="/common/main_top"}
+<script>
+$(function(){
+	//全选
+	$('.admin_submit').click(function(){
+		if($("#name").val().length < 1){
+			alert("技能分类名称不能为空");
+			$("#name").focus();
+			return false;
+		}
+		$("#addform").submit();
+	});
+});
+</script>
+<div class="allpagetop">后台管理中心<strong>/</strong>技能分类管理<strong>/</strong>编辑</div>
+<div class="mains">
+	<div class="h1tit">
+		<div class="h1">技能分类管理</div>
+		<div class="topnav">
+			<a href="{:url('/Admin/materialcate/browse')}">技能分类列表</a>
+			<a href="{:url('/Admin/materialcate/create')}" class="select">添加</a>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="toptit">编辑技能分类</div>
+	<form id="addform" method="post" action="">
+	<div class="form_main width150">
+		<div class="fl">选择上级:</div>
+		<div class="fr">
+			<select name="pid" id="pid" class="gg_select w200">
+				<option value="0" selected="selected">作为顶级分类</option>
+				{volist name="catelist" id="val"}
+				<?php if($val['pid']==0){?>
+				<option value="{$val.id}" <?php echo $val['id']==$obj['pid']?'selected':''?>>{$val.name}</option>
+				<?php }?>
+				{/volist}
+			</select>
+		</div>
+		<div class="fl">名称:</div>
+		<div class="fr">
+			<div><input type="text" name="name" id="name" value="{$obj['name']}" maxlength="50" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl">排序:</div>
+		<div class="fr">
+			<div><input type="text" name="sort" value="{$obj['sort']}" maxlength="10" class="input_text_default middle" /></div>
+		</div>
+		<div class="fl"></div>
+		<div class="fr">
+			<input type="submit" class="admin_submit" value="保 存" />
+		</div>
+		<div class="clear"></div>
+	</div>
+	</form>
+</div>
+
+{include file="/common/main_footer"}

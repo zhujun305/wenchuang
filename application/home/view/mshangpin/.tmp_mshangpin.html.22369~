@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>商品管理-会员中心</title>
+{include file="/member/m_header"}
+<link rel="stylesheet" type="text/css" href="{$Think.config.web_member}/css/style.css"/>
+<style>
+em.huise{background-color:gray;color:#fff;}
+.spM-span01 input{margin-top:8px;}
+</style>
+</head>
+
+<body>
+
+<!--头部开始-->
+{include file="/member/m_top"}
+<!-- 非头尾的内容 START -->
+<!--面包屑导航开始-->
+<div class="breadcrumb clearfix " >
+</div>
+<!--面包屑导航结束-->
+
+<div class="main clearfix" >
+{include file="/member/m_left"}
+    <div class="contents fr m20">
+        <div class="clearfix">
+			<div class="location">会员中心  > 商品管理   > 添加商品</div>
+			<div class="spMan">
+				<div class="spManT">
+					<div class="forms">
+						<div class="spManT01 fl">
+							<h3>添加操作区</h3>
+							<a href="{:url('home/mshangpin/mspadd')}">添加商品</a>
+						</div>
+						<div class="spManTLine fl"></div>
+						<div class="spManT02 fl">
+							<h3>删除操作区</h3>
+							<a href="javascript:void(0);" id="delallbtn">批量删除</a>
+						</div>
+						<div class="spManTLine fl"></div>
+						<div class="spManT03 fl">
+							<h3>商品列表排序方式</h3>
+							<select id="paixu" style="width:170px;">
+								<option value="">最新发布</option>
+								<option value="2" {php}if($paixu==2){echo 'selected';}{/php}>时间倒序</option>
+								<option value="3" {php}if($paixu==3){echo 'selected';}{/php}>库存由小到大</option>
+								<option value="4" {php}if($paixu==4){echo 'selected';}{/php}>库存由大到小</option>
+								<option value="5" {php}if($paixu==5){echo 'selected';}{/php}>价格由低到高</option>
+								<option value="6" {php}if($paixu==6){echo 'selected';}{/php}>价格由高到低</option>
+							</select>
+						</div>
+						<div class="spManTLine fl"></div>
+						<div class="spManT03 fl">
+							<h3>搜索操作区</h3>
+							<select id="ischk" style="width:70px;" class="fl">
+								<option value="">审核状态</option>
+								<option value="1" {php}if($ischk==1){echo 'selected';}{/php}>未审核</option>
+								<option value="2" {php}if($ischk==2){echo 'selected';}{/php}>已审核</option>
+								<option value="3" {php}if($ischk==3){echo 'selected';}{/php}>不通过</option>
+							</select>
+							<select id="status" style="width:70px;" class="fl">
+								<option value="">上架状态</option>
+								<option value="1" {php}if($status==1){echo 'selected';}{/php}>未上架</option>
+								<option value="2" {php}if($status==1){echo 'selected';}{/php}>已上架</option>
+							</select>
+							<input type="text" id="title" value="{php}echo $title;{/php}" class="fl" />
+							<a href="javascript:void(0);" id="searchBtn" class="fl">搜索</a>
+						</div>
+					</div>
+				</div>
+				<div class="spManB">
+					<div class="spManB01">
+						<span class="spM-span01"><input type="checkbox" id="chkall" title="全选/反选" /></span>
+						<span class="spM-span02">gid</span>
+						<span class="spM-span03">商品</span>
+						<span class="spM-span04">库存</span>
+						<span class="spM-span05">销售价</span>
+						<span class="spM-span06">浏览量</span>
+						<span class="spM-span07">审核</span>
+						<span class="spM-span08">状态</span>
+						<span class="spM-span09">操作</span>
+					</div>
+	    			{volist name="list" id="val"}
+					<div class="spManB02 {php}if(($key+1)%2==0){echo 'spManB03';}{/php}">
+						<span class="spM-span01"><input type="checkbox" id="id" class="chklie" value="{$val['id']}" /></span>
+						<span class="spM-span02">{$val['id']}</span>
+						<div class="hy-orderB02-img fl">
+							<a href="{:url('home/mshangpin/mspupd','id='.$val.id)}">
+							<img src="<?php echo getImgURL($val['cover']);?>" class="fl" width="60" height="60" /></a>
+							<p>{$val['title']}<br/>【{$catelist[$val['cate']]['title']}】<br/>{$val['sno']}</p>
+						</div>
+						<span class="spM-span04">{$val['stock_num']}</span>
+						<span class="spM-span05">￥{$val['price']}</span>
+						<span class="spM-span06">{$val['pv']}</span>
+						<span class="spM-span07">{$val['is_chk']==2?'<font color="green">已审核</font>':'<font color="red">未审核</font>'}</span>
+						<div class="spM-ysj fl">{$val['status']==2?'<em>已上架</em>':'<em class="huise">未上架</em>'}</div>
+						<span class="spM-span09">
+							<a  title="编辑" class="edit" href="{:url('home/mshangpin/mspupd','id='.$val.id)}"></a>
+							<a title="查看" class="views2" href="{:url('home/mshangpin/mspupd','id='.$val.id)}"></a>
+							<a title="删除" class="del delbtn" _var="{:url('home/mshangpin/mspdel','id='.$val.id)}" href="javascript:void(0);"></a>
+						</span>
+					</div>
+					{/volist}
+				</div>
+				<div class="clear"></div>
+				<div class="page">
+					{$list->render()}
+				</div>
+			</div>
+		</div>
+    </div>
+</div>
+<!-- 非头尾的内容 END -->
+<script type="text/javascript">
+$(function(){
+	//全选
+	$('#chkall').click(function(){
+		var chk = $(this).is(":checked");
+		$('.chklie').each(function(){
+			$(this).attr('checked' , chk);
+		});
+	});
+	$(".delbtn").click(function(){
+		if(confirm('确定要删除选中的数据吗?')){
+			var url = $(this).attr("_var");
+			location.href = url;
+		}
+	});
+	//批量删除
+	$("#delallbtn").click(function(){
+		var obj = $('input[type="checkbox"][id="id"]:checked');
+		var len = obj.length;
+		var ids = '';
+		if(len == 0){
+			alert('请选择要删除的数据');
+		}else{
+			if(confirm('确定要删除选中的数据吗?')){
+				for(var i=0; i<len; i++){
+					ids += $(obj[i]).val();
+					if(i<len-1)
+						ids += "-";
+				}
+				var url = "{:url('home/mshangpin/mspdelall')}"
+				location.href = url + '?ids=' + ids ;
+			}
+		}
+	});
+	//搜索
+	$("#searchBtn").click(function(){
+		var paixu = $("#paixu").val();
+		var ischk = $("#ischk").val();
+		var status = $("#status").val();
+		var title = $("#title").val();
+		var url = "{:url('home/mshangpin/mshangpin')}?paixu="+paixu
+			+"&ischk="+ischk+"&status="+status+""+"&title="+title+"";
+		location.href = url;
+	});
+});
+</script>
+
+{include file="/member/m_footer"}
+
+</body>
+</html>

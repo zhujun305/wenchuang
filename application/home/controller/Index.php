@@ -12,9 +12,10 @@ use app\model\memberModel;
 use app\model\memberauthModel;
 use app\model\materialcateModel;
 use app\model\materialuprecordModel;
-
-use think\Image;
-use Imagick;
+use app\model\articleModel;
+use app\model\helpModel;
+use app\model\shopgoodsModel;
+use app\model\memberintegralModel;
 
 /**
  * 前台首页
@@ -37,6 +38,29 @@ class Index extends Homebase
 	 */
 	public function index(){
 		$this->assign('member', $this->member);
+		//广告
+		$ads = $this->getAds('indexbanner');
+		$this->assign('ads', $ads);
+		//公告
+		$where = ['is_lock'=>1,'type'=>2,'is_chk'=>2];
+		$gglist = articleModel::getListByWhere($where,[],'is_recommend desc,pv desc,id desc','6');
+		$this->assign('gglist', $gglist);
+		//新闻
+		$where['type'] = 1;
+		$xwlist = articleModel::getListByWhere($where,[],'is_recommend desc,pv desc,id desc','6');
+		$this->assign('xwlist', $xwlist);
+		//商品分类
+		$this->clist = readCacheFile("shopgoodscate");
+		$this->assign('clist', $this->clist);
+		//热门商品8个
+		$rmlist = shopgoodsModel::getListByWhere(['is_lock'=>1,'is_chk'=>2],[],'pv desc,id desc','8');
+		$this->assign('rmlist', $rmlist);
+		//会员uid列表
+		$mlist = $this->getmlist($rmlist);
+		$this->assign("mlist", $mlist);
+		//友情链接
+		$this->friends = readCacheFile("friends");
+		$this->assign('friends', $this->friends);
         return $this->fetch();
 	}
 	
@@ -60,14 +84,20 @@ class Index extends Homebase
 				if (empty($data)) {
 					$this->error('账号或密码错误','home/Index/login');
 				}else{
-					$rs = memberModel::upd_data(array('uid'=>$data['uid']), array('lastlogin'=>time()));
+					$rs = memberModel::upd_data(['uid'=>$data['uid']],['logintime'=>time(),'lastlogintime'=>$data['logintime']]);
 					session('portalUserUid',$data['uid']);
 					$this->setportalUser($data['uid']);
 					//如果用户选择了，记录登录状态就把用户名和加了密的密码放到cookie里面
 					if(!empty($remember)){
-						Cookie::set("user_name", $post['username'], 3600*24*30);
-						Cookie::set("password", $post['password'], 3600*24*30);
+						Cookie::set("user_name", $post['username'], 3600*24*7);
+						Cookie::set("password", $post['password'], 3600*24*7);
 					}
+					if($data['logintime']=='' && $data['lastlogintime']==''){
+						//用户首次登陆奖励5积分
+						$this->addintegral($data['uid'],1,8);//会员，收支类型，收入方式，支出方式
+					}
+					//每日首次登陆奖励2积分
+					$this->addintegral($data['uid'],1,2);//会员，收支类型，收入方式，支出方式
 					$this->success('登录成功、前往文创平台首页','home/Index/index');
 				}
 			}else{
@@ -112,8 +142,8 @@ class Index extends Homebase
 				$this->error('您的帐号不能为空！','home/Index/register');
 			}else if (preg_match('/\s+/', $uname)) {
 				$this->error('您的帐号不能包含空格！','home/Index/register');
-			}else if (strlen($uname)<6 || strlen($uname)>16) {
-				$this->error('您的帐号长度必须在6位到16位之间！','home/Index/register');
+			}else if (strlen($uname)<3 || strlen($uname)>16) {
+				$this->error('您的帐号长度必须在3位到16位之间！','home/Index/register');
 			}else if (!preg_match('/^[\w|\d|\@|\.|\-|\_]+$/', $uname)) {
 				$this->error('帐号不能包含( 字母 数字 @ . - _ ) 以外的其他字符！','home/Index/register');
 			}
@@ -143,11 +173,15 @@ class Index extends Homebase
 			if($uid>0){
 				session('portalUserUid',$uid);
 				$this->setportalUser($uid);
+				//用户首次注册奖励50积分
+				$this->addintegral($uid,1,7);//会员，收支类型，收入方式，支出方式
 				$this->success('注册成功、前往选择会员',Url('home/Index/register2','tmp=2'));
 			}else{
 				$this->error('注册失败！','home/Index/register');
 			}
     	}
+		$xieyi = helpModel::getOneByWhere(['is_lock'=>1,'cate'=>'xieyi']);
+		$this->assign('xieyi', $xieyi);
     	return $this->fetch();
     }
     
@@ -262,6 +296,7 @@ class Index extends Homebase
 					$this->error('参数错误',Url('home/Index/register2','tmp=2&cate='.$data['cate']));
 				}
 			}elseif($cate == 4){
+				$data['leaguer_no'] = $post['leaguer_no'];
 				$data['company'] = $post['company'];
 				$data['legal'] = $post['legal'];
 				$data['org_code'] = basename($post['org_code']);
@@ -280,7 +315,7 @@ class Index extends Homebase
 				$this->error('认证失败',Url('home/Index/register2','tmp=2&cate='.$data['cate']));
 			}
 		}
-    }
-    
+	}
+	
 }
 

@@ -4,6 +4,9 @@
 <title>发布项目-会员中心</title>
 {include file="/member/m_header"}
 <script src="__STATIC__/js/calendar.js"></script>
+<style>
+textarea{width:588px;height:120px;padding:5px;}
+</style>
 </head>
 
 <body>
@@ -66,7 +69,14 @@
 					</div></li>
                 <li><em>空间范围</em><div class="in_con">
                 	<input type="text" name="roomarea" id="roomarea" class="c_u_intxt" placeholder="资源内容反映的地域" /></div></li>
-                <li><input type="submit" value="下一步" class="release" id="submit" /></li>
+                <li><em>内容描述</em>
+					<div class="in_con">
+					<textarea name="desc" id="desc"></textarea>
+					</div>
+				</li>
+                <li>
+                	<input type="submit" value="下一步" class="release" id="submit" />
+				</li>
               	</form>
               </ul>
             </div>

@@ -1,0 +1,35 @@
+
+<div class="s_navc clear">
+    <div class="w nav_hover">
+      <div class="n_lf left">
+        <h3><a href="javascript:;">产品分类</a></h3>
+		<ul class="sider" style="display:none;">
+		{volist name="catelist" id="val"}
+		{php}if($val['pid']==0){{/php}
+		<li class="mainCate">
+		<h4><i>&gt;</i><a href="{:url('home/shop/shopgoods','paixu=&pid='.$val['id'])}">{$val['title']}</a></h4>
+		<div class="subCate">
+			{volist name="catelist" id="vvv"}
+			{php}if($vvv['pid']==$val['id']){{/php}
+			<a href="{:url('home/shop/shopgoods','paixu=&pid=&cate='.$vvv['id'])}" style="font-size:16px;">{$vvv['title']}</a>
+				{volist name="catelist" id="uuu"}
+				{php}if($uuu['pid']==$vvv['id']){{/php}
+				<a href="{:url('home/shop/shopgoods','paixu=&pid=&cate='.$uuu['id'])}" style="font-size:14px;color:#333;">{$uuu['title']}</a>
+				{php}}{/php}
+				{/volist}
+				<b>|</b>
+			{php}}{/php}
+			{/volist}
+		</li>
+		{php}}{/php}
+		{/volist}
+		</ul>
+      </div>
+      <ul class="s_nav left">
+        <li><a href="{:url('home/shop/shopgoods')}">最新商品</a></li>
+        <li><a href="{:url('home/shop/shopgoodstj')}">特别推荐</a></li>
+        <li><a href="{:url('home/shop/cyglist')}">联盟成员馆</a></li>
+      </ul>
+      <div class="clear0"></div>
+    </div>
+</div>

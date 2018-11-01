@@ -33,11 +33,9 @@ class Sysrose extends Adminbase
 		$findObj = [];
 		$fields = 'name';
 		$this->getFindObj($findObj, $find, $fields);
+		$this->assign("findObj", $findObj);
 		$list = sysroseModel::getList($findObj);
 		$this->assign("list", $list);
-		//空判断
-		$findObj['name'] = isset($findObj['name'])?$findObj['name']:'';
-		$this->assign("findObj", $findObj);
 		return $this->fetch();
 	}
 	

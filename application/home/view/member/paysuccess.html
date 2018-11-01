@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>付款成功</title>
+{include file="/common/c_header"}
+<link type="text/css" rel="stylesheet" href="__STATIC__/webmember/css/base.css"/>
+<link type="text/css" rel="stylesheet" href="__STATIC__/webmember/css/style.css"/>
+<style>
+.zhifu01{}
+.zhifu01 div{height:30px;line-height:30px;font-size:14px;}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+{include file="/common/c_top"}
+
+<div class="w">
+	<div class="hyCurt">
+		<div class="zhifu">
+			<h3 style="display:none;">感谢您，订单支付成功！</h3>
+			<h3>感谢您，下单成功！</h3>
+			<div class="zhifu01">
+				<div>订单号: <b>{$obj['snstr']}</b></div>
+				<div>总金额: <b>￥{$obj['amount']}</b></div>
+				<div>支付方式: <b>活动付款</b></div>
+				<h4>您的订单已经在处理，如有必要联系客服</h4>
+			</div>
+			<div class="zhifu02">
+				<a href="{:url('home/mshangpin/mspbuyorder')}" class="enter">进入订单中心</a>
+				<a href="{:url('home/mshangpin/mspbuyorderdetail','sn='.$obj['ordsn'])}" class="check">查看订单详情</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+{include file="/common/c_footer"}
+</div>
+<script type="text/javascript">
+$(function(){
+});
+</script>
+
+</body>
+</html>

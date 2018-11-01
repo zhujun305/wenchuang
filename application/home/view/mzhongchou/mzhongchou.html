@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>众筹管理-会员中心</title>
+{include file="/member/m_header"}
+</head>
+
+<body>
+
+<!--头部开始-->
+{include file="/member/m_top"}
+<!-- 非头尾的内容 START -->
+<!--面包屑导航开始-->
+<div class="breadcrumb clearfix " >
+</div>
+<!--面包屑导航结束-->
+
+<div class="main clearfix" >
+{include file="/member/m_left"}
+    <div class="contents fr m20">
+		{include file="/member/ad"}
+		
+		<div class="lm">
+			<div class="search">
+				<input type="text" class="txt" id="seatxt" value="{$find}" placeholder="搜索" /> 
+				<input type="image" src="{$Think.config.web_member}/img/fff.png" class="ss" id="seaform" />
+			</div>
+			<a class="on" href="javascript:void(0);">众筹管理</a>
+		</div>
+    	<div class="border">
+			<div class="zc_lm">
+				<a {php}echo $sts==''?'class="on"':'';{/php} href="{:url('home/mzhongchou/mzhongchou')}">全部</a>
+				<a {php}echo $sts=='1'?'class="on"':'';{/php} href="{:url('home/mzhongchou/mzhongchou','sts=1')}">众筹中</a>
+				<a {php}echo $sts=='2'?'class="on"':'';{/php} href="{:url('home/mzhongchou/mzhongchou','sts=2')}">已成功</a>
+				<a {php}echo $sts=='3'?'class="on"':'';{/php} href="{:url('home/mzhongchou/mzhongchou','sts=3')}">已失败</a>
+			</div>
+			<div class="zc_tit">
+				<i class="l1">项目信息<span style="float:right;margin-right:10px;">降价规则</span></i>
+				<i class="l2">当前状态</i>
+				<i class="l3">操作</i>
+			</div>
+			<div class="zc_list">
+				<ul>
+				{volist name="list" id="val"}
+				<li>
+					<div class="img" onClick="location='{:url('home/crowdfunding/detail','id='.$val['id'])}'">
+						<img src="{php}echo getImgURL($val['cover']);{/php}" width="130" height="98" /></div>
+					<div class="jianjie">
+						<div style="float:right;margin-right:25px;margin-top:35px;">
+							<font color="red">{php}echo isset($rulearr[$val['id']])?$rulearr[$val['id']]:0{/php}</font>条</div>
+						<a href="{:url('home/crowdfunding/detail','id='.$val['id'])}">
+						<h5>{$val['title']}【{$catelist[$val['cate']]['title']}】</h5></a>
+						<h6>目标：￥<span>{$val['tot_price']}</span>元  或  <span>{$val['tot_num']}</span>件</h6>
+						<p><span>已完成</span><span>筹集金额</span><span>认购数量</span><span>剩余时间</span></p>
+						<p>
+							<span>{$val['percent']}%</span>
+							<span>￥{$val['zhe_price']}</span><span>{$val['zhe_num']}件</span>
+							<?php $sjcha=($val['end_time']-time());
+								if($sjcha>0){
+									$day=intval(date("d",$sjcha)).'天';
+								}else{
+									$day='已到期';
+								}
+							?>
+							<span>{$day}</span>
+						</p>
+					</div>
+					<div class="d3">{$status_arr[$val['status']]}</div>
+					<div class="d4">
+						<a class="a3" href="{:url('home/crowdfunding/detail','id='.$val['id'])}">预览</a>
+						<a class="a3" href="{:url('home/mzhongchou/mzcupd','id='.$val['id'])}">编辑</a><br/>
+						<a class="a3" href="{:url('home/mzhongchou/mzcsetrule','id='.$val['id'])}">设置</a>
+					</div>
+				</li>
+				{/volist}
+				</ul>
+			</div>
+			<div class="page">
+				{$list->render()}
+			</div>
+			<div class="clearfix"></div>
+		</div>
+    </div>
+</div>
+<!-- 非头尾的内容 END -->
+<script type="text/javascript">
+$(function(){
+	$(".delbtn").click(function(){
+		if(confirm('确定要删除选中的数据吗?')){
+			var url = $(this).attr("_var");
+			location.href = url;
+		}
+	});
+	$("#seaform").click(function(){
+		var seatxt = $("#seatxt").val();
+		var url = "{:url('home/mzhongbao/mzhongbao')}?sts=''&find="+seatxt+"";
+		location.href = url;
+	});
+});
+</script>
+
+{include file="/member/m_footer"}
+
+</body>
+</html>

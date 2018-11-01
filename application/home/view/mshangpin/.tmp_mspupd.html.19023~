@@ -1,0 +1,349 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>编辑商品-会员中心</title>
+{include file="/member/m_header"}
+<link rel="stylesheet" type="text/css" href="{$Think.config.web_member}/css/style.css"/>
+<style>
+.hy-tjInfo01R select{margin-top:7px;width:200px;}
+.hy-tjInfo-03 textarea{padding:3px;height:78px;}
+</style>
+</head>
+
+<body>
+
+<!--头部开始-->
+{include file="/member/m_top"}
+<!-- 非头尾的内容 START -->
+<!--面包屑导航开始-->
+<div class="breadcrumb clearfix " >
+</div>
+<!--面包屑导航结束-->
+
+<div class="main clearfix" >
+{include file="/member/m_left"}
+	<div class="contents fr m20">
+      <div class="clearfix">
+		<div class="location">会员中心  > 商品管理   > 编辑商品</div>
+		<div class="hyAdd">
+			<div class="hyAddT">   
+				<ul>
+				<li onClick="location='{:url('home/mshangpin/mspupd','id='.$obj['id'])}'" class="hyAddT-current"><span>商品基础信息</span></li>
+				<li onClick="location='{:url('home/mshangpin/mspupddetail','id='.$obj['id'])}'"><span>商品详细</span></li>
+				<li onClick="location='{:url('home/mshangpin/mspupdimages','id='.$obj['id'])}'"><span>商品相册</span></li>
+				<li onClick="location='{:url('home/mshangpin/mspupdnorms','id='.$obj['id'])}'"><span>规格/参数</span></li>
+				<li onClick="location='{:url('home/mshangpin/mspupdrule','id='.$obj['id'])}'"><span>批发价格</span></li>
+				</ul>
+			</div>
+			<form id="addform" method="post" action="">
+			<div class="hyAddB">
+				<div class="hy-tjInfo">
+					<div class="hy-tjInfo01">
+						<div class="hy-tjInfo01L fl"><p>是否推荐</p></div>
+						<div class="hy-tjInfo01R fl">
+							<div class="hy-tjInfo-01">
+								<label><input type="checkbox" name="is_recommend" id="is_recommend" value="{$obj['is_recommend']}" />热门推荐</label>
+							</div>
+						</div>
+					</div>
+					<div class="hy-tjInfo01">
+						<div class="hy-tjInfo01L fl"><p>所属栏目</p></div>
+						<div class="hy-tjInfo01R fl">
+							<div class="hy-tjInfo-02">
+								<select id="topcate">
+									<option value="">请选择</option>
+									{volist name="catelist" id="val"}
+									{php}if($val['pid']==0){{/php}
+									<option value="{$val['id']}" {$obj['catepid']==$val['id']?'selected="selected"':''}>{$val['title']}</option>
+									{php}}{/php}
+									{/volist}
+								</select>
+								<select name="cate" id="soncate">
+									<option value="">请选择</option>
+									{volist name="catelist" id="val"}
+									{php}if($val['level']==2){{/php}
+									<option value="{$val['id']}" class="clie clie_{$val['pid']} {$obj['catepid']==$val['pid']?'':'d_n'}" {$obj['cate']==$val['id']?'selected="selected"':''}>{$val['title']}</option>
+									{php}}{/php}
+									{/volist}
+								</select>
+								<select name="cate_san" id="cate_san">
+									<option value="">请选择</option>
+									{volist name="catelist" id="val"}
+									{php}if($val['level']==3){{/php}
+									<option value="{$val['id']}" class="csan csan_{$val['pid']} {$obj['cate']==$val['pid']?'':'d_n'}" {$obj['catesan']==$val['id']?'selected="selected"':''}>{$val['title']}</option>
+									{php}}{/php}
+									{/volist}
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="hy-tjInfo01">
+						<div class="hy-tjInfo01L fl">
+							<p><em>*</em> 商品名称</p>
+						</div>
+						<div class="hy-tjInfo01R fl">
+							<div class="hy-tjInfo-03">
+								<input type="text" name="title" id="title" value="{$obj['title']}" style="width:388px;" />
+							</div>
+						</div>
+					</div>
+					<div class="hy-tjInfo01">
+						<div class="hy-tjInfo01L fl">
+							<p>商品副标题</p>
+						</div>
+						<div class="hy-tjInfo01R fl">
+							<div class="hy-tjInfo-03">
+								<input type="text" name="subtitle" id="subtitle" value="{$obj['subtitle']}" style="width:388px;" />
+							</div>
+						</div>
+					</div>
+					<div class="hy-tjInfo01">
+						<div class="hy-tjInfo01L fl">
+							<p><em>*</em> 商品编号</p>
+						</div>
+						<div class="hy-tjInfo01R fl">
+							<div class="hy-tjInfo-03">
+								<input type="text" name="sno" id="sno" value="{$obj['sno']}" style="width:146px;" class="fl" />
+								<a href="javascript:void(0);" id="cmsp_no">生成编号</a>
+							</div>
+						</div>
+					</div>
+					<div class="hy-tjInfo01">
+						<div class="hy-tjInfo01L fl">
+							<p><em>*</em> 商品货号</p>
+						</div>
+						<div class="hy-tjInfo01R fl">
+							<div class="hy-tjInfo-03">
+								<input type="text" name="gno" id="gno" value="{$obj['gno']}" style="width:146px;" class="fl" />
+								<a href="javascript:void(0);" class="fl" id="re_cmsp_no">复制商品编号</a>
+								<b class="fl">不填写则以商品编号为货号</b>
+							</div>
+						</div>
+					</div>
+					<div class="hy-tjInfo01">
+						<div class="hy-tjInfo01L fl"><p>条形码</p></div>
+						<div class="hy-tjInfo01R fl">
+							<div class="hy-tjInfo-03">
+								<input type="text" name="gbarcode" id="gbarcode" value="{$obj['gbarcode']}" style="width:268px;" class="fl" />
+							</div>
+						</div>
+					</div>
+					<div class="hy-tjInfo01">
+						<div class="hy-tjInfo01L fl"><p><em>*</em> 库存</p></div>
+						<div class="hy-tjInfo01R fl">
+							<div class="hy-tjInfo-03">
+								<input type="text" name="stock_num" id="stock_num" value="{$obj['stock_num']}" style="width:78px;" class="fl" />
+								<b class="fl">若设置商品规格则此库存会自动更新为所有规格商品库存总和</b>
+							</div>
+						</div>
+					</div>
+					<div class="hy-tjInfo01 hy-tjInfo02">
+						<div class="hy-tjInfo01L fl"><p>价格</p></div>
+						<div class="hy-tjInfo01R fl">
+							<div class="hy-tjInfo-04">
+								<ul>
+								<li>
+									<h4 class="fl">市场价</h4>
+									<div class="hy-tjInfo01RR fl">
+										<input type="text" name="old_price" id="old_price" value="{$obj['old_price']}" class="fl" style="width:90px;" />
+										<b class="fl">元</b>
+									</div>
+								</li>
+								<li style="border-bottom: none;">
+									<h4 class="fl"><b>*</b> 销售价</h4>
+									<div class="hy-tjInfo01RR fl">
+										<input type="text" name="price" id="price" value="{$obj['price']}" class="fl" style="width:90px;" />
+										<b class="fl">元</b>
+									</div>
+								</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="hy-tjInfo01">
+						<div class="hy-tjInfo01L fl"><p><em>*</em> 重量</p></div>
+						<div class="hy-tjInfo01R fl">
+							<div class="hy-tjInfo-03">
+								<input type="text" name="weight" id="weight" value="{$obj['weight']}" style="width:78px;" class="fl" placeholder="0" />
+								<i class="fl">kg（千克）</i>
+								<b class="fl">商品重量跟物流配送费用有关</b>
+							</div>
+						</div>
+					</div>
+					<div class="hy-tjInfo01 hy-tjInfo02">
+						<div class="hy-tjInfo01L fl"><p><em>*</em> 商品缩略图</p></div>
+						<div class="hy-tjInfo01R fl">
+							<div class="up_img_div">
+							<a class="ups f_l cover_div"><img src="{$obj['cover_path']}" width="120px" /></a>
+							<div class="f_l">
+							<a class="imgbtn cover_div">选择图片...</a>
+							<a class="imgbtn clear_img">清除图片</a>
+							<div class="clear"></div>
+							<input type="text" name="cover" id="cover" value="{$obj['cover_path']}" class="imgtext" readonly="readonly" />
+							<input type="file" id="cover_file" style="display:none;" />
+							</div>
+							</div>
+						</div>
+					</div>
+					<div class="hy-tjInfo01 hy-tjInfo02">
+						<div class="hy-tjInfo01L fl"><p>商品摘要</p></div>
+						<div class="hy-tjInfo01R fl">
+							<div class="hy-tjInfo-03">
+								<textarea name="summary" id="summary" class="fl">{$obj['summary']}</textarea>
+							</div>
+						</div>
+					</div>
+					<div class="hy-tjInfo01">
+						<div class="hy-tjInfo01L fl"><p>SEO标题</p></div>
+						<div class="hy-tjInfo01R fl">
+							<div class="hy-tjInfo-03">
+								<input type="text" name="seo_title" id="seo_title" value="{$obj['seo_title']}" style="width:389px;" class="fl" />
+								<b class="fl">页面的标题</b>
+							</div>
+						</div>
+					</div>
+					<div class="hy-tjInfo01 hy-tjInfo03">
+						<div class="hy-tjInfo01L fl"><p>SEO关键词<br />keywords</p></div>
+						<div class="hy-tjInfo01R fl">
+							<div class="hy-tjInfo-03">
+								<input type="text" name="seo_keywords" id="seo_keywords" value="{$obj['seo_keywords']}" style="width:389px;" class="fl" />
+								<b class="fl">页面的标题</b>
+							</div>
+						</div>
+					</div>
+					<div class="hy-tjInfo01 hy-tjInfo02">
+						<div class="hy-tjInfo01L fl">
+							<p style="line-height:30px;">SEO描述<br />keywords</p>
+						</div>
+						<div class="hy-tjInfo01R fl">
+							<div class="hy-tjInfo-03">
+								<textarea name="seo_desc" id="seo_desc" class="fl" style="width:376px;">{$obj['seo_desc']}</textarea>
+								<b class="fl" style="margin-top: 60px;">页面的标题</b>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="hyAddB-01B">
+					<a href="javascript:void(0);" id="submit" class="qdSave fl">确定保存</a>
+					<a href="javascript:void(0);" id="reset" class="hyAdd-cz fl">重置</a>
+				</div>
+			</div>
+			</form>
+		</div>
+	  </div>
+	</div>
+</div>
+<!-- 非头尾的内容 END -->
+<script type="text/javascript">
+$(function(){
+	$("#is_recommend").click(function(){
+		if($(this).is(':checked')){
+			$(this).val("2");
+		}else{
+			$(this).val("1");
+		}
+	});
+	$("#topcate").change(function(){
+		var pid = $(this).val();
+		$("#soncate .clie").removeAttr("selected");
+		$("#cate_san .csan").removeAttr("selected");
+		$("#soncate").find(".clie").hide();
+		$("#soncate").find(".clie_"+pid).show();
+	});
+	$("#soncate").change(function(){
+		var pid = $(this).val();
+		$("#cate_san .csan").removeAttr("selected");
+		$("#cate_san").find(".csan").hide();
+		$("#cate_san").find(".csan_"+pid).show();
+	});
+	$("#cmsp_no").click(function(){
+		$.post("{:url('home/mshangpin/createmspno')}",{},function(data){
+			$("#sno").val(data);
+		},'json');
+	});
+	$("#re_cmsp_no").click(function(){
+		$("#gno").val($("#sno").val());
+	});
+	//提交
+	$('#submit').click(function(){
+		if($("#soncate").val()<1){
+			alert("请选择商品分类");
+			$("#soncate").focus();
+			return false;
+		}
+		if($("#title").val().length < 1){
+			alert("商品名称不能为空");
+			$("#title").focus();
+			return false;
+		}
+		if($("#sno").val().length < 1){
+			alert("商品编号不能为空");
+			$("#sno").focus();
+			return false;
+		}
+		if($("#stock_num").val()<1){
+			alert("库存必须大于0");
+			$("#stock_num").focus();
+			return false;
+		}
+		if(!($("#old_price").val()>0)){
+			alert("市场价必须大于0");
+			$("#old_price").focus();
+			return false;
+		}
+		if(!($("#price").val()>0)){
+			alert("销售价必须大于0");
+			$("#price").focus();
+			return false;
+		}
+		if(!($("#weight").val()>0)){
+			alert("重量必须大于0");
+			$("#weight").focus();
+			return false;
+		}
+		$("#addform").submit();
+	});
+});
+</script>
+{include file="/common/upimage"}
+<style>
+.up_img_div{margin-top:7px;}
+.cover_div{margin-right:12px;}
+.cover_div img{max-width:120px;}
+.imgbtn{display:block;float:left;margin-bottom:10px;padding:0px 8px;height:25px;line-height:25px;
+text-align:center;background-color:#f1f1f1;border:1px solid #ccc;border-radius:5px;cursor:pointer;}
+.up_img_div input.imgtext{padding:0px 5px;width:360px;height:35px;border:1px dashed #ccc;}
+</style>
+<script>
+$(function () {
+	$(".clear_img").click(function(){
+		$("#cover").val('');
+		div_cover.find("img").attr("src","__STATIC__/images/default.jpg");
+	});
+	//上传封面图
+	var div_cover = $(".cover_div");
+	var file_cover = $("#cover_file");
+	var name_cover = $("#cover");
+	div_cover.click(function(){
+		file_cover.attr("val","1");
+		document.getElementById("cover_file").click(); //js触发其他标签click事件
+	});
+	file_cover.change(function () {
+		let files = $(this)[0].files[0]; //获取files对象
+		//参数2为按比例缩小压缩后宽高
+		$.compress(files,1000).then((url)=>{
+			div_cover.find("img").attr("src",url);
+			//上传到服务器
+			$.post("{:url('admin/Aajax/ajaxupimages')}",{imgsource:url},function(data){
+				name_cover.val(data.imgurl);
+				div_cover.find("img").attr("src",data.imgurl);
+			},"json");
+		});
+	});
+});
+</script>
+
+{include file="/member/m_footer"}
+
+</body>
+</html>

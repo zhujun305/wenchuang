@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>订单付款</title>
+{include file="/common/c_header"}
+<link type="text/css" rel="stylesheet" href="__STATIC__/webmember/css/base.css"/>
+<link type="text/css" rel="stylesheet" href="__STATIC__/webmember/css/style.css"/>
+<style>
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+{include file="/common/c_top"}
+
+<div class="w">
+	<div class="hyCurt">
+		<div class="hy-zffy">
+			<h3>支付费用</h3>
+			<div class="hy-zffy01">
+				<div class="hy-zffy01T">
+					<input type="radio" class="fl" />
+					<h4 class="fl">余额支付</h4>
+					<p class="fl">可用余额<em>￥0</em></p>
+				</div>
+			</div>
+			<div class="hy-zffy01 hy-zffy02">
+				<div class="hy-zffy01T">
+					<input type="radio" class="fl" />
+					<h4 class="fl">支付宝</h4>
+				</div>
+			</div>
+			<div class="hy-zffy01 hy-zffy02">
+				<div class="hy-zffy01T">
+					<input type="radio" class="fl" />
+					<h4 class="fl">微信扫描支付</h4>
+				</div>
+				<h5>扫描微信扫描支付</h5>
+			</div>
+			<div class="hy-zffy01 hy-zffy02">
+				<div class="hy-zffy01T">
+					<input type="radio" class="fl" />
+					<h4 class="fl">网银支付</h4>
+				</div>
+				<div class="hy-zffy01B">
+					<ul>
+					<li><input type="radio" class="fl" /><span class="fl"><img src="img/bank-tu.png"></span></li>
+					<li><input type="radio" class="fl" /><span class="fl"><img src="img/bank-tu.png"></span></li>
+					<li><input type="radio" class="fl" /><span class="fl"><img src="img/bank-tu.png"></span></li>
+					<li><input type="radio" class="fl" /><span class="fl"><img src="img/bank-tu.png"></span></li>
+					<li><input type="radio" class="fl" /><span class="fl"><img src="img/bank-tu.png"></span></li>
+					<li><input type="radio" class="fl" /><span class="fl"><img src="img/bank-tu.png"></span></li>
+					<li><input type="radio" class="fl" /><span class="fl"><img src="img/bank-tu.png"></span></li>
+					</ul>
+				</div>
+			</div>
+			<div class="hy-zffy01 hy-zffy02">
+				<div class="hy-zffy01T">
+					<input type="radio" class="fl" />
+					<h4 class="fl">银行汇款转账</h4>
+				</div>
+				<h5>这里填写银行信息</h5>
+			</div>
+			<div class="hy-zffy01 hy-zffy02">
+				<div class="hy-zffy01T">
+					<input type="radio" class="fl" />
+					<h4 class="fl">货到付款</h4>
+				</div>
+			</div>
+		</div>
+		<div class="hy-zffyB">
+			<h2>订单信息</h2>
+			<div class="hy-zffyB01">		
+				<b class="fr">$0.00</b>	
+				<p class="fr">支付手续费：</p>
+			</div>
+			<div class="hy-zffyB01">		
+				<b class="fr">$8954.00</b>	
+				<p class="fr">订单总金额：</p>
+			</div>
+			<div class="hy-zffyB02">
+				<a href="#">确定</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+{include file="/common/c_footer"}
+</div>
+<script type="text/javascript">
+$(function(){
+	$("#submit").click(function(){
+		if(!($("#id_lie input").length>0)){
+			alert("请选择商品！");
+			return false;
+		}
+		$("#addform").submit();
+	});
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>投稿管理-会员中心</title>
+{include file="/member/m_header"}
+</head>
+
+<body>
+
+<!--头部开始-->
+{include file="/member/m_top"}
+<!-- 非头尾的内容 START -->
+<!--面包屑导航开始-->
+<div class="breadcrumb clearfix " >
+</div>
+<!--面包屑导航结束-->
+
+<div class="main clearfix" >
+{include file="/member/m_left"}
+    <div class="contents fr m20">
+		{include file="/member/ad"}
+		
+		<div class="lm">
+			<div class="search">
+				<input type="text" class="txt" id="seatxt" value="{$find}" placeholder="搜索" /> 
+				<input type="image" src="{$Think.config.web_member}/img/fff.png" class="ss" id="seaform" />
+			</div>
+			<a class="on" href="javascript:void(0);">稿件详细</a>
+		</div>
+    	<div class="border">
+			<div class="fang_con">
+			方案详情：<br/>
+			项目名称：{$zbobj['title']}<br/>
+			设计团队： {$fbmember['nick_name']}
+			<span style="margin-left:30px;">投稿时间：<?php echo $obj['input_time']>0?date("Y-m-d",$obj['input_time']):'';?></span><br/>
+			<p>&nbsp;</p>
+			<p><img src="<?php echo getImgURL($obj['cover']);?>" /></p>
+			<p>&nbsp;</p>
+			<p>设计工期：{$obj.cycle}(天)<br/>
+			  设计费用：{$obj.price}元<br/>
+			  附件下载：<a href="<?php echo getFileURL($obj['filename'],'zipfile');?>" target="_blank">{$obj.filename}</a><br/>
+			</p>
+			<p>&nbsp;</p>
+			<p>状态：<font style="color:#333;">{$status_arr[$obj.status]}</font></p>
+			<div class="fang_btn">
+				<?php if($obj['status']!=2 && $obj['status']!=3 && $obj['status']!=4){?>
+				<a _val="2" href="javascript:void(0);">设为备选</a>
+				<?php }?>
+				<?php if($obj['status']!=3 && $obj['status']!=4){?>
+				<a _val="3" href="javascript:void(0);">设为中标</a>
+				<?php if($obj['status']!=2){?>
+				<a _val="4" href="javascript:void(0);" class="b">设为淘汰</a>
+				<?php }?>
+				<?php }?>
+			</div>
+			<form id="addfrom" action="{:url('home/mzhongbao/mzbwtbdetail','id='.$obj['id'])}" method="post">
+			<div class="ping">
+				<div><b>稿件点评</b></div>
+				<textarea class="in" name="comment" id="comment" placeholder="点评不得超过100个字">{$obj['comment']}</textarea>
+			</div>
+			<div class="fang_btn" style="margin-top:10px;">
+				<a href="javascript:void(0);" id="submit">发表评论</a>
+			</div>
+			</form>
+			</div>
+			<div class="clearfix" style="height:10px;"></div>
+		</div>
+    </div>
+</div>
+<!-- 非头尾的内容 END -->
+<div class="pop_box" style="display:none;">
+  <div class="pop_boxc">
+	<div class="tit">确定设置此稿件为中标方案？</div>
+	<div class="pop_con">
+		<a class="reset" href="javascript:void(0);">取消</a>
+		<a class="confim" href="javascript:void(0);">确定</a>
+	</div>
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$(".fang_btn a").click(function(){
+		$(".pop_box").show();
+		var type = $(this).attr("_val");
+		$(".pop_con .confim").attr("_val",type);
+	});
+	$(".reset").click(function(){
+		$(".pop_box").hide();
+	});
+	$(".confim").click(function(){
+		var type = $(this).attr("_val");
+		var url = "{:url('home/mzhongbao/mzbwtbstatus','id='.$obj.id)}"+"&type="+type;
+		if(type==2 || type==3 || type==4){
+			location.href = url;
+		}
+	});
+	$("#submit").click(function(){
+		if($("#comment").val().length<1){
+			alert('请输入点评内容！');
+			$('#comment').focus();
+			return false;
+		}
+		if($("#comment").val().length>100){
+			alert('点评内容必须少于100个字！');
+			$('#comment').focus();
+			return false;
+		}
+		$("#addfrom").submit();
+	});
+});
+</script>
+
+{include file="/member/m_footer"}
+
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>{$obj['title']}-文创素材</title>
+{include file="/common/c_header"}
+<style>
+.sc_desc{padding:15px;font-size:14px;}
+.sc_desc em{font:bold 14px/1.5 "Microsoft YaHei";}
+#down_mat_a{display:none;}
+.material ul li{height:270px;}
+.material ul li .pic{display:table-cell;text-align:center;vertical-align:middle;}
+.material ul li .pic img{max-width:270px;max-height:200px;}
+#maxobjimg{min-width:200px;min-height:200px;}
+.pop_box{display:none;position:fixed;left:0;right:0;top:0;bottom:0;background:rgba(0,0,0,.5);z-index:99;}
+.pop_boxc01{min-width:200px;min-height:200px;position:absolute;left:50%;top:50%;margin:-100px 0 0 -100px;
+background-color:#fcfcfc;border-radius:5px;}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+{include file="/common/c_top"}
+
+  <div class="unionbg clear">
+    <div class="w location">当前位值：
+		<a href="{:url('home/Material/matlist','cate='.$obj['cate'])}">{$obj['yijimenu']}</a>
+		<i>&gt;</i>{$obj['erjimenu']}
+	</div>
+    <div class="w">
+      <div class="pic_tit">
+        <h2>{$obj['title']}</h2>
+        <p>
+        	<font>浏览：{$obj['pv']}</font><font>收藏：{$obj['coll']}</font><font>下载：{$obj['download']}</font>
+			<font>【下载积分：{$obj['score']}】</font>
+		</p>
+        <em>
+        	<?php if($obj['collid']>0){?>
+        	<a class="collection coll_a" href="javascript:void(0);" _collid="{$obj['collid']}" style="background-color:#cacaca;">已收藏</a>
+			<?php }else{?>
+        	<a class="collection coll_a" href="javascript:void(0);" _collid="0">收藏素材</a>
+			<?php }?>
+			<a href="javascript:void(0);" id="down_mat">下载素材</a>
+			<a href="" id="down_mat_a" target="_blank"></a>
+		</em>
+      </div>
+      <div class="n_pic_con clear">
+        <div class="n_pic_dt left" id="objimg">
+        	<img src="<?php echo getImgURL($obj['pic_water']);?>" width="810" />
+		</div>
+        <div class="n_pic_rt right">
+          <ul class="n_pic_rtc">
+            <li><em>素材编号：</em>{$obj['metadata']}</li>
+            <li><em>上传时间：</em><?php echo $obj['input_time']>0?date("Y/m/d",$obj['input_time']):'';?></li>
+            <li><em>格式：</em>{$obj['ext']}</li>
+            <li><em>分辨率：</em>{$obj['pixel']}dpi</li>
+			<?php $size_str = '';
+				$size = intval($obj['size']/1024);
+				if($size>1024){
+					$size = round(($size/1024),1);
+					$size_str = $size.'MB';
+				}else{
+					$size_str = $size.'KB';
+				}?>
+            <li><em>大小：</em>{$size_str}</li>
+            <li><em>尺寸：</em>{$obj['width']}*{$obj['height']}像素</li>
+            <li><em>其他题名：</em>{$obj['supply_tit']}</li>
+			<?php $topic_arr=[]; 
+				if($obj['topic_str']!=''){ $topic_arr=explode(",",$obj['topic_str']); }
+				$topic_str = '';
+				if(!empty($topic_arr)){
+					foreach($topic_arr as $kkk=>$vvv){
+						$topic_str.= (isset($topicarr[$vvv])?$topicarr[$vvv].'，':'');
+					}
+				}?>
+            <li><em>系列题名：</em>{$topic_str}</li>
+            <li><em>责任者名称：</em>{$obj['author']}</li>
+            <li><em>责任方式：</em>{$obj['author_info']}</li>
+            <li><em>主题词：</em>{$obj['themewords']}</li>
+            <li><em>关键词：</em>{$obj['keywords']}</li>
+            <li><em>素材来源书：</em>{$obj['source']}</li>
+            <li><em>素材版本：</em>{$obj['version']}</li>
+            <li><em>创作时间：</em>{$obj['originaltime']}</li>
+            <li><em>制作时间：</em>{$obj['makingtime']}</li>
+            <li><em>空间范围：</em>{$obj['roomarea']}</li>
+            <li><em>资源类型：</em>{$obj['resourcecate']}</li>
+            <li><em>包含于：</em>{$obj['contain']}</li>
+          </ul>
+          <div class="n_pic_txt">
+            <h3>应用场景：</h3>
+            <p>{$obj['scene']}</p>
+          </div>
+        </div>
+        <div class="clear0"></div>
+		<div class="sc_desc">
+			<em>内容描述：</em>{$obj['desc']}
+		</div>
+      </div>
+    </div>
+    <div class="material clear">
+      <div class="tit2"><em>相关素材</em></div>
+      <ul>
+      	{volist name="xglist" id="val"}
+        <li>
+          <div class="pic"><a onClick="location='{:url('home/Material/detail','id='.$val.id)}'" href="javascript:void(0);">
+          	<img src="<?php echo getImgURL($val['cover']);?>" /></a></div>
+          <div class="txts">
+            <h3>{$val.title}</h3>
+            <p>{$catearr[$val.cate]['cname']}</p>
+          </div>
+        </li>
+		{/volist}
+      </ul>
+    </div>
+  </div>
+
+{include file="/common/c_footer"}
+</div>
+<div class="pop_box" id="maxobjimg">
+	<div class="pop_boxc01">
+		<img src="" />
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$("#objimg img").click(function(){
+		$("#maxobjimg img").attr("src",$(this).attr("src"));
+		var _w = parseInt($(window).width());//获取浏览器的宽度
+		var _h = parseInt($(window).height());
+		var theImage = new Image();
+		theImage.src = $("#objimg img").attr("src");
+		var r_width = parseInt(theImage.width);
+		var r_height = parseInt(theImage.height);
+		var ml_width = parseInt(r_width/2);
+		var ml_height = parseInt(r_height/2);
+		//如果真实的宽度大于浏览器的宽度就按照100%显示
+		if(r_width >= _w){
+			$("#maxobjimg img").css("width","100%").css("height","auto");
+			$("#maxobjimg .pop_boxc01").css({"top":0});
+		}else{
+			//如果小于浏览器的宽度按照原尺寸显示
+			$("#maxobjimg img").css("width",r_width+'px').css("height",r_height+'px');
+			if(r_height >= _h){
+				$("#maxobjimg .pop_boxc01").css({"top":0});
+				$("#maxobjimg .pop_boxc01").css({"margin-left":"-"+ml_width+"px"});
+			}else{
+				$("#maxobjimg .pop_boxc01").css({"margin-left":"-"+ml_width+"px","margin-top":"-"+ml_height+"px"});
+			}
+		}
+		$(".pop_box").show();
+	});
+	$(".pop_box").click(function(){
+		$(".pop_box").hide();
+	});
+});
+</script>
+<script type="text/javascript">
+$(function(){
+	var uid = "{$member['uid']}";
+	$(".coll_a").click(function(){
+		if(!(uid>0)){
+			if(confirm("收藏素材，请先登录。")){
+				location.href = "{:url('home/Index/login')}";
+			}
+			return false;
+		}else{
+			var _collid = $(this).attr("_collid");
+			if(_collid>0){
+			  if (confirm("确定不在收藏此素材吗？")) {
+				var url = "{:url('home/member/delmembercoll')}";
+				$.post(url,{id:_collid},function(data){
+					if(data>0){
+						$(".coll_a").css({"background-color":""});
+						$(".coll_a").html("收藏素材");
+						$(".coll_a").attr("_collid", ""); //修改属性
+					}
+				},'json');
+			  }
+			}else{
+				var url = "{:url('home/member/addmembercoll')}";
+				var cate = 2; //1会员2素材3众包4众筹5商品
+				$.post(url,{cate:cate,id:"{$obj['id']}"},function(data){
+					if(data>0){
+						$(".coll_a").css({"background-color":"#cacaca"});
+						$(".coll_a").html("已收藏");
+						$(".coll_a").attr("_collid", data); //修改属性
+						alert("收藏成功。");
+					}
+				},'json');
+			}
+		}
+	});
+	$("#down_mat").click(function(){
+		if(!(uid>0)){
+			if(confirm("下载素材，请先登录。")){
+				location.href = "{:url('home/Index/login')}";
+			}
+			return false;
+		}else{
+			var url = "{:url('home/Material/downloadsc')}";
+			$.post(url,{id:"{$obj['id']}",uid:uid},function(data){
+				if(data.rs==1){
+					var imgfile = "{:url('home/Material/force_download')}?id={$obj['id']}&uid="+uid;
+					$("#down_mat_a").attr("href",imgfile);
+					document.getElementById("down_mat_a").click(); //js触发其他标签click事件
+				}else{
+					alert(data.msg);
+				}
+			},'json');
+		}
+	});
+});
+</script>
+
+</body>
+</html>

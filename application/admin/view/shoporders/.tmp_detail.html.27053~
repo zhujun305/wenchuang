@@ -1,0 +1,112 @@
+{include file="/common/main_top"}
+<script>
+$(document).ready(function () {
+});
+</script>
+<style>
+.splie{}
+.splie img{margin-right:20px;}
+.splie .info{margin-right:20px;}
+.splie .info p{}
+</style>
+<div class="allpagetop">后台管理中心<strong>/</strong>订单管理<strong>/</strong>订单信息</div>
+<div class="mains">
+	<div class="h1tit">
+		<div class="h1">订单管理</div>
+		<div class="topnav">
+			<a href="{:url('/Admin/shoporders/browse')}" class="select">订单列表</a>
+			<div class="clear"></div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="toptit">订单信息</div>
+	<form id="addform" method="post" action="">
+	<div class="form_main width150">
+		<div class="fl">下单会员:</div>
+		<div class="fr">
+			<a href="{:url('/Admin/member/browse')}?find={$obj['uid']}">
+			<div style="padding-top:12px;">{$obj['uid']} {$member['nick_name']}</div></a>
+		</div>
+		<div class="fl">下单时间:</div>
+		<div class="fr">
+			<div style="padding-top:12px;">
+				<?php echo $obj['input_time']>0?date("Y-m-d H:i:s",$obj['input_time']):''?>
+			</div>
+		</div>
+		<div class="fl">订单内容:</div>
+		<div class="fr">
+			<div style="padding-top:12px;">{$obj['title']}</div>
+		</div>
+		<div class="fl">订单金额:</div>
+		<div class="fr">
+			<div style="padding-top:12px;">{$obj['amount']} 元</div>
+		</div>
+		<div class="fl">付款:</div>
+		<div class="fr">
+			<div style="padding-top:12px;">
+				<span><?php echo $obj['pay_status']==2?'<font color="red">已付款</font>':'未付款';?></span> 
+				<span>付款金额：{$obj['pay_amount']} 元 </span> 
+				<span>付款时间：<?php echo $obj['pay_time']>0?date("Y-m-d H:i:s",$obj['pay_time']):''?></span>
+			</div>
+		</div>
+		<div class="fl">收货人:</div>
+		<div class="fr">
+			<div style="padding-top:12px;">
+				<span>{$obj['sh_name']} - </span> 
+				<span>{$obj['sh_mobile']} - </span> 
+				<span>{$obj['sh_area']}</span>
+			</div>
+		</div>
+		<div class="fl">发货人:</div>
+		<div class="fr">
+			<div style="padding-top:12px;">
+				<span>{$obj['fh_name']} - </span> 
+				<span>{$obj['fh_mobile']} - </span> 
+				<span>{$obj['fh_area']} </span>
+			</div>
+		</div>
+		<div class="fl">商品清单:</div>
+		<div class="fr">
+			<div style="padding-top:12px;">
+				{volist name="list" id="val"}
+				<div class="splie">
+					<img src="<?php echo getImgURL($val['cover']);?>" class="f_l" width="80" height="80" />
+					<div class="f_l info">
+						<div>{$val['title']}</div><br/>
+						<div>
+						{php}if($val['snvidone']>0){ echo $shopnorms[$val['snidone']]['name'].'：'.$snormsval[$val['snvidone']]['name']; }{/php}&nbsp;
+						{php}if($val['snvidtwo']>0){ echo $shopnorms[$val['snidtwo']]['name'].'：'.$snormsval[$val['snvidtwo']]['name']; }{/php}&nbsp;
+						{php}if($val['snvidthree']>0){ echo $shopnorms[$val['snidthree']]['name'].'：'.$snormsval[$val['snvidthree']]['name']; }{/php}
+						</div>
+					</div>
+					<div class="f_l txt">
+						<span class="">编号：{$val['gno']}</span>
+						<span class="">单价：￥{$val['price']}</span>
+						<span class="">数量：{$val['num']}</span>
+						<span class="">小计：￥{$val['amount']}</span>
+					</div>
+					<div class="clear"></div>
+				</div>
+				{/volist}
+			</div>
+		</div>
+		<div class="fl">备注:</div>
+		<div class="fr">
+			<pre>{$obj['remark']}</pre>
+		</div>
+		<?php if(1==2){?>
+		<div class="fl">订单备注:</div>
+		<div class="fr">
+			<textarea name="remark" cols="70" rows="3" class="input_text_default mb_10" style="font-size:12px;line-height:200%;height:150px;" placeholder="备注"></textarea>
+			<div>
+			<input type="button" class="admin_submit shen_chk" value="提交" />
+			<input type="hidden" name="is_chk" id="is_chk" value="" />
+			</div>
+		</div>
+		<?php }?>
+		<div class="clear"></div>
+	</div>
+	</form>
+</div>
+
+{include file="/common/main_footer"}

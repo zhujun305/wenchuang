@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>收货地址-会员中心</title>
+{include file="/member/m_header"}
+<link type="text/css" rel="stylesheet" href="__STATIC__/webmember/css/style.css"/>
+<style>
+.shAddressT a{margin-right:15px;}
+.shAddressT span{padding:8px 15px;background-color:#e3f2fd;line-height:30px;}
+.pop_box{display:none;}
+.pop_boxc03{margin:-220px 0 0 -250px;}
+</style>
+</head>
+
+<body>
+
+<!--头部开始-->
+{include file="/member/m_top"}
+<!-- 非头尾的内容 START -->
+<!--面包屑导航开始-->
+<div class="breadcrumb clearfix " >
+</div>
+<!--面包屑导航结束-->
+
+<div class="main clearfix" >
+{include file="/member/m_left"}
+    <div class="contents fr m20">
+        <div class="clearfix">
+			<div class="location">会员中心  > 收货地址管理</div>
+			<div class="shAddress">
+				<div class="shAddressT">
+					{php}if(count($list)<20){{/php}
+					<a href="javascript:;" id="addship">添加收货地址</a>
+					{php}}{/php}
+					<span>最多可以保存20条收货地址记录</span>
+				</div>
+				{volist name="list" id="val"}
+				<div class="shAddress01">
+					<h3>收货地址{php}if($val['is_default']==2){{/php}<b>默认</b>{php}}{/php}</h3>
+					<div class="shAddress01C">
+						<p><span>收货人：</span>{$val['truename']}</p>
+						<p><span>联系电话：</span>{$val['mobile']}</p>
+						<p><span>配送地区：</span>
+						{$area[$val['province']]['name']}-{$area[$val['city']]['name']}-{$area[$val['county']]['name']}
+						</p>
+						<p><span>收货地址：</span>{$val['address']}</p>
+						<p><span>邮编：</span>{$val['zipcode']}</p>
+					</div>
+					<div class="shAddress01CB">
+						<a href="{:url('home/Member/deldizhi','id='.$val['id'])}" class="fr" onclick="return confirm('你确定要删除吗？')">删除</a>
+						<a href="javascript:;" class="fr upd_dizhi" _id="{$val['id']}">编辑</a>
+						{php}if($val['is_default']==1){{/php}
+						<a href="{:url('home/Member/setmoren','id='.$val['id'])}" class="fr">设为默认</a>
+						{php}}{/php}
+					</div>
+				</div>
+				{/volist}
+			</div>
+    	</div>
+    </div>
+</div>
+<!-- 非头尾的内容 END -->
+<div class="pop_box">
+  <div class="pop_boxc01 pop_boxc03">
+	<div class="pop_boxc01T">
+		<h3 class="fl">添加收货地址</h3>
+		<a href="javascript:;" class="fr box_close">x</a>
+	</div>
+	<div class="pop_boxc03M">
+		<div class="pop_boxc03M-01">
+			<div class="pop_boxc03M-01L fl"><span>* </span>收货人</div>
+			<div class="pop_boxc03M-01R fl">
+				<input type="text" name="truename" id="truename" style="width:195px;" />
+			</div>
+		</div>
+		<div class="pop_boxc03M-01">
+			<div class="pop_boxc03M-01L fl"><span>* </span>联系电话</div>
+			<div class="pop_boxc03M-01R fl">
+				<input type="text" name="mobile" id="mobile" style="width:195px;" />
+			</div>
+		</div>
+		<div class="pop_boxc03M-01">
+			<div class="pop_boxc03M-01L fl"><span>* </span>配送地区</div>
+			<div class="pop_boxc03M-01R fl">
+				<select name="province" id="province" class="fl">
+					<option value="">请选择</option>
+					{volist name="areaerji" id="val"}
+					<option value="{$val['id']}">{$val['name']}</option>
+					{/volist}
+				</select>
+				<select name="city" id="city" class="fl">
+					<option value="">请选择</option>
+				</select>
+				<select name="county" id="county" class="fl">
+					<option value="">请选择</option>
+				</select>
+			</div>
+		</div>
+		<div class="pop_boxc03M-01">
+			<div class="pop_boxc03M-01L fl"><span>* </span>收货地址</div>
+			<div class="pop_boxc03M-01R fl">
+				<input type="text" name="address" id="address" style="width:340px;" />
+			</div>
+		</div>
+		<div class="pop_boxc03M-01">
+			<div class="pop_boxc03M-01L fl">邮编</div>
+			<div class="pop_boxc03M-01R fl">
+				<input type="text" name="zipcode" id="zipcode" style="width:195px;" />
+			</div>
+		</div>
+	</div>
+	<div class="pop_boxc01B pop_boxc01B-">
+		<input type="hidden" name="id" id="id" value="" />
+		<a href="javascript:;" id="submit" class="aSubmit">确认</a>
+		<a href="javascript:;" class="aClose box_close">关闭</a>
+	</div>
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){
+	$(".box_close").click(function(){
+		$(".pop_box").hide();
+	});
+	$("#addship").click(function(){
+		$('.pop_box input,.pop_box select').val('');
+		$("#city").empty();
+		$("#city").append("<option value=''>请选择</option>");
+		$("#county").empty();
+		$("#county").append("<option value=''>请选择</option>");
+		$(".pop_box").show();
+	});
+	$("#submit").click(function(){
+		if($('#truename').val().length<1) {
+			alert('收货人不能为空！');
+			$('#truename').focus();
+			return false;
+		}
+		if($('#mobile').val().length<1) {
+			alert('电话不能为空！');
+			$('#mobile').focus();
+			return false;
+		}
+		if(!($('#province').val()>0) || !($('#city').val()>0) || !($('#county').val()>0)) {
+			alert('请选择配送地区！');
+			return false;
+		}
+		if($('#address').val().length<1) {
+			alert('收货地址不能为空！');
+			$('#address').focus();
+			return false;
+		}
+		var id = $("#id").val();
+		var truename = $("#truename").val();
+		var mobile = $("#mobile").val();
+		var province = $("#province").val();
+		var city = $("#city").val();
+		var county = $("#county").val();
+		var address = $("#address").val();
+		var zipcode = $("#zipcode").val();
+		$.post("{:url('home/Member/ajaxupddizhi')}?id="+id,
+		{truename:truename,mobile:mobile,province:province,city:city,county:county,address:address,zipcode:zipcode},
+		function(data){
+			if(data.msg!='') alert(data.msg);
+			location.reload();
+		},'json');
+	});
+	//编辑
+	$(".upd_dizhi").click(function(){
+		$(".pop_box").show();
+		var id = $(this).attr("_id");
+		$.post("{:url('home/member/getdizhiobj')}",{id:id},function(data){
+			if(data.id>0){
+				$('#id').val(data.id);
+				$('#truename').val(data.truename);
+				$('#mobile').val(data.mobile);
+				$('#address').val(data.address);
+				$('#zipcode').val(data.zipcode);
+				$("#province").find("option[value='"+data.province+"']").attr("selected",true);
+				$("#city").empty();
+				$("#county").empty();
+				$("#city").append("<option value='"+data.city+"'>"+data.city_name+"</option>");
+				$("#county").append("<option value='"+data.county+"'>"+data.county_name+"</option>");
+			}
+		},"json");
+	});
+	//区域联动-省
+	$("#province").change(function(){
+		var id = $(this).val();
+		$.post("{:url('home/Aajax/getareabypid')}",{id:id},function(data){
+			$("#city").empty();
+			$("#city").append("<option value=''>请选择</option>");
+			$("#county").empty();
+			$("#county").append("<option value=''>请选择</option>");
+			$.each(data,function(key, val){
+				$("#city").append("<option value='"+val.id+"'>"+val.name+"</option>");
+			});
+		},"json");
+	});
+	//区域联动-市
+	$("#city").change(function(){
+		var id = $(this).val();
+		$.post("{:url('home/Aajax/getareabypid')}",{id:id},function(data){
+			$("#county").empty();
+			$.each(data,function(key, val){
+				$("#county").append("<option value='"+val.id+"'>"+val.name+"</option>");
+			});
+		},"json");
+	});
+});
+</script>
+
+{include file="/member/m_footer"}
+
+</body>
+</html>

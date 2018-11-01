@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>文创素材</title>
+{include file="/common/c_header"}
+<style>
+.cho_li_bg{background:#cacaca;}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+{include file="/common/c_top"}
+
+  <div class="topNav clear" id="topNav" style="display:none;">
+    <div class="">
+      <dl> 
+        <dd>
+          <h3><a href="javascript:void(0);">查看推荐<i></i></a></h3>
+        </dd>
+        <dd>
+          <h3><a href="javascript:void(0);">专题查看<i></i></a></h3>
+        </dd>
+        <dd>
+          <h3><a href="javascript:void(0);">素材排序<i></i></a></h3>
+        </dd>
+      </dl>
+    </div>
+  </div>
+  <div class="unionbg clear">
+    <div class="material clear">
+      <ul>
+      	{volist name="list" id="val"}
+        <li>
+          <div class="pic"><a onClick="location='{:url('home/Material/matlist','cate=&topic='.$val.id)}'" href="javascript:void(0);">
+          	<img src="<?php echo getImgURL($val['cover']);?>" width="270" height="200" /></a></div>
+          <div class="txts">
+            <h3>{$val.title}</h3>
+          </div>
+        </li>
+		{/volist}
+      </ul>
+    </div>
+	  <div class="pagetwo">
+		{$list->render()}
+	  </div>
+  </div>
+
+{include file="/common/c_footer"}
+</div>
+
+</body>
+</html>

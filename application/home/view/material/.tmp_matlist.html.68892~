@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>文创素材</title>
+{include file="/common/c_header"}
+<style>
+.cho_li_bg{background:#cacaca;}
+.material ul li{height:270px;}
+.material ul li .pic{display:table-cell;text-align:center;vertical-align:middle;}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+{include file="/common/c_top"}
+
+  <div class="banner ny_ban2">
+    <div class="hd"><em>1</em><em>2</em><em>3</em></div>
+    <div class="bd">
+      <ul>
+        <li style="background:url({$Think.config.web_home}/images/scbanner03.png) top center no-repeat;"><a href="#"></a></li>
+        <li style="background:url({$Think.config.web_home}/images/scbanner01.png) top center no-repeat;"><a href="#"></a></li>
+        <li style="background:url({$Think.config.web_home}/images/scbanner02.png) top center no-repeat;"><a href="#"></a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="topNav clear" id="topNav">
+    <div class="">
+      <dl> 
+        <dd>
+          <h3><a href="javascript:void(0);">分类查看<i></i></a></h3>
+          <ul>
+            <li <?php echo !($cate>0)?'class="cho_li_bg"':''?>><a href="javascript:void(0);" class="sb_cate" _val="0">全部分类</a></li>
+      		{volist name="catelist" id="val"}
+            <li <?php echo $cate==$val['id']?'class="cho_li_bg"':''?>>
+            	<a href="javascript:void(0);" class="sb_cate" _val="{$val.id}">{$val.cname}</a></li>
+			{/volist}
+          </ul>
+        </dd>
+        <dd>
+          <h3><a href="javascript:void(0);">专题查看<i></i></a></h3>
+          <ul>
+            <li <?php echo !($topic>0)?'class="cho_li_bg"':''?>><a href="javascript:void(0);" class="sb_topic" _val="0">全部专题</a></li>
+      		{volist name="topiclist" id="val"}
+            <li <?php echo $topic==$val['id']?'class="cho_li_bg"':''?>>
+            	<a href="javascript:void(0);" class="sb_topic" _val="{$val.id}">{$val.title}</a></li>
+			{/volist}
+          </ul>
+        </dd>
+        <dd>
+          <h3><a href="javascript:void(0);">素材排序<i></i></a></h3>
+          <ul>
+            <li <?php echo $type==1?'class="cho_li_bg"':''?>>
+            	<a href="javascript:void(0);" class="sb_order" _val="1">最新时间</a></li>
+            <li <?php echo $type==2?'class="cho_li_bg"':''?>>
+            	<a href="javascript:void(0);" class="sb_order" _val="2">最早时间</a></li>
+            <li <?php echo $type==3?'class="cho_li_bg"':''?>>
+            	<a href="javascript:void(0);" class="sb_order" _val="3">浏览量</a></li>
+            <li <?php echo $type==4?'class="cho_li_bg"':''?>>
+            	<a href="javascript:void(0);" class="sb_order" _val="4">下载量</a></li>
+          </ul>
+        </dd>
+      </dl>
+    </div>
+  </div>
+  <div class="unionbg clear">
+    <div class="material clear">
+      <ul>
+      	{volist name="list" id="val"}
+        <li>
+          <div class="pic"><a onClick="location='{:url('home/Material/detail','id='.$val.id)}'" href="javascript:void(0);">
+          	<img src="<?php echo getImgURL($val['cover']);?>" width="270" height="200" /></a></div>
+          <div class="txts">
+            <h3>{$val.title}</h3>
+            <p>{$catearr[$val.cate]['cname']}</p>
+          </div>
+        </li>
+		{/volist}
+      </ul>
+    </div>
+	  <div class="pagetwo">
+		{$list->render()}
+	  </div>
+  </div>
+
+{include file="/common/c_footer"}
+</div>
+<script type="text/javascript">
+$(function(){
+	var listurl = "{:url('home/Material/matlist')}";
+	$(".sb_cate").click(function(){
+		var cate = $(this).attr("_val");
+		location.href = listurl+"?cate="+cate+"&topic={$topic}&type={$type}";
+	});
+	$(".sb_topic").click(function(){
+		var topic = $(this).attr("_val");
+		location.href = listurl+"?cate={$cate}&topic="+topic+"&type={$type}";
+	});
+	$(".sb_order").click(function(){
+		var type = $(this).attr("_val");
+		location.href = listurl+"?cate={$cate}&topic={$topic}&type="+type+"";
+	});
+});
+</script>
+<script type="text/javascript">
+jQuery(".banner").slide({titCell:".hd em",mainCell:".bd ul",effect:"fold",interTime:6000,autoPlay:true});
+jQuery(".topNav").slide({type:"menu",titCell:"dd",targetCell:"ul",delayTime:0,defaultPlay:false});
+</script>
+
+</body>
+</html>
